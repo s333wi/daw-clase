@@ -1,82 +1,98 @@
 document.getElementById('ONOFF').addEventListener('click', openCalc);
-let btnValue = '';
-let operation = [];
-let open = false;
-let pantalla = document.getElementById('pantalla');
-let screenText = pantalla.value;
-let firstOp = true;
+let btnCalcValue = '';
+let calcOperation = []; //En les posicions 0 i 2 del array sempre hi haura nums i en la 1 el operador
+let isCalcOpen = false;
+let calcScreen = document.getElementById('pantalla');
+let screenText = calcScreen.value;
+
+
+function operate(op1, op2, operator) {
+    if (Number.isNaN(op2)) return op1;
+    switch (operator) {
+        case '+':
+            return op1 + op2;
+            break;
+        case '-':
+            return op1 - op2;
+            break;
+        case '/':
+            if (op2 === 0) return 'Infinit';
+            return op1 / op2;
+            break;
+        case 'x':
+            return op1 * op2;
+            break;
+        default:
+            break;
+    }
+}
 
 function openCalc() {
-    var power = document.getElementById('ONOFF');
-    var powerValue = power.getAttribute('value');
-    open = (powerValue === 'OFF') ? false : true;
+    var calcPower = document.getElementById('ONOFF');
+    var calcPowerValue = calcPower.getAttribute('value');
+    isCalcOpen = (calcPowerValue === 'OFF') ? false : true;
 
-    if (open) {
-        power.setAttribute('value', 'OFF');
-        pantalla.setAttribute('value', '0');
+    if (isCalcOpen) {
+        calcPower.setAttribute('value', 'OFF');
+        calcScreen.setAttribute('value', '0');
     } else {
-        power.setAttribute('value', 'ON')
-        pantalla.setAttribute('value', 'Apagada');
+        calcPower.setAttribute('value', 'ON')
+        calcScreen.setAttribute('value', 'Apagada');
+        btnCalcValue = '';
+        calcOperation.length = 0;
     }
 
 }
 
 function getButton() {
     let btnClass = window.event.target.className;
-    console.log(btnClass);
-    if (open && btnClass.includes('num')) {
-        console.log('es num');
-        btnValue += window.event.target.value;
-        pantalla.setAttribute('value', btnValue);
-        console.log(btnValue);
 
-    } else if (open && btnClass.includes('operator')) {
-        console.log('es operador');
-        let operator = window.event.target.value;
-        console.log(operator);
-        console.log({ operation });
-        console.log({ operator });
-        switch (operator) {
+    if (isCalcOpen && btnClass.includes('num')) {
+        btnCalcValue += window.event.target.value;
+        calcScreen.setAttribute('value', btnCalcValue);
+
+    } else if (isCalcOpen && btnClass.includes('operator')) {
+        let calcOperator = window.event.target.value;
+        switch (calcOperator) {
             case 'C':
-                operation = [];
-                btnValue = 0;
-                pantalla.setAttribute('value', btnValue);
+                calcOperation.length = 0;
+                btnCalcValue = 0;
+                calcScreen.setAttribute('value', btnCalcValue);
                 break;
             case 'CE':
-                btnValue = btnValue.slice(0, -1);
-                pantalla.setAttribute('value', btnValue)
+                if (calcScreen.value !== '0') {
+                    btnCalcValue = btnCalcValue.toString().slice(0, -1);
+                    calcScreen.setAttribute('value', btnCalcValue)
+                }
                 break;
             case '=':
-                operation.push(btnValue);
-                let finalResult = operation.toString();
-                console.log( finalResult );
-                let finalEnter = parseInt(finalResult);
-                console.log(finalEnter);
-                //btnValue = parseInt(toString(operation));
+                calcOperation.push(btnCalcValue);
+                let firstOp = +calcOperation[0];
+                let secondOp = +calcOperation[2];
+                calcOperator = calcOperation[1];
+                let result = operate(firstOp, secondOp, calcOperator);
+                calcOperation.length = 0;
+                btnCalcValue = result;
+                calcScreen.setAttribute('value', btnCalcValue);
+                firstOperationDone = true;
                 break;
             case '+/-':
-                btnValue = parseInt(btnValue) * (-1);
-                pantalla.setAttribute('value', btnValue);
+                btnCalcValue = parseInt(btnCalcValue) * (-1);
+                calcScreen.setAttribute('value', btnCalcValue);
                 break;
             case '+':
             case 'x':
             case '/':
             case '-':
-                if (firstOp) {
-                    operation.push(btnValue);
-                    operation.push(operator);
-                    btnValue = '';
-                    pantalla.setAttribute('value', btnValue);
-                    firstOp = false;
-                } else {
-                    operation.push(btnValue);
-                    firstOp = true;
-                }
+                calcOperation.push(btnCalcValue);
+                calcOperation[1] = calcOperator;
+                btnCalcValue = '';
+                calcScreen.setAttribute('value', btnCalcValue);
                 break;
             default:
                 break;
         }
     }
-    screenText = pantalla.value;
+    screenText = calcScreen.value;
 }
 
