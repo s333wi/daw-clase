@@ -1,10 +1,12 @@
-div.login-box>a{
-    color:#F9FF33;
+div.login-box>a {
+    color: #F9FF33;
     text-decoration: none;
 }
-div.login-box:last-child>a{
-    color:#33E9FF;
+
+div.login-box:last-child>a {
+    color: #33E9FF;
 }
+
 html {
     height: 100%;
 }
@@ -16,7 +18,29 @@ body {
     background: linear-gradient(#141e30, #243b55);
 }
 
+#gutsGif {
+    text-align: unset;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    position: relative;
+}
+
+iframe {
+    zoom: 0.75;
+    -moz-transform: scale(0.75);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.75);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.75);
+    -webkit-transform-origin: 0 0;
+}
+
 button {
+    padding-top: 20px;
     background-color: transparent;
     background-repeat: no-repeat;
     border: none;
@@ -25,8 +49,21 @@ button {
     outline: none;
     color: #03e9f4;
 }
+
 .login-box {
     text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    padding: 40px;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.private-box {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -48,9 +85,11 @@ button {
 .login-box .user-box {
     position: relative;
 }
-label#remembercb{
+
+label#remembercb {
     color: #03e9f4;
 }
+
 .login-box .user-box input {
     width: 100%;
     padding: 10px 0;
@@ -62,6 +101,7 @@ label#remembercb{
     outline: none;
     background: transparent;
 }
+
 .login-box .user-box label {
     position: absolute;
     top: 0;
@@ -73,8 +113,8 @@ label#remembercb{
     transition: 0.5s;
 }
 
-.login-box .user-box input:focus ~ label,
-.login-box .user-box input:valid ~ label {
+.login-box .user-box input:focus~label,
+.login-box .user-box input:valid~label {
     top: -20px;
     left: 0;
     color: #03e9f4;
