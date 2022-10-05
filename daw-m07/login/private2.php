@@ -16,7 +16,7 @@ if (empty($_SESSION['username'])) {
 </head>
 
 <body>
-    <div class="private-box">
+    <div class="privategit pus-box">
         <h2 style="color: green;">Welcome <?= $_SESSION['username'] ?></h2>
         <div>
             <p style='color:#fff'><em>“You’re right, we are mortal and fragile. But even if we are tortured or wounded,
