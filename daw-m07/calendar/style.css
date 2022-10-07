@@ -1,3 +1,21 @@
 td.noBorder {
     border: none;
 }
+
+td#currDay {
+    background-color: #d2d2ff;
+}
+
+td.satDay {
+    background-color: #fbe6ca;
+}
+
+td.sunDay {
+    background-color: #ff0000;
+}
+
+td {
+    padding: 10px 10px;
+    width: 50px;
+    text-align: center;
+}
