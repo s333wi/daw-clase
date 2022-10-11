@@ -4,6 +4,7 @@ function formValidation() {
     window.event.preventDefault();
     let divChecker = document.getElementById("inpCheck");
     console.log(divChecker);
+
     let email = document.querySelector('#formEmail');
     let password = document.getElementById("formPass");
     let confirmPassword = document.getElementById("formPassConfirm");
@@ -14,12 +15,11 @@ function formValidation() {
     let errorPassUpper = document.getElementById("errorPassUpper");
     let errorPassMatch = document.getElementById("errorPassMatch");
     errorDiv = document.getElementById("inpCheck");
-    let pError = document.createElement("p");
-    (validateEmailAddress(email.value)) ? canRemove(errorEmail) : canAppend('errorEmail', errorEmail);
-    (passLength) ? canRemove(errorPassLength) : canAppend('errorPassLength', errorPassLength);
-    passContainsNumber(password.value) ? canRemove(errorPassNumber) : canAppend('errorPassNumber', errorPassNumber);
-    passHasUpper(password.value) ? canRemove(errorPassUpper) : canAppend('errorPassUpper', errorPassUpper);
-    (password.value === confirmPassword.value) ? canRemove(errorPassMatch) : canAppend('errorPassMatch', errorPassMatch);
+    (validateEmailAddress(email.value)) ? canRemove(errorEmail) : canAppend(errorEmail);
+    (passLength) ? canRemove(errorPassLength) : canAppend(errorPassLength);
+    passContainsNumber(password.value) ? canRemove(errorPassNumber) : canAppend(errorPassNumber);
+    passHasUpper(password.value) ? canRemove(errorPassUpper) : canAppend(errorPassUpper);
+    (password.value === confirmPassword.value) ? canRemove(errorPassMatch) : canAppend(errorPassMatch);
 
     let errorElements = document.querySelectorAll('p.error');
     if (errorElements.length === 0) {
@@ -33,41 +33,23 @@ function canRemove(child) {
         errorDiv.removeChild(child);
     }
 }
-function canAppend(error, value) {
-    switch (error) {
-        case 'errorEmail':
-            errorDiv.innerHTML += (value === null) ? "<p class='error' id='errorEmail'>L'email no es valid</p>" : "";
-            break;
-        case 'errorPassLength':
-            errorDiv.innerHTML += (value === null) ? "<p class= 'error' id='errorPassLength'>La contrasenya ha de ser mes gran de 9 caracters</p>" : "";
-            break;
-        case 'errorPassNumber':
-            errorDiv.innerHTML += (value === null) ? "<p class='error' id='errorPassNumber'>El password ha de contenir minim 1 numero</p>" : "";
-            break;
-        case 'errorPassUpper':
-            errorDiv.innerHTML += (value === null) ? "<p class='error' id='errorPassUpper'>El password ha de contenir minim 2 majuscules</p>" : "";
-            break;
-        case 'errorPassMatch':
-            errorDiv.innerHTML += (value === null) ? "<p class='error' id='errorPassMatch'>Els passwords no coincideixen</p>" : undefined;
-            break;
-        default:
-            break;
-    }
+function canAppend(error) {
+    const obj_errors = {
+        errorEmail: "L'email no es valid",
+        errorPassLength: "La contrasenya ha de ser mes gran de 9 caracters",
+        errorPassNumber: "El password ha de contenir minim 1 numero",
+        errorPassUpper: "El password ha de contenir minim 2 majuscules",
+        errorPassMatch: "Els passwords no coincideixen"
+    };
+    errorDiv.innerHtml += (value === null) ? "<p class='error' id='" + error + "'>" + obj_errors.error + "</p>" : "";
 }
 function validateEmailAddress(emailString) {
     console.log({ emailString });
     let atSymbol = emailString.indexOf("@");
-    if (atSymbol < 1)
-        return false;
-
     let dot = emailString.indexOf(".");
-    if (dot <= atSymbol + 2)
+    if (atSymbol < 1 && dot <= atSymbol + 2 && dot === emailString.length - 1) {
         return false;
-
-    // check that the dot is not at the end
-    if (dot === emailString.length - 1)
-        return false;
-
+    }
     return true;
 }
 
