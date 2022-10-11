@@ -5,7 +5,6 @@ let isCalcOpen = false;
 let calcScreen = document.getElementById('pantalla');
 let screenText = calcScreen.value;
 
-
 function operate(op1, op2, operator) {
     if (Number.isNaN(op2)) return op1;
     switch (operator) {
