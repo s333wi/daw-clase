@@ -1,10 +1,7 @@
 var errorDiv;
-
-function formValidation() {
-    window.event.preventDefault();
-    let divChecker = document.getElementById("inpCheck");
-    console.log(divChecker);
-
+document.getElementById("btnSubmit").addEventListener("click", function (event) {
+    
+    event.preventDefault();
     let email = document.querySelector('#formEmail');
     let password = document.getElementById("formPass");
     let confirmPassword = document.getElementById("formPassConfirm");
@@ -14,27 +11,25 @@ function formValidation() {
     let errorPassNumber = document.getElementById("errorPassNumber");
     let errorPassUpper = document.getElementById("errorPassUpper");
     let errorPassMatch = document.getElementById("errorPassMatch");
-    errorDiv = document.getElementById("inpCheck");
-    (validateEmailAddress(email.value)) ? canRemove(errorEmail) : canAppend(errorEmail);
-    (passLength) ? canRemove(errorPassLength) : canAppend(errorPassLength);
-    passContainsNumber(password.value) ? canRemove(errorPassNumber) : canAppend(errorPassNumber);
-    passHasUpper(password.value) ? canRemove(errorPassUpper) : canAppend(errorPassUpper);
-    (password.value === confirmPassword.value) ? canRemove(errorPassMatch) : canAppend(errorPassMatch);
-
+    (validateEmailAddress(email.value)) ? canRemove(errorEmail) : canAppend('errorEmail', errorEmail);
+    (passLength) ? canRemove(errorPassLength) : canAppend('errorPassLength', errorPassLength);
+    passContainsNumber(password.value) ? canRemove(errorPassNumber) : canAppend('errorPassNumber', errorPassNumber);
+    passHasUpper(password.value) ? canRemove(errorPassUpper) : canAppend('errorPassUpper', errorPassUpper);
+    (password.value === confirmPassword.value) ? canRemove(errorPassMatch) : canAppend('errorPassMatch', errorPassMatch);
     let errorElements = document.querySelectorAll('p.error');
     if (errorElements.length === 0) {
         document.forms['loginForm'].submit();
     }
+});
 
-}
 function canRemove(child) {
 
     if (child !== null) {
         errorDiv.removeChild(child);
     }
 }
-function canAppend(error) {
-    console.log(error);
+function canAppend(error, value) {
+    errorDiv = document.querySelector("#inpCheck");
     const obj_errors = {
         errorEmail: "L'email no es valid",
         errorPassLength: "La contrasenya ha de ser mes gran de 9 caracters",
@@ -42,21 +37,17 @@ function canAppend(error) {
         errorPassUpper: "El password ha de contenir minim 2 majuscules",
         errorPassMatch: "Els passwords no coincideixen"
     };
-    errorDiv.innerHtml += (value === null) ? "<p class='error' id='" + error + "'>" + obj_errors.error + "</p>" : "";
+    errorDiv.innerHTML += (value === null) ? "<p class='error' id='" + error + "'>" + obj_errors[error] + "</p>" : "";
 }
 function validateEmailAddress(emailString) {
-    console.log({ emailString });
     let atSymbol = emailString.indexOf("@");
     let dot = emailString.indexOf(".");
-    if (atSymbol < 1 && dot <= atSymbol + 2 && dot === emailString.length - 1) {
-        return false;
-    }
-    return true;
+    return !(atSymbol < 1 || dot <= atSymbol + 2 || dot === emailString.length - 1);
 }
 
 function passContainsNumber(password) {
     for (let i = 0; i < password.length; i++) {
-        if (!isNaN(password.charAt(i)) && !(password.charAt(i) === " ")) {
+        if (!isNaN(password.charAt(i)) && password.charAt(i) !== " ") {
             return true;
         }
     }
@@ -72,4 +63,4 @@ function passHasUpper(password) {
         }
     }
     return false;
-};
+}
