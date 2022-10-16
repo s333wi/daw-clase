@@ -1,0 +1,98 @@
+body {
+    background-color: #dbdbdb;
+}
+
+div#contenedor {
+
+    background-color: #ececec;
+    width: 50%;
+    margin: auto;
+}
+
+div#cabecera,
+div#pie {
+    background-color: #9a9c95;
+}
+
+#cabecera>p {
+    margin: 0;
+}
+
+div#menu,
+div#contenido,
+div#primario,
+div#secundario {
+    float: left
+}
+
+div#pie {
+    position: static;
+    clear: both;
+}
+
+div#menu {
+    width: 20%;
+}
+
+div#contenido {
+    width: 80%;
+}
+
+div#principal {
+    width: 60%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+#secundario {
+    width: 20%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+#imgHamburguesa {
+    margin-right: 10px;
+    float: left;
+}
+
+div#principal p {
+    margin: 0;
+    text-align: justify;
+    text-justify: inter-word;
+    line-height: 2;
+}
+
+#menu>ul>li {
+    display: block;
+    margin-bottom: 30px;
+
+}
+
+#menu strong {
+    border-bottom: 2px solid #ff0000;
+    border-bottom-style: dotted;
+}
+
+div#menu ul {
+    letter-spacing: 5px;
+    padding-top: 20px;
+    padding-left: 5px;
+}
+
+div#secundario {
+    margin-right: 20px;
+    margin-top: 70px;
+    padding: 50px 0px;
+    background-image: url(../material/CSS_13_fons_blau.png);
+    background-size: cover;
+    border-radius: 1em;
+    border-bottom: 5px solid #4797ad;
+
+}
+
+#secundario p {
+    margin: 0;
+    color: #f3f3f3;
+    text-align: center;
+    padding: 20px 5px;
+}

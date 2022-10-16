@@ -1,0 +1,56 @@
+body {
+    background-color: #dbdbdb;
+}
+div{max-height: 500px;
+    max-width: 700px;}
+div#contenedor {
+    background-color: #ececec;
+    width: 50%;
+    margin: auto;
+}
+
+div#cabecera,
+div#pie {
+    background-color: #9a9c95;
+}
+#cabecera > p{
+    margin: 0;
+}
+div#menu,
+div#contenido {
+    float: left
+}
+
+div#pie {
+    position:static;
+    clear: both;
+}
+
+div#menu {
+    width: 20%;
+}
+
+div#contenido{
+    width: 80%;
+}
+
+#imgHamburguesa{
+    float: right;
+}
+div#contenido p{
+    line-height: 2;
+}
+#menu>ul>li {
+    display: block;
+    margin-bottom: 30px;
+    
+}
+#menu strong{
+    border-bottom: 2px solid #ff0000;
+    border-bottom-style: dotted;
+}
+div#menu ul{
+    letter-spacing: 5px;
+    padding-top: 20px;
+    padding-left: 5px;
+}
