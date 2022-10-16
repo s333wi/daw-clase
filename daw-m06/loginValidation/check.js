@@ -34,6 +34,7 @@ function canRemove(child) {
     }
 }
 function canAppend(error) {
+    console.log(error);
     const obj_errors = {
         errorEmail: "L'email no es valid",
         errorPassLength: "La contrasenya ha de ser mes gran de 9 caracters",

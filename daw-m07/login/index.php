@@ -1,5 +1,4 @@
 <?php
-session_start();
 echo '<pre>';
 print_r($_POST);
 echo '</pre>';
@@ -38,7 +37,7 @@ if (isset($_POST['btnSubmit'])) {
             <h2>Login</h2>
             <form method='POST' target="_self" autocomplete="off">
                 <div class="user-box">
-                    <input type="text" name="username" required="" value='<?= $_COOKIE['username'] ?>'>
+                    <input type="text" name="username" required="" value='<?= !empty($_COOKIE['username']) ? $_COOKIE['username'] : "" ?>'>
                     <label>Username</label>
                 </div>
                 <div class="user-box">
