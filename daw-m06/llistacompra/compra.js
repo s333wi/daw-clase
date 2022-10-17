@@ -43,5 +43,8 @@ window.onload = function () {
     }
     console.log(arrCompra);
     storage.setItem("compra", JSON.stringify(arrCompra));
-
+    
+    $('.task-delete').click(() => {
+        idfniogf
+    })
 }

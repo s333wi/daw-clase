@@ -1,5 +1,6 @@
 <?php
 session_start();
+include_once 'logout.php';
 echo '<pre>';
 print_r($_POST);
 print_r($_SESSION);
