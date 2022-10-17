@@ -1,0 +1,20 @@
+body {
+    background-color: #39c0ff;
+}
+
+img#imgHamburguesa {
+    float: right;
+    margin: 10px;
+}
+
+.container {
+    border: 3px solid #394dff;
+    border-radius: 1em;
+    background-color: #ffffff;
+    width: 60%;
+    vertical-align: middle;
+    margin: auto;
+    padding: 30px 25px;
+
+}
+

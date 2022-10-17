@@ -1,13 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
 <?php
-echo '<pre>';
-print_r($_POST);
-echo '</pre>';
+session_start();
+
 $validation = false;
+$msg = '';
 $master_user = 'daw';
-$master_pass = '2122';
-$user = '';
+$master_pass = '2022';
+$user = (isset($_COOKIE['username'])) ? $_COOKIE['username'] : '';
 $wrong_pass = false;
-if (isset($_POST['btnSubmit'])) {
+if (isset($_POST['submit'])) {
     $user = $_POST['username'];
     if ($master_pass == $_POST['pass'] && $master_user == $user) {
         $validation = true;
@@ -16,8 +18,7 @@ if (isset($_POST['btnSubmit'])) {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
@@ -30,14 +31,14 @@ if (isset($_POST['btnSubmit'])) {
 <body>
     <?php
     if ($validation) /* Missatge benvinguda */ {
-        include_once 'menu.php';
+        header('Location:./menu.php');
     ?>
     <?php } else { ?>
         <div class="login-box">
             <h2>Login</h2>
-            <form method='POST' target="_self" autocomplete="off">
+            <form method='POST' action="index.php" autocomplete="off">
                 <div class="user-box">
-                    <input type="text" name="username" required="" value='<?= !empty($_COOKIE['username']) ? $_COOKIE['username'] : "" ?>'>
+                    <input type="text" name="username" required="" value='<?= $user ?>'>
                     <label>Username</label>
                 </div>
                 <div class="user-box">
@@ -49,13 +50,16 @@ if (isset($_POST['btnSubmit'])) {
                         <p style="color: red;">Wrong password</p>
                     </div>
                 <?php } ?>
-                <label id='remembercb'>
-                    <input type='checkbox' id='cbox1' name='<?= isset($_COOKIE['username']) ? 'formMaintainCookie' : 'formRememberCb' ?>' value='remember_cb' <?= isset($_COOKIE['username']) ? 'checked' : '' ?>>
-                    Remember me
-                </label><br>
-                <button value='submit' name='btnSubmit'>SUBMIT</button>
+                <label id='remembercb'><input type='checkbox' id='cbox1' 
+                name='<?= (isset($_COOKIE['username']) ? 'preserveCookieCb' : 'formRememberCb') ?>' 
+                value='remember_cb' <?= isset($_COOKIE['username']) ? 'checked' : '' ?>>
+                    Remember me</label><br>
+                <a>
+                    <button value='submit' name='submit'>SUBMIT</button>
+                </a>
             </form>
         </div>
     <?php } ?>
 </body>
+
 </html>
