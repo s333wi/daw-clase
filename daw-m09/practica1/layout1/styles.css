@@ -5,9 +5,12 @@ body {
 img#imgHamburguesa {
     float: right;
     margin: 10px;
+    padding-left: 30px;
 }
 
 .container {
+    min-width: 600px;
+    min-height: 300px;
     border: 3px solid #394dff;
     border-radius: 1em;
     background-color: #ffffff;
@@ -17,4 +20,9 @@ img#imgHamburguesa {
     padding: 30px 25px;
 
 }
-
+div > p{
+    margin: 0;
+    text-align: justify;
+    text-justify: inter-word;
+    line-height: 2;
+}

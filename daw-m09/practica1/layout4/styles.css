@@ -1,7 +1,8 @@
-body {
+body { 
+    margin: 0;
+    padding: 0;
     background-color: #dbdbdb;
 }
-
 div#contenedor {
     min-width: 600px;
     min-height: 400px;
@@ -45,7 +46,7 @@ div#principal {
 #secundario {
     width: 20%;
     float: right;
- 
+
     vertical-align: top;
 }
 
@@ -94,4 +95,26 @@ div#secundario {
     color: #f3f3f3;
     text-align: center;
     padding: 20px 5px;
+}
+
+#pie p {
+    margin-bottom: 0;
+}
+
+div#footer {
+    clear: both;
+    margin: 0 0;
+    color: #ffffff;
+    width: 100%;
+    height: 50px;
+    margin-top: -50px;
+    background-color: #000000;
+    position: absolute;
+    top: 100%;
+    left: 0;
+}
+
+div#footer>p {
+    text-align: end;
+    padding-right: 20px;
 }
