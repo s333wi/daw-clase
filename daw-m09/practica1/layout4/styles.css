@@ -3,7 +3,8 @@ body {
 }
 
 div#contenedor {
-
+    min-width: 600px;
+    min-height: 400px;
     background-color: #ececec;
     width: 50%;
     margin: auto;
@@ -19,14 +20,11 @@ div#pie {
 }
 
 div#menu,
-div#contenido,
-div#primario,
-div#secundario {
+div#contenido {
     float: left
 }
 
 div#pie {
-    position: static;
     clear: both;
 }
 
@@ -39,14 +37,15 @@ div#contenido {
 }
 
 div#principal {
-    width: 60%;
+    width: 70%;
     display: inline-block;
     vertical-align: top;
 }
 
 #secundario {
     width: 20%;
-    display: inline-block;
+    float: right;
+ 
     vertical-align: top;
 }
 
@@ -80,7 +79,7 @@ div#menu ul {
 }
 
 div#secundario {
-    margin-right: 20px;
+    margin-left: 20px;
     margin-top: 70px;
     padding: 50px 0px;
     background-image: url(../material/CSS_13_fons_blau.png);
