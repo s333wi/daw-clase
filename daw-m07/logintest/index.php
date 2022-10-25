@@ -1,4 +1,8 @@
 <?php
+session_start();
+if (isset($_SESSION['username'])) {
+    include_once 'logout.php';
+}
 $validation = false;
 $master_user = 'daw';
 $master_pass = '2122';

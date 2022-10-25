@@ -4,12 +4,11 @@ var arrCompra = [];
 var jsonCompra = storage.getItem("compra");
 window.onload = function () {
 
-    alert(jsonCompra);
     if (jsonCompra !== null) {
         arrCompra = JSON.parse(jsonCompra);
 
         for (let producte of arrCompra) {
-            listaCompra.innerHTML += "<li><span style='visibility:visible'>" + producte + "</span><input type=text style='visibility:hidden' id='" + producte + "'>" +
+            listaCompra.innerHTML += "<li><span>" + producte + "</span><input value='" + producte + "' type=text style='display:none' id='" + producte + "'>" +
                 "<button class='btnEdit'>Editar</button><button class='btnDelete'>Borrar</button></li>";
         }
     }
@@ -18,8 +17,8 @@ window.onload = function () {
         var addQuery = document.getElementById("searchQuery");
         alert(addQuery.value);
         arrCompra.push(addQuery.value);
-        console.log({ arrCompra });
         storage.setItem("compra", JSON.stringify(arrCompra));
+        location.reload();
     });
 
     const editArr = document.getElementsByClassName("btnEdit");
@@ -30,21 +29,30 @@ window.onload = function () {
 
             if (btnValue === "Editar") {
                 btnEdit.innerHTML = "Guardar";
-                console.log(parent.children[1]);
                 parent.children[1].value = parent.children[0].innerHTML;
-                parent.children[0].style.visibility = "hidden";
-                parent.children[1].style.visibility = "visible";
+                parent.children[0].style.display = "none";
+                parent.children[1].style.display = "inline-block";
             } else if (btnValue === "Guardar") {
-                btnEdit.innerHTML = "Editar";
-                console.log(parent.children[1]);
-                parent.children[0].style.visibility = "hidden";
-                parent.children[1].style.visibility = "none";
+                let editValue = parent.children[1].value;
                 let index = arrCompra.indexOf(parent.children[0].innerHTML);
-                console.log(parent.children[1]);
-                arrCompra[index] = parent.children[1].value;
+                arrCompra[index] = editValue;
+                storage.setItem("compra", JSON.stringify(arrCompra));
+                location.reload();
             }
         });
     }
 
-
+    const deleteArr = document.getElementsByClassName("btnDelete");
+    for (let btnDelete of deleteArr) {
+        btnDelete.addEventListener("click", function () {
+            let parent = btnDelete.parentElement;
+            let key = parent.children[0].innerHTML;
+            let confirmDelete = confirm("Segurs que vols esborrar?");
+            if (confirmDelete) {
+                arrCompra.splice(key, 1);
+                storage.setItem("compra", JSON.stringify(arrCompra));
+                location.reload();
+            }
+        });
+    }
 }
