@@ -5,14 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Agenda telefonica</title>
-        <style>
-        div {
-            margin: 10px 0px;
-        }
-        input {
-            margin-left: 5px;
-        }
-    </style>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <div><span>Nom:</span><input class="formulari" type="text" name="nom" id="inpNom"></div>
@@ -32,6 +25,18 @@
                 <option value="filterLocalitat">Cerca per localitat:</option>
             </select>
             <input type="text" name="query" id="inpQuery">
+        </div>
+        <div id="contactes">
+            <div class="contacteTemplate tr_text">
+                <p>
+                    <span style="font-weight: bold;" class="nomPersona">Nom persona</span>(tlfn: <span class="telefon">1111</span>)
+                </p>
+                <p>
+                    <span class="address">C/ Girona</span>.&nbsp;<span class="localitat">Lleida</span>
+                    <button id="btnEdit" class="personaEdit">Editar</button>
+                    <button class="personaEliminar">Eliminar</button>
+                </p>
+            </div>
         </div>
         <script src="./agenda.js"></script>
     </body>
