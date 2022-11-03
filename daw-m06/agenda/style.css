@@ -1,9 +1,13 @@
 div {
-    margin: 10px 0px;
+  margin: 10px 0px;
 }
 input {
-    margin-left: 5px;
+  margin-left: 5px;
 }
-.contacteTemplate{
-    display: none;
+#contacteTemplate {
+  display: none;
+}
+
+#btnSave {
+  display: none;
 }
