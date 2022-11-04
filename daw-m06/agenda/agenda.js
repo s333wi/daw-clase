@@ -92,6 +92,50 @@ function copySpanToForm(element, id) {
   document.getElementById("btnSave").setAttribute("data-id", id);
 }
 
+function exportContactes(text) {
+  var blob = new Blob([text], { type: "aplication/json" });
+
+  var elem = window.document.createElement("a");
+  elem.href = window.URL.createObjectURL(blob);
+  elem.download = "arxiu.txt";
+  document.body.appendChild(elem);
+  elem.click();
+  document.body.removeChild(elem);
+}
+
+function readSingleFile(e) {
+  var file = e.target.files[0];
+  if (!file) {
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    var contents = e.target.result;
+    displayContents(contents);
+  };
+  reader.readAsText(file);
+}
+
+function displayContents(contents) {
+  let storageAgenda = storage.getItem("contactes");
+  let arrContactesImport = JSON.parse(contents);
+  let arrContactesStorage = JSON.parse(storageAgenda);
+  arrContactesStorage = arrContactesStorage.concat(arrContactesImport);
+
+  //Ho fico en un map per eliminar els valors repetits
+  let foo = new Map();
+  for (const tag of arrContactesStorage) {
+    foo.set(tag.telefon, tag);
+  }
+  let sortedContactes = [...foo.values()];
+  storage.setItem("contactes", JSON.stringify(sortedContactes));
+  listContactes();
+}
+
+document
+  .getElementById("file-input")
+  .addEventListener("change", readSingleFile, false);
+
 document.addEventListener("DOMContentLoaded", function () {
   listContactes();
 });
@@ -121,7 +165,6 @@ formContacte.addEventListener("click", (e) => {
     element.style.display = "none";
     element.removeAttribute("data-id");
     let inputsForm = formContacte.querySelectorAll(".formulari");
-    console.log(inputsForm);
     Array.from(inputsForm).forEach((e) => (e.value = ""));
   }
   e.stopPropagation();
@@ -133,6 +176,16 @@ searchFilter.addEventListener("change", (e) => {
     searchMode = element.options[element.selectedIndex].value;
   }
   console.log(searchMode);
+});
+
+document.addEventListener("click", (e) => {
+  const element = e.target;
+  if (element.id === "backup") {
+    let backup = JSON.stringify(arrayContactes);
+    exportContactes(backup);
+  }
+
+  e.stopPropagation();
 });
 
 searchFilter.addEventListener("keyup", (e) => {
