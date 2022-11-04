@@ -8,38 +8,40 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div>
-      <span>Nom:</span
-      ><input class="formulari" type="text" name="nom" id="inpNom" />
+    <div id="formAgenda">
+      <div>
+        <span>Nom:</span
+        ><input class="formulari" type="text" name="nom" id="inpNom" />
+      </div>
+      <div>
+        <span>Cognom:</span
+        ><input class="formulari" type="text" name="cognom" id="inpCognom" />
+      </div>
+      <div>
+        <span>Telèfon:</span
+        ><input class="formulari" type="text" name="telefon" id="inpTelefon" />
+      </div>
+      <div>
+        <span>Adreça:</span
+        ><input class="formulari" type="text" name="address" id="inpAddress" />
+      </div>
+      <div>
+        <span>Localitat:</span
+        ><input
+          class="formulari"
+          type="text"
+          name="localitat"
+          id="inpLocalitat"
+        />
+      </div>
+      <button id="btnAdd">Afegir</button>
+      <button id="btnSave">Guardar</button>
     </div>
-    <div>
-      <span>Cognom:</span
-      ><input class="formulari" type="text" name="cognom" id="inpCognom" />
-    </div>
-    <div>
-      <span>Telèfon:</span
-      ><input class="formulari" type="text" name="telefon" id="inpTelefon" />
-    </div>
-    <div>
-      <span>Adreça:</span
-      ><input class="formulari" type="text" name="address" id="inpAddress" />
-    </div>
-    <div>
-      <span>Localitat:</span
-      ><input
-        class="formulari"
-        type="text"
-        name="localitat"
-        id="inpLocalitat"
-      />
-    </div>
-    <button id="btnAdd">Afegir</button>
-    <button id="btnSave">Guardar</button>
     <h1>Agenda</h1>
-    <div>
+    <div id="buscador">
       <select name="filter" id="selFilter">
-        <option value="filterNom">Cerca per nom:</option>
-        <option value="filterLocalitat">Cerca per localitat:</option>
+        <option value="nomPersona">Cerca per nom:</option>
+        <option value="localitat">Cerca per localitat:</option>
       </select>
       <input type="text" name="query" id="inpQuery" />
     </div>

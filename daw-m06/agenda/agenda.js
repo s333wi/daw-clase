@@ -2,6 +2,11 @@ let storage = window.localStorage;
 let jsonAgenda = storage.getItem("contactes");
 let listaContactes = document.getElementById("contactes");
 let contacteTemplate = document.getElementById("contacteTemplate");
+const formContacte = document.getElementById("formAgenda");
+const searchFilter = document.getElementById("buscador");
+const modeFilter = document.getElementById("selFilter");
+var searchMode = modeFilter.options[modeFilter.selectedIndex].value;
+
 if (jsonAgenda !== null) {
   arrayContactes = JSON.parse(jsonAgenda);
   console.log({ arrayContactes });
@@ -10,11 +15,12 @@ if (jsonAgenda !== null) {
 }
 
 document.getElementById("btnAdd").addEventListener("click", () => {
-    createContacte();
+  createContacte();
   listContactes();
 });
 
 function listContactes() {
+  //Els borro primer per a que no surtin repetits
   while (listaContactes.firstChild) {
     listaContactes.removeChild(listaContactes.lastChild);
   }
@@ -88,28 +94,64 @@ function copySpanToForm(element, id) {
 
 document.addEventListener("DOMContentLoaded", function () {
   listContactes();
-  let btnListEliminar =
-    listaContactes.getElementsByClassName("personaEliminar");
-  let btnListEditar = listaContactes.getElementsByClassName("personaEdit");
-  Array.from(btnListEliminar).forEach((element) =>
-    element.addEventListener("click", () => {
-      deleteContacte(element);
-    })
-  );
-  Array.from(btnListEditar).forEach((element) =>
-    element.addEventListener("click", () => {
-      copySpanToForm(element, element.getAttribute("data-id"));
-    })
-  );
+});
 
-  document.getElementById("btnSave").addEventListener("click", () => {
-    let contactId = document.getElementById("btnSave").getAttribute("data-id");
+listaContactes.addEventListener("click", (e) => {
+  const element = e.target;
+  if (element.classList.contains("personaEliminar")) {
+    if (confirm("Segur que vols esborrar aquest contacte??") === true)
+      deleteContacte(element);
+  }
+  if (element.classList.contains("personaEdit")) {
+    copySpanToForm(element, element.getAttribute("data-id"));
+  }
+  e.stopPropagation();
+});
+
+formContacte.addEventListener("click", (e) => {
+  const element = e.target;
+  if (element.id === "btnSave") {
+    element.getAttribute("data-id");
+    let contactId = element.getAttribute("data-id");
     listaContactes.querySelector("div[data-id='" + contactId + "']").remove();
     storage.setItem("contactes", JSON.stringify(arrayContactes));
-    createContactes();
+    createContacte();
     listContactes();
     document.getElementById("btnAdd").style.display = "block";
-    document.getElementById("btnSave").style.display = "none";
-    document.getElementById("btnSave").removeAttribute("data-id");
-  });
+    element.style.display = "none";
+    element.removeAttribute("data-id");
+    let inputsForm = formContacte.querySelectorAll(".formulari");
+    console.log(inputsForm);
+    Array.from(inputsForm).forEach((e) => (e.value = ""));
+  }
+  e.stopPropagation();
+});
+
+searchFilter.addEventListener("change", (e) => {
+  const element = e.target;
+  if (element.id === "selFilter") {
+    searchMode = element.options[element.selectedIndex].value;
+  }
+  console.log(searchMode);
+});
+
+searchFilter.addEventListener("keyup", (e) => {
+  const element = e.target;
+  console.log(searchMode);
+  if (element.id === "inpQuery") {
+    let searchQuery = element.value;
+    searchQuery = searchQuery.toUpperCase();
+    let arrContactes = listaContactes.getElementsByTagName("div");
+    Array.from(arrContactes, (contacte) => {
+      console.log(contacte);
+      console.log(searchQuery);
+      let textInfo = contacte.querySelector("span." + searchMode).innerHTML;
+      console.log(textInfo);
+      if (textInfo.toUpperCase().indexOf(searchQuery) > -1 || textInfo === "") {
+        contacte.style.display = "block";
+      } else {
+        contacte.style.display = "none";
+      }
+    });
+  }
 });
