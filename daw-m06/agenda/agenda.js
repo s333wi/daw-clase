@@ -9,7 +9,6 @@ var searchMode = modeFilter.options[modeFilter.selectedIndex].value;
 
 if (jsonAgenda !== null) {
   arrayContactes = JSON.parse(jsonAgenda);
-  console.log({ arrayContactes });
 } else {
   var arrayContactes = new Array();
 }
@@ -33,7 +32,6 @@ function listContactes() {
 function createContacte() {
   let formulari = document.getElementsByClassName("formulari");
   let formInputs = Array.from(formulari, (element) => element.value);
-  console.log({ formInputs });
   let contacte = {
     nom: formInputs[0],
     cognom: formInputs[1],
@@ -43,7 +41,6 @@ function createContacte() {
   };
   arrayContactes.push(contacte);
   storage.setItem("contactes", JSON.stringify(arrayContactes));
-  console.log({ arrayContactes });
   cloneContacte(contacte);
 }
 
@@ -68,10 +65,7 @@ function deleteContacte(element) {
   let data_id = element.getAttribute("data-id");
   var arrayContactes = JSON.parse(jsonAgenda);
   var found = arrayContactes.findIndex((element) => element.telefon == data_id);
-  console.log(found);
-  console.log({ arrayContactes });
   arrayContactes.splice(found, 1);
-  console.log({ arrayContactes });
   listaContactes.querySelector("div[data-id='" + data_id + "']").remove();
   storage.setItem("contactes", JSON.stringify(arrayContactes));
 }
@@ -79,7 +73,6 @@ function deleteContacte(element) {
 function copySpanToForm(element, id) {
   let parent = element.parentNode.parentNode;
   var found = arrayContactes.findIndex((element) => element.telefon == id);
-  console.log(found);
   let spansList = parent.querySelectorAll("span");
   var formulari = document.getElementsByClassName("formulari");
   let indexForm = 0;
@@ -175,7 +168,6 @@ searchFilter.addEventListener("change", (e) => {
   if (element.id === "selFilter") {
     searchMode = element.options[element.selectedIndex].value;
   }
-  console.log(searchMode);
 });
 
 document.addEventListener("click", (e) => {
@@ -190,16 +182,12 @@ document.addEventListener("click", (e) => {
 
 searchFilter.addEventListener("keyup", (e) => {
   const element = e.target;
-  console.log(searchMode);
   if (element.id === "inpQuery") {
     let searchQuery = element.value;
     searchQuery = searchQuery.toUpperCase();
     let arrContactes = listaContactes.getElementsByTagName("div");
     Array.from(arrContactes, (contacte) => {
-      console.log(contacte);
-      console.log(searchQuery);
       let textInfo = contacte.querySelector("span." + searchMode).innerHTML;
-      console.log(textInfo);
       if (textInfo.toUpperCase().indexOf(searchQuery) > -1 || textInfo === "") {
         contacte.style.display = "block";
       } else {
