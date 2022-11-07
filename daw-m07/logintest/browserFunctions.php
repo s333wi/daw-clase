@@ -8,6 +8,7 @@ $ext = pathinfo($ruta_user, PATHINFO_EXTENSION);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+echo 'Var ruta_root: '. $ruta_root .'<br>';
 
 
 //Funcio recursiva per borrar directori
@@ -35,7 +36,6 @@ function copyDir($src, $dst)
     echo 'Dest:' . $dst . '<br>';
     $file = basename($src);
     if (is_dir($src)) {
-        // 
         $dir = opendir($src);
         //Si no existeix creo la carpeta i em guardo la ruta per guardar els arxius adins
         if (!file_exists($dst)) mkdir($dst);
