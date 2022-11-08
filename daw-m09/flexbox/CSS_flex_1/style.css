@@ -12,8 +12,6 @@ body {
   display: flex;
   flex-direction: column;
   align-content: space-between;
-  flex-wrap: nowrap;
-  background-color: DodgerBlue;
 }
 
 .flex-container > div {
@@ -27,30 +25,34 @@ body {
 #header {
   height: 40px;
 }
-/* #header {
-  margin-top: 0;
-}
-#footer {
-  margin-top: auto;
-} */
 
 div.flex-item {
   flex: 1 1 auto;
-  display: inline-flex;
-  height: max-content;
+  display: flex;
   justify-content: center;
   align-items: stretch;
 }
-
-.flex-item > div {
-  background-color: #a19f9f;
+.flex-item > div{
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 32px;
 }
+
 #centerflex {
-  background-color: red;
+  background-color: #44ffd1;
   flex: 1 0 50%;
 }
 
 #leftflex,
 #rightflex {
   flex: 1 0 25%;
+}
+
+#leftflex {
+  background-color: #ffc944;
+}
+
+#rightflex {
+  background-color: #cd0000;
 }
