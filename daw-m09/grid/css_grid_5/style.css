@@ -1,0 +1,39 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.item-1 {
+  grid-area: header;
+  background-color: #b03532;
+}
+.item-2 {
+  background-color: #33a8a5;
+  grid-area: main;
+}
+.item-3 {
+  grid-area: side;
+  background-color: #30997a;
+}
+.item-4 {
+  grid-area: footer;
+  background-color: #6a478f;
+}
+
+section.g1 {
+  padding: 10px;
+  background-color: #888888;
+  display: grid;
+  grid-template: "header header header" auto "main main side" auto "footer footer footer" auto;
+  gap: 10px;
+}
+
+.g1 > div {
+  padding: 10px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #ffffff;
+  height: 100px;
+}
