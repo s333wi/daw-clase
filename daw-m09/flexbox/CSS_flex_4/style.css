@@ -1,9 +1,14 @@
+html,
 body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   font-family: "Roboto", sans-serif;
 }
 .sidebarw {
   background-color: #995bed;
-  width: 500px;
+  width: 300px;
 }
 
 ul {
@@ -11,6 +16,7 @@ ul {
   padding: 0px;
   margin: 0px;
   text-align: left;
+  margin-bottom: 50px;
 }
 ul li {
   color: #555555;
@@ -30,10 +36,19 @@ i {
   margin: 0px 10px;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  flex: 1 0 100%;
 }
-li.active {
+/* enlloc d'utilitzar la classe active he utilitzat hover perque semblava mes realista */
+
+li:hover {
   background-color: #f7f2ff;
   color: #995bed;
+}
+
+li.active {
+  background-color: #e1d2fa;
+  color: #6704f1;
 }
 
 h3 {
@@ -53,6 +68,7 @@ h4 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 0;
 }
 .sidebarp img {
   border-radius: 50%;
