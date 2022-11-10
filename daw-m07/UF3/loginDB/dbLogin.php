@@ -1,5 +1,4 @@
 <?php
-print_r($_POST);
 
 if (isset($_POST)) {
     include_once './connectionDB.php';
