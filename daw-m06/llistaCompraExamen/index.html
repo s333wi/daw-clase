@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Llista de la compra</title>
+        <style>
+        button {
+            margin-left: 20px;
+        }
+
+        li {
+            margin-top: 5px;
+        }
+    </style>
+    </head>
+
+    <body>
+        <div id="formProducte">
+            <input class="formulariInp" type="number" name="quantitat"
+                id="inpQuantitat"
+                placeholder="Quantitat">
+            <select class="formulariInp" name="unitatPes" id="inpUnitatPes">
+                <option value="kg">Kg</option>
+                <option value="uds">Unitats</option>
+            </select>
+            <input class="formulariInp" type="text" name="producteSearch"
+                id="inpProducteSearch"
+                placeholder="Producte">
+            <select class="formulariInp" name="producteTipus"
+                id="inpProducteTipus">
+                <option value="tipusVerdura">Verdura</option>
+                <option value="tipusFruita">Fruita</option>
+            </select>
+            <input id="btnAdd" type="button" value="Afegir">
+            <input id="btnSave" type="button" value="Guardar"
+                style="display:hidden">
+        </div>
+        <h1>Llista compra</h1>
+        <div id="verdures">
+            <h2>Verdura</h2>
+            <ul id="listaCompraVerdura">
+            </ul>
+        </div>
+        <div id="fruites">
+            <h2>Fruita</h2>
+            <ul id="listaCompraFruita">
+            </ul>
+        </div>
+        <li id="templateProducte" style="display:hidden">
+            <span class="prodQuantitat">1</span>&nbsp;<span
+                class="prodTipusPes">Kg</span>.&nbsp;<span
+                class="nomProducte">Pera</span>
+            <input class="btnEdit" type="button" value="Editar">
+            <input class="btnDelete" type="button" value="Eliminar">
+        </li>
+        <script src="compra.js"></script>
+    </body>
+
+</html>
