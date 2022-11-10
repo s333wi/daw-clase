@@ -1,0 +1,30 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.grid-container {
+  padding: 10px;
+  padding-top: 100px;
+  width: auto;
+  height: fit-content;
+  background-color: #ff6347;
+  display: grid;
+  grid-template-columns: 50% 25% 25%;
+  grid-template-rows: 300px 200px;
+  place-items: center;
+}
+
+div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 36px;
+  background-color: #ffe0da;
+  border: 1px solid #ff6347;
+  height: 100%;
+  width: 100%;
+}

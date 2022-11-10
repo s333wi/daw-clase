@@ -1,0 +1,28 @@
+html,
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+h1 {
+  color: #ff6347;
+}
+
+div.llist {
+  margin-left: 10px;
+  margin-top: 10px;
+  display: flex;
+  gap: 30px;
+}
+
+div.llist div {
+  width: 175px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding:0 10px;
+  border: 2px solid #b9b9b9;
+  background-color: #e5e5e5;
+  border-radius: 5px;
+}
