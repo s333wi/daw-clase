@@ -1,0 +1,57 @@
+:root {
+  --altura: calc(100% - 80px);
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+#header {
+  grid-area: header;
+}
+#footer {
+  grid-area: footer;
+}
+#left {
+  grid-area: left;
+  background-color: #ffc944;
+}
+#right {
+  grid-area: right;
+  background-color: #cd0000;
+}
+#center {
+  grid-area: main;
+  background-color: #44ffd1;
+}
+
+#left,
+#right,
+#center {
+  height: 100%;
+}
+
+#header,
+#footer {
+  height: 48px;
+  text-align: center;
+}
+.grid-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template:
+    "header header header" auto
+    "left main right" 1fr
+    "footer footer footer" auto/
+    25% 50% 25%;
+  align-items: center;
+  text-align: center;
+}
+
+#header,
+#footer {
+  background-color: #f3f3f3;
+}
