@@ -16,6 +16,9 @@ if (jsonAgenda !== null) {
 document.getElementById("btnAdd").addEventListener("click", () => {
   createContacte();
   listContactes();
+  let formulari = document.getElementsByClassName("formulari");
+  Array.from(formulari, (element) => element.value='');
+
 });
 
 function listContactes() {
