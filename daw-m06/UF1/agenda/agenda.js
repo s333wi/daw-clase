@@ -6,12 +6,12 @@ const formContacte = document.getElementById("formAgenda");
 const searchFilter = document.getElementById("buscador");
 const modeFilter = document.getElementById("selFilter");
 var searchMode = modeFilter.options[modeFilter.selectedIndex].value;
-
-if (jsonAgenda !== null) {
-  arrayContactes = JSON.parse(jsonAgenda);
-} else {
-  var arrayContactes = new Array();
-}
+//
+//if (jsonAgenda !== null) {
+//  arrayContactes = JSON.parse(jsonAgenda);
+//} else {
+//  var arrayContactes = new Array();
+//}
 
 document.getElementById("btnAdd").addEventListener("click", () => {
   createContacte();
@@ -29,10 +29,11 @@ function listContactes() {
   let jsonAgenda = storage.getItem("contactes");
   var arrayContactes = JSON.parse(jsonAgenda);
   arrayContactes.forEach((contacte) => {
-    cloneContacte(contacte);
+        printContacte(contacte);
   });
 }
 function createContacte() {
+  var arrayContactes=storage.getItem("contactes")==null?[]:JSON.parse(storage.getItem("contactes"));
   let formulari = document.getElementsByClassName("formulari");
   let formInputs = Array.from(formulari, (element) => element.value);
   let contacte = {
@@ -44,10 +45,10 @@ function createContacte() {
   };
   arrayContactes.push(contacte);
   storage.setItem("contactes", JSON.stringify(arrayContactes));
-  cloneContacte(contacte);
+  printContacte(contacte);
 }
 
-function cloneContacte(contacte) {
+function printContacte(contacte) {
   let contacteClone = contacteTemplate.cloneNode(true);
   contacteClone.removeAttribute("id");
   contacteClone.setAttribute("data-id", contacte.telefon);
@@ -71,9 +72,15 @@ function deleteContacte(element) {
   arrayContactes.splice(found, 1);
   listaContactes.querySelector("div[data-id='" + data_id + "']").remove();
   storage.setItem("contactes", JSON.stringify(arrayContactes));
+  saveLocalestorge("contactes",  JSON.stringify(arrayContactes));
+}
+
+function saveLocalestorge(item, params){
+    storage.setItem(item, params);
 }
 
 function copySpanToForm(element, id) {
+    var arrayContactes = JSON.parse(jsonAgenda);
   let parent = element.parentNode.parentNode;
   var found = arrayContactes.findIndex((element) => element.telefon == id);
   let spansList = parent.querySelectorAll("span");
