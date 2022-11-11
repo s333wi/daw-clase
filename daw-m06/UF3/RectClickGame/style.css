@@ -1,0 +1,28 @@
+html,
+body {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+}
+#counter-result{
+    display: flex;
+    justify-content: center;
+    gap:10px;
+    font-size:36px;
+}
+.flex-container {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 20px;
+}
+#tauler {
+  background-color: #6e37db;
+}
+
+#target {
+  background-color: #3bd4ae;
+  position: relative;
+}
