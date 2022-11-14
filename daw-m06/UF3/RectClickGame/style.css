@@ -24,5 +24,6 @@ body {
 
 #target {
   background-color: #3bd4ae;
+  border-radius: 50%;
   position: relative;
 }
