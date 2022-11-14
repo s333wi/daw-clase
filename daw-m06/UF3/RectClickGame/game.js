@@ -1,4 +1,9 @@
+//Var per al score
+var clickCounter = 0;
+//Temps inicial interval
+var gameTargetIntervalInitTime = 2000;
 var startTime = new Date().getTime();
+
 //Temps total del contador, si no es fica minuts s'utilitzaran nomes els segons
 var minuts = 1;
 var segons = 25;
@@ -6,15 +11,21 @@ var tempsTotal = minuts * 60 || segons;
 
 //Funcions del contador
 
-//Funcio main del contador
+//Funcio main del contadorx
 function timerCount(timer) {
   timer.usedTime = Math.floor((+new Date() - timer.startTime) / 10);
 
   var remainingTime = timer.totalTime - timer.usedTime;
   timer.elem.style.color = remainingTime <= 1000 ? "red" : "black";
   if (remainingTime <= 0) {
+    //Reiniciem les variables per un nou joc
     clearInterval(gameTargetInterval);
     gameTargetInterval = 0;
+    gameTargetIntervalTime = gameTargetIntervalInitTime;
+    clickCounter = 0;
+    counterAccumulator.innerHTML = 0;
+    targetGame.style.left = "0" + dimensionsUnit;
+    targetGame.style.top = "0" + dimensionsUnit;
     alert("TIMEUP");
     clearInterval(timer.timerID);
     btnStart.style.display = "block";
@@ -85,15 +96,6 @@ function Countdown(elem, seconds) {
 var span = document.getElementById("time");
 var countdown = new Countdown(span, tempsTotal);
 
-//Agregar els events als botons del contador i les seves accions corresponents
-document.getElementById("stop").addEventListener("click", function () {
-  countdown.stop();
-});
-
-document.getElementById("reset").addEventListener("click", function () {
-  countdown.reset();
-});
-
 //Declaro les dimensions aqui per si un dia les volem canviar
 var boxWidth = 800;
 var boxHeight = 500;
@@ -108,20 +110,18 @@ var boxGame = document.getElementById("tauler");
 var targetGame = document.getElementById("target");
 boxGame.style.width = boxWidth + dimensionsUnit;
 boxGame.style.height = boxHeight + dimensionsUnit;
-targetGame.style.width = targetWidth + dimensionsUnit;
-targetGame.style.height = targetHeight + dimensionsUnit;
+// targetGame.style.width = targetWidth + dimensionsUnit;
+// targetGame.style.height = targetHeight + dimensionsUnit;
 
 //Parent dels botons i contador
-var counterResult = document.getElementById("counter-result");
-// var counterAccumulator = counterResult.getElementById('correctClick'); ??????????
-var counterAccumulator = document.getElementById("correctClick");
+var counterResult = document.querySelector("#counter-result");
+var counterAccumulator = counterResult.querySelector("#correctClick");
 var btnStart = document.getElementById("startGame");
 var btnStop = document.getElementById("stopGame");
 
 //Id interval del target
 var gameTargetInterval;
 var gameTargetTimeout = 0;
-var gameTargetIntervalInitTime = 2000;
 var gameTargetIntervalTime = gameTargetIntervalInitTime;
 
 //Posicions inicials del target
@@ -130,31 +130,18 @@ var posY = 0;
 
 function moveTarget() {
   if (gameTargetInterval) clearInterval(gameTargetInterval);
-  gameTargetInterval = setInterval(function () {
-    posX = Math.floor(Math.random() * (boxWidth - targetWidth));
-    posY = Math.floor(Math.random() * (boxHeight - targetHeight));
-    targetGame.style.left = posX.toString() + dimensionsUnit;
-    targetGame.style.top = posY.toString() + dimensionsUnit;
-  }, gameTargetIntervalTime);
+  posX = Math.floor(Math.random() * (boxWidth - targetWidth));
+  posY = Math.floor(Math.random() * (boxHeight - targetHeight));
+  targetGame.style.left = posX.toString() + dimensionsUnit;
+  targetGame.style.top = posY.toString() + dimensionsUnit;
 }
+
 counterResult.addEventListener("click", function (e) {
   const element = e.target;
   if (element.id === "startGame") {
-    counterAccumulator.innerHTML = 0;
-    targetGame.style.left = "0" + dimensionsUnit;
-    targetGame.style.top = "0" + dimensionsUnit;
-    alert("Empieza");
-    if (gameTargetInterval) {
+    gameTargetInterval = setInterval(function () {
       moveTarget();
-    } else {
-      gameTargetInterval = setInterval(function () {
-        posX = Math.floor(Math.random() * (boxWidth - targetWidth));
-        posY = Math.floor(Math.random() * (boxHeight - targetHeight));
-        targetGame.style.left = posX.toString() + dimensionsUnit;
-        targetGame.style.top = posY.toString() + dimensionsUnit;
-      }, gameTargetIntervalInitTime);
-    }
-
+    }, gameTargetIntervalTime);
     countdown.reset();
     countdown.start();
     element.style.display = "block";
@@ -167,21 +154,19 @@ counterResult.addEventListener("click", function (e) {
     countdown.stop();
   }
 });
-var clickCounter = 0;
-boxGame.addEventListener("click", function (e) {
-  const element = e.target;
-  if (element.id === "target" && gameTargetInterval) {
+
+targetGame.addEventListener("click", function (e) {
+  if (gameTargetInterval) {
     clickCounter++;
     if (gameTargetTimeout) {
       clearTimeout(gameTargetTimeout);
     }
-    targetGame.style.display = "none";
-    gameTargetTimeout = setTimeout(function () {
-      targetGame.style.display = "block";
-    }, gameTargetIntervalTime);
-    if (gameTargetIntervalTime > 500) gameTargetIntervalTime -= 100;
+    // targetGame.style.display = "none";
     moveTarget();
+    // gameTargetTimeout = setTimeout(function () {
+    //   targetGame.style.display = "block";
+    // }, gameTargetIntervalTime);
+    if (gameTargetIntervalTime > 500) gameTargetIntervalTime -= 100;
     counterAccumulator.innerHTML = clickCounter;
-    console.log(clickCounter);
   }
 });
