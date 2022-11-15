@@ -7,7 +7,7 @@ var startTime = new Date().getTime();
 //Temps total del contador, si no es fica minuts s'utilitzaran nomes els segons
 var minuts = 1;
 var segons = 25;
-var tempsTotal = minuts * 60 || segons;
+var tempsTotal = minuts * 60 + segons|| segons;
 
 //Funcions del contador
 
@@ -80,7 +80,7 @@ function Countdown(elem, seconds) {
 
   timerObj.start = function () {
     if (!timerObj.timerID) {
-      timerObj.timerID = setInterval(timerObj.count, 1);
+      timerObj.timerID = setInterval(timerObj.count,100);
     }
   };
 
