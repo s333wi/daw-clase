@@ -6,7 +6,6 @@ window.onload = function () {
 
     if (jsonCompra !== null) {
         arrCompra = JSON.parse(jsonCompra);
-
         for (let producte of arrCompra) {
             listaCompra.innerHTML += "<li><span>" + producte + "</span><input value='" + producte + "' type=text style='display:none' id='" + producte + "'>" +
                 "<button class='btnEdit'>Editar</button><button class='btnDelete'>Borrar</button></li>";
