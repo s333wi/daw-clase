@@ -14,7 +14,6 @@ window.onload = function () {
 
     document.getElementById("btnSearch").addEventListener("click", function () {
         var addQuery = document.getElementById("searchQuery");
-        alert(addQuery.value);
         arrCompra.push(addQuery.value);
         storage.setItem("compra", JSON.stringify(arrCompra));
         location.reload();

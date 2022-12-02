@@ -4,40 +4,38 @@ var minuts = 1;
 var segons = 25;
 var tempsTotal = minuts * 60 || segons;
 
-
 //Constructor del contador
 function Countdown(elem, seconds) {
-  //
-   var timerObj = {};
-   timerObj.elem = elem;
-   timerObj.seconds = seconds;
-   timerObj.totalTime = seconds * 100;
-   timerObj.usedTime = 0;
-   timerObj.startTime = +new Date();
-   timerObj.timerID = null;
- 
-   //Metodes del contador
-   timerObj.count = function () {
-     timerCount(timerObj);
-   };
- 
-   timerObj.reset = function () {
-     resetTimer(timerObj, seconds);
-   };
- 
-   timerObj.start = function () {
-     if (!timerObj.timerID) {
-       timerObj.timerID = setInterval(timerObj.count, 1);
-     }
-   };
- 
-   timerObj.stop = function () {
-     console.log("usedTime = " + countdown.usedTime);
-     if (timerObj.timerID) clearInterval(timerObj.timerID);
-   };
- 
-   return timerObj;
- }
+  //Atributs del contador
+  var timerObj = {};
+  timerObj.elem = elem;
+  timerObj.seconds = seconds;
+  timerObj.totalTime = seconds * 100;
+  timerObj.usedTime = 0;
+  timerObj.startTime = +new Date();
+  timerObj.timerID = null;
+
+  //Metodes del contador
+  timerObj.count = function () {
+    timerCount(timerObj);
+  };
+
+  timerObj.reset = function () {
+    resetTimer(timerObj, seconds);
+  };
+
+  timerObj.start = function () {
+    if (!timerObj.timerID) {
+      timerObj.timerID = setInterval(timerObj.count, 1);
+    }
+  };
+
+  timerObj.stop = function () {
+    if (timerObj.timerID) clearInterval(timerObj.timerID);
+  };
+
+  return timerObj;
+}
 
 //Funcions del contador
 
@@ -53,7 +51,7 @@ function timerCount(timer) {
     clearInterval(timer.timerID);
     btnStart.style.display = "block";
     btnStop.style.display = "none";
-    playGame=false;
+    playGame = false;
     timer.reset();
   } else {
     var mi = Math.floor(remainingTime / (60 * 100));
@@ -83,20 +81,9 @@ function resetTimer(timerObj, seconds) {
   }
 }
 
-
-
 //Creacio del contador
 var span = document.getElementById("time");
 var countdown = new Countdown(span, tempsTotal);
-
-//Agregar els events als botons del contador i les seves accions corresponents
-document.getElementById("stop").addEventListener("click", function () {
-  countdown.stop();
-});
-
-document.getElementById("reset").addEventListener("click", function () {
-  countdown.reset();
-});
 
 //Declaro les dimensions aqui per si un dia les volem canviar
 var boxWidth = 800;
@@ -131,6 +118,7 @@ var gameTargetIntervalTime = gameTargetIntervalInitTime;
 var posX = 0;
 var posY = 0;
 
+//Main function per moure el target
 function moveTarget() {
   posX = Math.floor(Math.random() * (boxWidth - targetWidth));
   posY = Math.floor(Math.random() * (boxHeight - targetHeight));
@@ -139,49 +127,60 @@ function moveTarget() {
 }
 
 //Variable per veure si es pot jugar, fins que no doni al start no es pot
-var playGame; 
+var playGame;
 
+//Afegir events als botons de start i stop
 counterResult.addEventListener("click", function (e) {
   const element = e.target;
   if (element.id === "startGame") {
+
+    //M'asseguro que totes les variables estiguin a zero com si fos un nou joc
     clickCounter = 0;
     counterAccumulator.innerHTML = clickCounter;
     targetGame.style.left = "0" + dimensionsUnit;
     targetGame.style.top = "0" + dimensionsUnit;
     alert("Empieza");
-    if (gameTargetInterval) {
+
+    //Moure el target i ficar el temps inicial a l'interval
+    moveTarget();
+    gameTargetInterval = setInterval(function () {
       moveTarget();
-    } else {
-      moveTarget();
-      gameTargetInterval = setInterval(function () {
-        moveTarget();
-      }, gameTargetIntervalInitTime);
-    }
+    }, gameTargetIntervalInitTime);
+
+    //Reset del crono
     countdown.reset();
     countdown.start();
+
+    //Amago el boto de start
     element.nextElementSibling.style.display = "block";
     element.style.display = "none";
     gameTargetIntervalTime = gameTargetIntervalInitTime;
-    playGame=true;
+    playGame = true;
   } else if (element.id === "stopGame") {
-    playGame=false;
+    playGame = false;
     clearInterval(gameTargetInterval);
     element.previousElementSibling.style.display = "block";
     element.style.display = "none";
     countdown.stop();
   }
 });
+
+//Event i tractament dels intervals al fer click al target
 boxGame.addEventListener("click", function (e) {
   const element = e.target;
   if (element.id === "target" && gameTargetInterval && playGame) {
     clearInterval(gameTargetInterval);
     clickCounter++;
-    if (gameTargetIntervalTime > 500) gameTargetIntervalTime -= 100;
+
+    //Poso un limit al interval per a que no sigui impossible clicar
+    if (gameTargetIntervalTime > 600) gameTargetIntervalTime -= 100;
+    
+    //Per ultim moc el target li fico un interval i aumento el comptador
     moveTarget();
     gameTargetInterval = setInterval(function () {
       moveTarget();
     }, gameTargetIntervalTime);
+
     counterAccumulator.innerHTML = clickCounter;
-    console.log(clickCounter);
   }
 });
