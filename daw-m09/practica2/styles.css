@@ -1,14 +1,7 @@
 :root {
     --btnTextColor: #000000;
-    --shape: 75%;
-    /* Posar a 0 si es vol quadrat a 75% si es vol amb cercles */
-    --shapecornerleft: 75%;
-    /* 5% 0% 0% 5% per quadrat i 75% per cercle*/
-    --shapecornerright:75%;
-    /* 0% 5% 5% 0% per quadrat i 75% per cercle*/
-    --marginbetween:12px;
-    /*12px per al cercle*/
-    --float: left;
+    --shape:0%;
+    /* Posar a 0 si es vol quadrat a 100 si es vol amb cercles */
 }
 
 .pagination {
@@ -19,20 +12,15 @@
     width: max-content;
     height: max-content;
 }
-
-a:first-child {
-    border-radius: var(--shapecornerleft);
+a:first-child
+{
+    border-radius:5% 0% 0% 5%;
 }
 
-a:hover {
-    background-color: #777777;
-}
-
-a:last-child {
+a:last-child{
     border-right-style: solid;
-    border-radius: var(--shapecornerright);
+    border-radius: 0% 5% 5% 0%;
 }
-
 a {
     border: 1px solid #777;
     border-radius: var(--shape);
@@ -41,11 +29,7 @@ a {
     width: 40px;
     height: 40px;
     padding: 10px;
-    display: inline-block;
-    float: var(--float);
-    margin: var(--marginbetween);
-    line-height: 40px;
-    text-align: center;
+    float: left;
     box-shadow: 0px 2px 8px 1px rgb(0 0 0 / 20%);
     border-right-style: none;
 }
