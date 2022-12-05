@@ -1,3 +1,5 @@
+const pairs = 12;
+const totalCards = pairs * 2;
 const cardsObj = [
   { id: 1, imgPath: "/resources/frontal1.png" },
   { id: 2, imgPath: "/resources/frontal2.png" },
@@ -27,6 +29,8 @@ const cardsObj = [
 
 const cardBackImgPath = "/resources/trasera.png";
 const cardContainerElem = document.querySelector(".card-container");
+const matchSpan = document.getElementById("encerts");
+const triesSpan = document.getElementById("intents");
 /* <div class="card">
 <div class="card-inner">
     <div class="card-front">
@@ -37,56 +41,79 @@ const cardContainerElem = document.querySelector(".card-container");
     </div>
 </div>
 </div> */
-function createRandPos(arr) {
-  for (var i = 1; i <= 24; i++) {
-    arr.push(i);
+function createRandPos() {
+  let baseArr = [];
+  for (var i = 1; i <= totalCards; i++) {
+    baseArr.push(i);
   }
+
+  let randArr = [];
+  for (let i = 0; i < totalCards; i++) {
+    let arr = baseArr[Math.floor(Math.random() * baseArr.length)];
+    console.log(arr);
+    while (arr + pairs === baseArr[baseArr.length - 1]) {
+      console.log(arr);
+      console.log("coincide");
+      console.log("current: " + arr, "last:" + baseArr[baseArr.length - 1]);
+      arr = baseArr[Math.floor(Math.random() * baseArr.length)];
+    }
+    let index = baseArr.indexOf(arr);
+
+    baseArr.splice(index, 1);
+
+    randArr.push(arr);
+  }
+  return randArr;
 }
 
-let cardsGame = [];
-let randCardPos = [];
-createRandPos(randCardPos);
-const b = randCardPos.slice();
-const newArr = [];
+const randArr = createRandPos();
 
-for (let i = 0; i < 24; i++) {
-  let arr = b[Math.floor(Math.random() * b.length)];
-  let index = b.indexOf(arr);
-
-  b.splice(index, 1);
-
-  newArr.push(arr);
-}
-
-console.log(randCardPos);
-console.log(newArr);
+console.log(randArr);
 createCards();
-let lastCardId = 0;
 
 //Creem les cartes al tauler
 function createCards() {
-  newArr.forEach((id) => {
+  randArr.forEach((id) => {
     //La primera del array es 0 i jo genero ids del 1-24 per tant he de restar 1 per accedir a la seva posicio
     createCard(cardsObj[id - 1]);
   });
 }
 
 let cards = document.querySelectorAll(".card");
+let lastCardId;
 let cardsFlipped = 0;
 let flipTime;
+let matchResult = 0;
+let triesResult = 0;
 cards.forEach((card) => {
   card.addEventListener("click", function (e) {
     let innerCard = card.firstChild;
-    console.log({ innerCard });
+    console.log("Last card: " + lastCardId);
+
     if (innerCard.classList.contains("flip")) {
       innerCard.classList.remove("flip");
     } else if (cardsFlipped < 2) {
       addClassToElement(innerCard, "flip");
       if (flipTime && cardsFlipped === 0) {
+        flipTime = undefined; //preguntar per que no funciona amb clear interval
       }
       cardsFlipped++;
     }
+
     if (cardsFlipped === 2 && flipTime === undefined) {
+      if (
+        (+card.id <= 12 && +card.id + 12 === lastCardId) ||
+        (+card.id > 12 && +card.id - 12 === lastCardId)
+      ) {
+        document.querySelectorAll(".flip").forEach((card) => {
+          card.classList.add("match");
+          card.classList.remove("flip");
+          console.log({ card });
+        });
+        matchSpan.innerHTML = ++matchResult;
+      } else {
+        triesSpan.innerHTML = ++triesResult;
+      }
       flipTime = setTimeout(() => {
         document.querySelectorAll(".flip").forEach((card) => {
           card.classList.remove("flip");
@@ -94,6 +121,7 @@ cards.forEach((card) => {
         cardsFlipped = 0;
       }, 2000);
     }
+    lastCardId = +card.id;
   });
 });
 
@@ -111,7 +139,7 @@ function createCard(card) {
   //Afegir la classe i el id a una carta
   addClassToElement(cardElem, "card");
 
-  addIdToElement(cardInner, card.id);
+  addIdToElement(cardElem, card.id);
   addClassToElement(cardInner, "card-inner");
   addClassToElement(cardFront, "card-front");
   addClassToElement(cardBack, "card-back");
