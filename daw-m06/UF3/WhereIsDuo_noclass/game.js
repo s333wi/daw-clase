@@ -11,6 +11,18 @@ const cardsObj = [
   { id: 10, imgPath: "/resources/frontal10.png" },
   { id: 11, imgPath: "/resources/frontal11.png" },
   { id: 12, imgPath: "/resources/frontal12.png" },
+  { id: 13, imgPath: "/resources/frontal1.png" },
+  { id: 14, imgPath: "/resources/frontal2.png" },
+  { id: 15, imgPath: "/resources/frontal3.png" },
+  { id: 16, imgPath: "/resources/frontal4.png" },
+  { id: 17, imgPath: "/resources/frontal5.png" },
+  { id: 18, imgPath: "/resources/frontal6.png" },
+  { id: 19, imgPath: "/resources/frontal7.png" },
+  { id: 20, imgPath: "/resources/frontal8.png" },
+  { id: 21, imgPath: "/resources/frontal9.png" },
+  { id: 22, imgPath: "/resources/frontal10.png" },
+  { id: 23, imgPath: "/resources/frontal11.png" },
+  { id: 24, imgPath: "/resources/frontal12.png" },
 ];
 
 const cardBackImgPath = "/resources/trasera.png";
@@ -26,37 +38,56 @@ const cardContainerElem = document.querySelector(".card-container");
 </div>
 </div> */
 function createRandPos(arr) {
-  for (var i = 3; i <= 24; i++) {
+  for (var i = 1; i <= 24; i++) {
     arr.push(i);
   }
 }
 
 let cardsGame = [];
-createCards();
-createCards();
-let cards = document.querySelectorAll(".card");
 let randCardPos = [];
 createRandPos(randCardPos);
+const b = randCardPos.slice();
+const newArr = [];
+
+for (let i = 0; i < 24; i++) {
+  let arr = b[Math.floor(Math.random() * b.length)];
+  let index = b.indexOf(arr);
+
+  b.splice(index, 1);
+
+  newArr.push(arr);
+}
+
 console.log(randCardPos);
+console.log(newArr);
+createCards();
+let lastCardId = 0;
 
 //Creem les cartes al tauler
 function createCards() {
-  cardsObj.forEach((card) => {
-    createCard(card);
+  newArr.forEach((id) => {
+    //La primera del array es 0 i jo genero ids del 1-24 per tant he de restar 1 per accedir a la seva posicio
+    createCard(cardsObj[id - 1]);
   });
 }
+
+let cards = document.querySelectorAll(".card");
 let cardsFlipped = 0;
+let flipTime;
 cards.forEach((card) => {
   card.addEventListener("click", function (e) {
     let innerCard = card.firstChild;
+    console.log({ innerCard });
     if (innerCard.classList.contains("flip")) {
       innerCard.classList.remove("flip");
     } else if (cardsFlipped < 2) {
       addClassToElement(innerCard, "flip");
+      if (flipTime && cardsFlipped === 0) {
+      }
       cardsFlipped++;
     }
-    if (cardsFlipped === 2) {
-      setTimeout(() => {
+    if (cardsFlipped === 2 && flipTime === undefined) {
+      flipTime = setTimeout(() => {
         document.querySelectorAll(".flip").forEach((card) => {
           card.classList.remove("flip");
         });
@@ -80,6 +111,7 @@ function createCard(card) {
   //Afegir la classe i el id a una carta
   addClassToElement(cardElem, "card");
 
+  addIdToElement(cardInner, card.id);
   addClassToElement(cardInner, "card-inner");
   addClassToElement(cardFront, "card-front");
   addClassToElement(cardBack, "card-back");

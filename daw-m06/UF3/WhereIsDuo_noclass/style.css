@@ -36,14 +36,17 @@ main {
   width: 100%;
   display: flex;
   font-size: 32px;
-  justify-content: space-evenly;
   padding-top: 32px;
+  justify-content: center;
 }
+
 
 .card-container {
   background-color: #6e37dbce;
   position: relative;
-  width: calc(var(--card-width) * (var(--num-cards) / 2));
+  width: calc(
+    (var(--card-width) * (var(--num-cards) / 4)) + var(--card-horizontal-space)
+  );
   height: calc(var(--card-height) * 4 + var(--card-horizontal-space));
   display: grid;
   grid-template-columns: repeat(6, 1fr);
