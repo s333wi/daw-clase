@@ -89,7 +89,10 @@ main {
   height: 100%;
 }
 
-.card-front {
+/* .card-front {
+  transform: rotateY(180deg);
+} */
+.card-back {
   transform: rotateY(180deg);
 }
 

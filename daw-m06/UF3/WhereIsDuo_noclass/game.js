@@ -1,33 +1,33 @@
 const pairs = 12;
 const totalCards = pairs * 2;
 const cardsObj = [
-  { id: 1, imgPath: "/resources/frontal1.png" },
-  { id: 2, imgPath: "/resources/frontal2.png" },
-  { id: 3, imgPath: "/resources/frontal3.png" },
-  { id: 4, imgPath: "/resources/frontal4.png" },
-  { id: 5, imgPath: "/resources/frontal5.png" },
-  { id: 6, imgPath: "/resources/frontal6.png" },
-  { id: 7, imgPath: "/resources/frontal7.png" },
-  { id: 8, imgPath: "/resources/frontal8.png" },
-  { id: 9, imgPath: "/resources/frontal9.png" },
-  { id: 10, imgPath: "/resources/frontal10.png" },
-  { id: 11, imgPath: "/resources/frontal11.png" },
-  { id: 12, imgPath: "/resources/frontal12.png" },
-  { id: 13, imgPath: "/resources/frontal1.png" },
-  { id: 14, imgPath: "/resources/frontal2.png" },
-  { id: 15, imgPath: "/resources/frontal3.png" },
-  { id: 16, imgPath: "/resources/frontal4.png" },
-  { id: 17, imgPath: "/resources/frontal5.png" },
-  { id: 18, imgPath: "/resources/frontal6.png" },
-  { id: 19, imgPath: "/resources/frontal7.png" },
-  { id: 20, imgPath: "/resources/frontal8.png" },
-  { id: 21, imgPath: "/resources/frontal9.png" },
-  { id: 22, imgPath: "/resources/frontal10.png" },
-  { id: 23, imgPath: "/resources/frontal11.png" },
-  { id: 24, imgPath: "/resources/frontal12.png" },
+  { id: 1, imgPath: "./resources/frontal1.png" },
+  { id: 2, imgPath: "./resources/frontal2.png" },
+  { id: 3, imgPath: "./resources/frontal3.png" },
+  { id: 4, imgPath: "./resources/frontal4.png" },
+  { id: 5, imgPath: "./resources/frontal5.png" },
+  { id: 6, imgPath: "./resources/frontal6.png" },
+  { id: 7, imgPath: "./resources/frontal7.png" },
+  { id: 8, imgPath: "./resources/frontal8.png" },
+  { id: 9, imgPath: "./resources/frontal9.png" },
+  { id: 10, imgPath: "./resources/frontal10.png" },
+  { id: 11, imgPath: "./resources/frontal11.png" },
+  { id: 12, imgPath: "./resources/frontal12.png" },
+  { id: 13, imgPath: "./resources/frontal1.png" },
+  { id: 14, imgPath: "./resources/frontal2.png" },
+  { id: 15, imgPath: "./resources/frontal3.png" },
+  { id: 16, imgPath: "./resources/frontal4.png" },
+  { id: 17, imgPath: "./resources/frontal5.png" },
+  { id: 18, imgPath: "./resources/frontal6.png" },
+  { id: 19, imgPath: "./resources/frontal7.png" },
+  { id: 20, imgPath: "./resources/frontal8.png" },
+  { id: 21, imgPath: "./resources/frontal9.png" },
+  { id: 22, imgPath: "./resources/frontal10.png" },
+  { id: 23, imgPath: "./resources/frontal11.png" },
+  { id: 24, imgPath: "./resources/frontal12.png" },
 ];
 
-const cardBackImgPath = "/resources/trasera.png";
+const cardBackImgPath = "./resources/trasera.png";
 const cardContainerElem = document.querySelector(".card-container");
 const matchSpan = document.getElementById("encerts");
 const triesSpan = document.getElementById("intents");
@@ -50,11 +50,17 @@ function createRandPos() {
   let randArr = [];
   for (let i = 0; i < totalCards; i++) {
     let arr = baseArr[Math.floor(Math.random() * baseArr.length)];
-    console.log(arr);
-    while ((arr + pairs || arr - pairs) === baseArr[baseArr.length - 1]) {
-      console.log(arr);
-      console.log("coincide");
-      console.log("current: " + arr, "last:" + baseArr[baseArr.length - 1]);
+
+    //Bucle que mira si el nou valor random es el mateix que el anterior.
+    //La condicio del bucle es divideix en dos per el format que te l'array
+    //de rutes de les imatges. Les cartes coincideixen si al ID de una carta
+    //li sumem el nº de parelles (en el cas de que el id de la carta actual sigui menor o igual que el
+    //nº de parelles) o restant (en l'altre cas, quan el ID es mes gran que el nº de parelles i
+    // menor que el numero total de cartes)
+    while (
+      (arr <= 12 && arr + pairs === randArr[randArr.length - 1]) ||
+      (arr > 12 && arr <= 24 && arr - pairs === randArr[randArr.length - 1])
+    ) {
       arr = baseArr[Math.floor(Math.random() * baseArr.length)];
     }
     let index = baseArr.indexOf(arr);
@@ -87,6 +93,7 @@ let matchResult = 0;
 let triesResult = 0;
 cards.forEach((card) => {
   card.addEventListener("click", function (e) {
+    console.log(flipTime);
     let innerCard = card.firstChild;
     console.log("Last card: " + lastCardId);
 
@@ -96,6 +103,7 @@ cards.forEach((card) => {
       addClassToElement(innerCard, "flip");
       if (flipTime && cardsFlipped === 0) {
         flipTime = undefined; //preguntar per que no funciona amb clear interval
+        clearTimeout(flipTime);
       }
       cardsFlipped++;
     }
@@ -108,7 +116,6 @@ cards.forEach((card) => {
         document.querySelectorAll(".flip").forEach((card) => {
           card.classList.add("match");
           card.classList.remove("flip");
-          console.log({ card });
         });
         matchSpan.innerHTML = ++matchResult;
       } else {
