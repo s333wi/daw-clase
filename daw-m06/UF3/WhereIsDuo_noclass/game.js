@@ -51,7 +51,7 @@ function createRandPos() {
   for (let i = 0; i < totalCards; i++) {
     let arr = baseArr[Math.floor(Math.random() * baseArr.length)];
     console.log(arr);
-    while (arr + pairs === baseArr[baseArr.length - 1]) {
+    while ((arr + pairs || arr - pairs) === baseArr[baseArr.length - 1]) {
       console.log(arr);
       console.log("coincide");
       console.log("current: " + arr, "last:" + baseArr[baseArr.length - 1]);
