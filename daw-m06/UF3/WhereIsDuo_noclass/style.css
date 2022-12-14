@@ -5,13 +5,13 @@
   --num-cards: 16;
   --card-horizontal-space: 100px;
 }
-
 html,
 body,
 * {
   margin: 0;
   padding: 0;
 }
+/*Center the div#result*/
 
 body {
   height: 100vh;
@@ -38,6 +38,7 @@ main {
   font-size: 32px;
   padding-top: 32px;
   justify-content: center;
+  padding-bottom: 20px;
 }
 
 
@@ -95,6 +96,8 @@ main {
 .card-front {
   transform: rotateY(180deg);
 }
+
+/* Girar si es vol veure les cartes */
 /* .card-back {
   transform: rotateY(180deg);
 } */

@@ -1,6 +1,7 @@
 let pairs = 8;
 let totalCards = pairs * 2;
 //Array d'objectes amb un id associat a la ruta de l'imatge frontal
+
 let cardsObj = [
   { id: 1, imgPath: "./resources/frontal1.png" },
   { id: 2, imgPath: "./resources/frontal1.png" },
@@ -33,8 +34,6 @@ let cardBackImgPath = "./resources/trasera.png";
 let cardContainerElem = document.querySelector(".card-container");
 let matchSpan = document.getElementById("encerts");
 let triesSpan = document.getElementById("intents");
-
-
 
 function createRandPos() {
   let baseArr = [];
@@ -163,7 +162,7 @@ document.getElementById("selPar").addEventListener("change", function (e) {
   createCards();
 });
 
-//Constructor visual de cada 
+//Constructor visual de cada
 function createCard(card) {
   //Crear els elements de la carta
   let cardElem = createElement("div");
