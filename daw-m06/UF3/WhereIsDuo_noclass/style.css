@@ -1,8 +1,8 @@
 :root {
-  --num-cards-row: 6;
+  --num-cards-row: 4;
   --card-width: 100px;
   --card-height: 150px;
-  --num-cards: 24;
+  --num-cards: 16;
   --card-horizontal-space: 100px;
 }
 
@@ -61,6 +61,7 @@ main {
   width: var(--card-width);
   perspective: none;
   cursor: pointer;
+  
 }
 
 .card-inner {
@@ -70,6 +71,7 @@ main {
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
+  
 }
 
 .card-front,
@@ -79,6 +81,7 @@ main {
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  
 }
 .card-container div {
   display: flex;
@@ -89,17 +92,22 @@ main {
   height: 100%;
 }
 
-/* .card-front {
-  transform: rotateY(180deg);
-} */
-.card-back {
+.card-front {
   transform: rotateY(180deg);
 }
+/* .card-back {
+  transform: rotateY(180deg);
+} */
 
 .card-inner.flip {
   transform: rotateY(180deg);
 }
 
 .match{
-  transform:rotateY(180deg);
+  transform:rotateY(180deg); 
+}
+
+#gameWon{
+  display:none;
+  text-align: center;
 }

@@ -1,52 +1,48 @@
-const pairs = 12;
-const totalCards = pairs * 2;
-const cardsObj = [
+let pairs = 8;
+let totalCards = pairs * 2;
+//Array d'objectes amb un id associat a la ruta de l'imatge frontal
+let cardsObj = [
   { id: 1, imgPath: "./resources/frontal1.png" },
-  { id: 2, imgPath: "./resources/frontal2.png" },
-  { id: 3, imgPath: "./resources/frontal3.png" },
-  { id: 4, imgPath: "./resources/frontal4.png" },
-  { id: 5, imgPath: "./resources/frontal5.png" },
-  { id: 6, imgPath: "./resources/frontal6.png" },
-  { id: 7, imgPath: "./resources/frontal7.png" },
-  { id: 8, imgPath: "./resources/frontal8.png" },
-  { id: 9, imgPath: "./resources/frontal9.png" },
-  { id: 10, imgPath: "./resources/frontal10.png" },
-  { id: 11, imgPath: "./resources/frontal11.png" },
-  { id: 12, imgPath: "./resources/frontal12.png" },
-  { id: 13, imgPath: "./resources/frontal1.png" },
-  { id: 14, imgPath: "./resources/frontal2.png" },
-  { id: 15, imgPath: "./resources/frontal3.png" },
-  { id: 16, imgPath: "./resources/frontal4.png" },
-  { id: 17, imgPath: "./resources/frontal5.png" },
-  { id: 18, imgPath: "./resources/frontal6.png" },
-  { id: 19, imgPath: "./resources/frontal7.png" },
-  { id: 20, imgPath: "./resources/frontal8.png" },
-  { id: 21, imgPath: "./resources/frontal9.png" },
-  { id: 22, imgPath: "./resources/frontal10.png" },
-  { id: 23, imgPath: "./resources/frontal11.png" },
+  { id: 2, imgPath: "./resources/frontal1.png" },
+  { id: 3, imgPath: "./resources/frontal2.png" },
+  { id: 4, imgPath: "./resources/frontal2.png" },
+  { id: 5, imgPath: "./resources/frontal3.png" },
+  { id: 6, imgPath: "./resources/frontal3.png" },
+  { id: 7, imgPath: "./resources/frontal4.png" },
+  { id: 8, imgPath: "./resources/frontal4.png" },
+  { id: 9, imgPath: "./resources/frontal5.png" },
+  { id: 10, imgPath: "./resources/frontal5.png" },
+  { id: 11, imgPath: "./resources/frontal6.png" },
+  { id: 12, imgPath: "./resources/frontal6.png" },
+  { id: 13, imgPath: "./resources/frontal7.png" },
+  { id: 14, imgPath: "./resources/frontal7.png" },
+  { id: 15, imgPath: "./resources/frontal8.png" },
+  { id: 16, imgPath: "./resources/frontal8.png" },
+  { id: 17, imgPath: "./resources/frontal9.png" },
+  { id: 18, imgPath: "./resources/frontal9.png" },
+  { id: 19, imgPath: "./resources/frontal10.png" },
+  { id: 20, imgPath: "./resources/frontal10.png" },
+  { id: 21, imgPath: "./resources/frontal11.png" },
+  { id: 22, imgPath: "./resources/frontal11.png" },
+  { id: 23, imgPath: "./resources/frontal12.png" },
   { id: 24, imgPath: "./resources/frontal12.png" },
 ];
 
-const cardBackImgPath = "./resources/trasera.png";
-const cardContainerElem = document.querySelector(".card-container");
-const matchSpan = document.getElementById("encerts");
-const triesSpan = document.getElementById("intents");
-/* <div class="card">
-<div class="card-inner">
-    <div class="card-front">
-        <img src="/images/card-JackClubs.png" alt="" class="card-img">
-    </div>
-    <div class="card-back">
-        <img src="/images/card-back-Blue.png" alt="" class="card-img">
-    </div>
-</div>
-</div> */
+//Mateixa ruta per la imatge trasera de la carta
+let cardBackImgPath = "./resources/trasera.png";
+let cardContainerElem = document.querySelector(".card-container");
+let matchSpan = document.getElementById("encerts");
+let triesSpan = document.getElementById("intents");
+
+
+
 function createRandPos() {
   let baseArr = [];
   for (var i = 1; i <= totalCards; i++) {
     baseArr.push(i);
   }
-
+  let baseArrClone = [...baseArr];
+  //Ara creem un array agafant valors random segons la longitud
   let randArr = [];
   for (let i = 0; i < totalCards; i++) {
     let arr = baseArr[Math.floor(Math.random() * baseArr.length)];
@@ -54,17 +50,21 @@ function createRandPos() {
     //Bucle que mira si el nou valor random es el mateix que el anterior.
     //La condicio del bucle es divideix en dos per el format que te l'array
     //de rutes de les imatges. Les cartes coincideixen si al ID de una carta
-    //li sumem el nº de parelles (en el cas de que el id de la carta actual sigui menor o igual que el
-    //nº de parelles) o restant (en l'altre cas, quan el ID es mes gran que el nº de parelles i
-    // menor que el numero total de cartes)
-    while (
-      (arr <= 12 && arr + pairs === randArr[randArr.length - 1]) ||
-      (arr > 12 && arr <= 24 && arr - pairs === randArr[randArr.length - 1])
-    ) {
-      arr = baseArr[Math.floor(Math.random() * baseArr.length)];
+    //li sumem 1 (en el cas de que el id de la carta actual impar) o restant 1 (en l'altre cas, quan el ID actual sigui parell)
+    let error = 0;
+    while (randomCheck(arr, randArr)) {
+      error++;
+      if (baseArr.length === 1 && randomCheck(arr, randArr)) {
+        baseArr = [...baseArrClone];
+        randArr.length = 0;
+        i = 0;
+      } else {
+        arr = baseArr[Math.floor(Math.random() * baseArr.length)];
+      }
     }
     let index = baseArr.indexOf(arr);
 
+    //Escurço l'array original per poder seguir randomitzant l'array resultant
     baseArr.splice(index, 1);
 
     randArr.push(arr);
@@ -72,81 +72,114 @@ function createRandPos() {
   return randArr;
 }
 
-const randArr = createRandPos();
-
-console.log(randArr);
-createCards();
+//He tret el condicional a una funcio per a que sigui mes llegible el codi
+function randomCheck(arr, randArr) {
+  return (
+    (arr % 2 === 0 && arr - 1 === randArr[randArr.length - 1]) ||
+    (arr % 2 === 1 && arr + 1 === randArr[randArr.length - 1])
+  );
+}
 
 //Creem les cartes al tauler
 function createCards() {
+  let randArr = createRandPos();
   randArr.forEach((id) => {
     //La primera del array es 0 i jo genero ids del 1-24 per tant he de restar 1 per accedir a la seva posicio
     createCard(cardsObj[id - 1]);
   });
-}
 
-let cards = document.querySelectorAll(".card");
-let lastCardId;
-let cardsFlipped = 0;
-let flipTime;
-let matchResult = 0;
-let triesResult = 0;
-cards.forEach((card) => {
-  card.addEventListener("click", function (e) {
-    console.log(flipTime);
-    let innerCard = card.firstChild;
-    console.log("Last card: " + lastCardId);
-
-    if (innerCard.classList.contains("flip")) {
-      innerCard.classList.remove("flip");
-    } else if (cardsFlipped < 2) {
-      addClassToElement(innerCard, "flip");
-      if (flipTime && cardsFlipped === 0) {
-        flipTime = undefined; //preguntar per que no funciona amb clear interval
-        clearTimeout(flipTime);
+  let cards = document.querySelectorAll(".card");
+  let lastCardId;
+  let cardsFlipped = 0;
+  let flipTime;
+  let matchResult = 0;
+  let triesResult = 0;
+  cards.forEach((card) => {
+    card.addEventListener("click", function () {
+      let innerCard = card.firstChild;
+      let cardId = +card.getAttribute("data-id");
+      if (innerCard.classList.contains("flip")) {
+        innerCard.classList.remove("flip");
+      } else if (cardsFlipped < 2 && !innerCard.classList.contains("match")) {
+        addClassToElement(innerCard, "flip");
+        if (flipTime && cardsFlipped === 0) {
+          flipTime = undefined;
+          clearTimeout(flipTime);
+        }
+        cardsFlipped++;
       }
-      cardsFlipped++;
-    }
 
-    if (cardsFlipped === 2 && flipTime === undefined) {
       if (
-        (+card.id <= 12 && +card.id + 12 === lastCardId) ||
-        (+card.id > 12 && +card.id - 12 === lastCardId)
+        cardsFlipped === 2 &&
+        flipTime === undefined &&
+        !innerCard.classList.contains("match")
       ) {
-        document.querySelectorAll(".flip").forEach((card) => {
-          card.classList.add("match");
-          card.classList.remove("flip");
-        });
-        matchSpan.innerHTML = ++matchResult;
-      } else {
+        flipTime = setTimeout(() => {
+          document.querySelectorAll(".flip").forEach((card) => {
+            card.classList.remove("flip");
+            cardsFlipped = 0;
+          });
+        }, 1000);
+        if (
+          (cardId % 2 === 1 && cardId + 1 === lastCardId) ||
+          (cardId % 2 === 0 && cardId - 1 === lastCardId)
+        ) {
+          clearTimeout(flipTime);
+
+          document.querySelectorAll(".flip").forEach((card) => {
+            card.classList.add("match");
+            card.classList.remove("flip");
+            card.style.cursor = "not-allowed";
+          });
+          matchSpan.innerHTML = ++matchResult;
+          if (matchResult === pairs) {
+            document.getElementById("gameWon").style.display = "block";
+          }
+          cardsFlipped = 0;
+        }
         triesSpan.innerHTML = ++triesResult;
       }
-      flipTime = setTimeout(() => {
-        document.querySelectorAll(".flip").forEach((card) => {
-          card.classList.remove("flip");
-        });
-        cardsFlipped = 0;
-      }, 2000);
-    }
-    lastCardId = +card.id;
+      lastCardId = cardId;
+    });
   });
+}
+
+//Inicialitzem el joc
+createCards();
+
+//Selector del nº de parelles en el joc
+document.getElementById("selPar").addEventListener("change", function (e) {
+  //Cada vegada que canvia reinicia el tauler i canvia el numero de parelles
+  removeAllChildNodes(document.querySelector(".card-container"));
+  pairs = +e.target.value;
+  totalCards = pairs * 2;
+  document.documentElement.style.setProperty("--num-cards-row", pairs / 2);
+  document.documentElement.style.setProperty("--num-cards", totalCards);
+  //El fico a none en cas de que si ha guanyat en un altre tauler i canvia de tauler no digui que ha guanyat
+  document.getElementById("gameWon").style.display = "none";
+  matchSpan.innerHTML = 0;
+  triesSpan.innerHTML = 0;
+  //Per ultim torno a inicialitzar el joc
+  createCards();
 });
 
+//Constructor visual de cada 
 function createCard(card) {
-  //Crear els divs per mostrar una carta
-  const cardElem = createElement("div");
-  const cardInner = createElement("div");
-  const cardFront = createElement("div");
-  const cardBack = createElement("div");
+  //Crear els elements de la carta
+  let cardElem = createElement("div");
+  let cardInner = createElement("div");
+  let cardFront = createElement("div");
+  let cardBack = createElement("div");
 
   //Crear les imatges del davant i del darrere
-  const cardFrontImg = createElement("img");
-  const cardBackImg = createElement("img");
+  let cardFrontImg = createElement("img");
+  let cardBackImg = createElement("img");
 
-  //Afegir la classe i el id a una carta
+  //Afegir la classe i el id a la carta
   addClassToElement(cardElem, "card");
-
   addIdToElement(cardElem, card.id);
+
+  //Afegir la resta de les classes als seus fills
   addClassToElement(cardInner, "card-inner");
   addClassToElement(cardFront, "card-front");
   addClassToElement(cardBack, "card-back");
@@ -171,6 +204,7 @@ function createCard(card) {
   addCardToTable(cardElem);
 }
 
+//Funcions de la creacio de cartes
 function createElement(elemType) {
   return document.createElement(elemType);
 }
@@ -180,7 +214,7 @@ function addClassToElement(element, className) {
 }
 
 function addIdToElement(element, idName) {
-  element.id = idName;
+  element.setAttribute("data-id", idName);
 }
 
 function addSrcToImg(imgElement, src) {
@@ -193,4 +227,11 @@ function addChildElement(parentElement, childElement) {
 
 function addCardToTable(card) {
   addChildElement(cardContainerElem, card);
+}
+
+//Funcio per eliminar totes les cartes quan canvia el nº de parelles
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
 }
