@@ -96,7 +96,7 @@ main {
   transform: rotateY(180deg);
 }
 
-/* Girar si es vol veure les cartes */
+/* Descomentar si es vol veure les cartes i comentar el card-front*/
 /* .card-back {
   transform: rotateY(180deg);
 } */
@@ -106,7 +106,8 @@ main {
 }
 
 .match{
-  transform:rotateY(180deg); 
+  transform:rotateY(180deg);
+  cursor:not-allowed; 
 }
 
 #gameWon{
