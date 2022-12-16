@@ -1,7 +1,14 @@
 let pairs = 8;
+let maxNumPairs = 12;
 let totalCards = pairs * 2;
-//Array d'objectes amb un id associat a la ruta de l'imatge frontal
-
+//Make an array of objects that will contain the id and the path of the front image with a loop, make one pair per path
+let cardssObj = [];
+for (let i = 1; i <= maxNumPairs*2; i+=1) {
+  cardssObj.push({ id: i, imgPath: `./resources/frontal${i}.png` });
+  cardssObj.push({ id: i + 1, imgPath: `./resources/frontal${i}.png` });
+}
+console.log(cardssObj);
+//Array de les cartes amb un id i un path
 let cardsObj = [
   { id: 1, imgPath: "./resources/frontal1.png" },
   { id: 2, imgPath: "./resources/frontal1.png" },
@@ -29,12 +36,20 @@ let cardsObj = [
   { id: 24, imgPath: "./resources/frontal12.png" },
 ];
 
-//Mateixa ruta per la imatge trasera de la carta
+for (let i = 8; i <= 12; i += 2) {
+  let option = document.createElement("option");
+  option.value = i;
+  option.textContent = `${i} Parelles`;
+  document.getElementById("selPar").appendChild(option);
+}
+
+// Same path for the back image of the card
 let cardBackImgPath = "./resources/trasera.png";
 let cardContainerElem = document.querySelector(".card-container");
 let matchSpan = document.getElementById("encerts");
 let triesSpan = document.getElementById("intents");
 
+//Crea un array amb els ids de les cartes de forma aleatoria i sense repetir
 function createRandPos() {
   let baseArr = [];
   for (var i = 1; i <= totalCards; i++) {
@@ -81,8 +96,8 @@ function randomCheck(arr, randArr) {
 
 //Creem les cartes al tauler
 function createCards() {
-  let randArr = createRandPos();
-  randArr.forEach((id) => {
+  let randIds = createRandPos();
+  randIds.forEach((id) => {
     //La primera del array es 0 i jo genero ids del 1-24 per tant he de restar 1 per accedir a la seva posicio
     createCard(cardsObj[id - 1]);
   });
@@ -96,18 +111,22 @@ function createCards() {
   cards.forEach((card) => {
     card.addEventListener("click", function () {
       let innerCard = card.firstChild;
+      //Agafem el data-id de la carta per poder comparar-la amb l'anterior
       let cardId = +card.getAttribute("data-id");
-      if (innerCard.classList.contains("flip")) {
-        innerCard.classList.remove("flip");
-      } else if (cardsFlipped < 2 && !innerCard.classList.contains("match")) {
-        addClassToElement(innerCard, "flip");
-        if (flipTime && cardsFlipped === 0) {
-          flipTime = undefined;
-          clearTimeout(flipTime);
-        }
+
+      //Si la carta no esta girada i no conte la classe match la girarem
+      if (
+        cardsFlipped < 2 &&
+        !innerCard.classList.contains("match") &&
+        !innerCard.classList.contains("flip")
+      ) {
+        innerCard.classList.add("flip");
+        flipTime = undefined;
+        clearTimeout(flipTime);
         cardsFlipped++;
       }
 
+      //Preguntar si a les ternaries es poden ficar funcions anonimes
       if (
         cardsFlipped === 2 &&
         flipTime === undefined &&
@@ -154,15 +173,17 @@ document.getElementById("selPar").addEventListener("change", function (e) {
   totalCards = pairs * 2;
   document.documentElement.style.setProperty("--num-cards-row", pairs / 2);
   document.documentElement.style.setProperty("--num-cards", totalCards);
+
   //El fico a none en cas de que si ha guanyat en un altre tauler i canvia de tauler no digui que ha guanyat
   document.getElementById("gameWon").style.display = "none";
   matchSpan.innerHTML = 0;
   triesSpan.innerHTML = 0;
+
   //Per ultim torno a inicialitzar el joc
   createCards();
 });
 
-//Constructor visual de cada
+//Constructor visual de cada carta
 function createCard(card) {
   //Crear els elements de la carta
   let cardElem = createElement("div");
@@ -200,14 +221,13 @@ function createCard(card) {
   addChildElement(cardElem, cardInner);
 
   //Afegir la carta al tauler
-  addCardToTable(cardElem);
+  appendCardToTable(cardElem);
 }
 
-//Funcions de la creacio de cartes
+//Funcions de la creacio de les cartes per afegir classes, id, src i afegir fills
 function createElement(elemType) {
   return document.createElement(elemType);
 }
-
 function addClassToElement(element, className) {
   element.classList.add(className);
 }
@@ -224,7 +244,7 @@ function addChildElement(parentElement, childElement) {
   parentElement.appendChild(childElement);
 }
 
-function addCardToTable(card) {
+function appendCardToTable(card) {
   addChildElement(cardContainerElem, card);
 }
 
