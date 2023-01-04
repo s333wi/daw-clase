@@ -35,6 +35,27 @@ if (isset($_GET['action']) && $_GET['action'] == 'users') //mostra una pagina co
 } else if (isset($_GET['action']) && $_GET['action'] == 'register') {
   $register = new Ctl_main();
   $register->register();
+} else if (isset($_GET['action']) && $_GET['action'] == 'register_user') {
+  $register = new Ctl_users();
+  $register->register_user();
+} else if (isset($_GET['action']) && $_GET['action'] == 'login') {
+  $login = new Ctl_users();
+  // $login->login();
+} else if (isset($_GET['action']) && $_GET['action'] == 'login_user') {
+  $login = new Ctl_users();
+  // $login->login_user();
+} else if (isset($_GET['action']) && $_GET['action'] == 'logout') {
+  $logout = new Ctl_users();
+  // $logout->logout();
+} else if (isset($_GET['action']) && $_GET['action'] == 'delete_user') {
+  $delete = new Ctl_users();
+  // $delete->delete_user();
+} else if (isset($_GET['action']) && $_GET['action'] == 'update_user') {
+  $update = new Ctl_users();
+  // $update->update_user();
+} else if (isset($_GET['action']) && $_GET['action'] == 'update_user_form') {
+  $update = new Ctl_users();
+  // $update->update_user_form();
 } else { //Si no existeix GET o POST -> mostra la pagina principal
   $main = new Ctl_main();
   $main->default_page();

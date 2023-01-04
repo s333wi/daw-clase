@@ -9,92 +9,98 @@
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="App/views/css/formularis.css">
     <script defer src="../../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/2a59fbfff2.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div class="container w-75 mt-5">
         <div class="row box-shadow">
-            <div class="col bg d-none d-lg-block col-md-5 col-lg-5 col-xl-6 rounded-start"></div>
-            <div class="col bg-body p-5 rounded-end">
-                <div class="text-end d-flex justify-content-end align-items-center">
+            <div class="col bg d-none d-lg-block col-md-5 col-lg-5 col-xl-6 rounded-start" loading="lazy"></div>
+            <div class="col bg-body px-5 pb-5 rounded-end">
+                <!-- Logo -->
+                <div class="d-flex text-end close-container mb-5">
+                    <a id="close-btn" href="index.php"><i class="fa-regular fa-circle-xmark fa-xl text-dark"></i></a>
+                </div>
+
+                <div class="d-flex  align-items-center">
                     <a href="index.php" class="text-decoration-none d-flex text-dark align-items-center">
+                        <img class="me-2" src="App/views/images/logo.png" loading="lazy" alt="" width="48" />
                         <div id="text">
                             <div id="effect" class="d-flex">
                                 <span class="fs-4">Coding Souls</span>
                             </div>
                         </div>
-                        <img class="ms-2" src="App/views/images/logo.png" alt="" width="48" />
                     </a>
                 </div>
                 <h2 class="fw-bold text-center py-5">Uneix-te a nosaltres rei</h2>
 
                 <!-- Formulari login -->
-                <form action="#">
+                <form action="index.php?action=register_user" method="POST">
                     <div class="row mb-3">
                         <div class="col-6">
                             <label for="username" class="text-uppercase mb-1">Nom d'usuari</label>
-                            <input type="text" class="form-control" id="username" placeholder="Nom d'usuari" />
+                            <input type="text" name="nick" class="form-control" id="username" placeholder="Nom d'usuari" required/>
                         </div>
                         <div class="col">
                             <label for="names" class="text-uppercase mb-1">Nom i cognoms</label>
-                            <input type="text" class="form-control" id="names" placeholder="Nom,cognoms">
+                            <input type="text" name="nomcognoms" class="form-control" id="names" placeholder="Nom,cognoms" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-8">
                             <label for="email" class="text-uppercase mb-1">Correu electrònic</label>
-                            <input type="email" class="form-control" id="email" placeholder="Email" />
+                            <input type="email" name="mail" class="form-control" id="email" placeholder="Email" required/>
                             <div class="form-helper">
                                 <small class="text-muted">Tranquil, no t'enviarem spam</small>
                             </div>
                         </div>
                         <div class="col">
                             <label for="age" class="text-uppercase mb-1">Edat</label>
-                            <input type="number" class="form-control" id="age" placeholder="Edat" />
+                            <input type="number" name="edat" class="form-control" id="age" placeholder="Edat" required/>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
                             <label for="password" class="text-uppercase mb-1">Contrasenya</label>
-                            <input type="password" class="form-control" id="password" placeholder="Contrasenya" />
+                            <input type="password" name="contrasenya" class="form-control" id="password" placeholder="Contrasenya" required/>
                             <div class="form-helper">
                                 <small class="text-muted">La contrasenya ha de tenir almenys 8 caràcters</small>
                             </div>
                         </div>
                     </div>
-                    <a href="#" class="btn btn-primary w-100">Registra't!</a>
+                    <button type="submit" class="btn btn-primary w-100">Registra't</button>
                 </form>
 
                 <!-- Iniciar sessio amb RRSS -->
                 <div class="container w-100 my-4">
                     <div class="row text-center">
-                        <div class="col-12">Inicia sessió amb les xarxes socials</div>
+                        <div class="col-12">Registra't amb les xarxes socials</div>
                     </div>
                     <div class="row my-3">
-                        <div class="col">
+                        <div class="col-12 col-xl mb-2">
                             <button class="btn btn-outline-primary w-100">
                                 <div class="row align-items-center">
-                                    <div class="col-2 d-none d-md-block">
+                                    <div class="col-md-2 d-none d-md-block">
                                         <img src="App/views/images/twitter.png" alt="" width="36" />
                                     </div>
                                     <div class="col-12 col-md-10 text-center">Twitter</div>
                                 </div>
                             </button>
                         </div>
-                        <div class="col">
+                        <div class="col-12 col-xl mb-2">
                             <button class="btn btn-outline-danger w-100">
                                 <div class="row align-items-center">
-                                    <div class="col-2 d-none d-md-block">
+                                    <div class="col-md-2 d-none d-md-block">
                                         <img src="App/views/images/google.png" alt="" width="36" />
                                     </div>
                                     <div class="col-12 col-md-10 text-center">Google</div>
                                 </div>
                             </button>
                         </div>
-                        <div class="col">
+                        <div class="col-12 col-xl mb-2">
                             <button class="btn btn-outline-dark w-100">
                                 <div class="row align-items-center">
-                                    <div class="col-2 d-none d-md-block">
+                                    <div class="col-md-2 d-none d-md-block">
                                         <img src="App/views/images/twitch.png" alt="" width="auto" height="36" />
                                     </div>
                                     <div class="col-12 col-md-10 text-center">Twitch</div>

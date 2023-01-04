@@ -19,4 +19,18 @@ class Ctl_users
         
         include 'App/views/users/page.php';
     }
+
+    public function register_user(){
+        
+        echo "<pre>";
+        print_r ($_POST);
+        echo "</pre>";
+        
+        $data = filter_input_array(INPUT_POST,FILTER_SANITIZE_STRING);
+        extract($data);
+
+        $usr_model = new Mdl_users();
+        $result=$usr_model->saveUser($nick, $nomcognoms, $mail, $edat, $contrasenya);
+
+    }
 }

@@ -54,3 +54,18 @@ body {
     border-color: #0000;
   }
 }
+
+#close-btn{
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 20px;
+  font-size: 20px;
+  color: #fff;
+  text-decoration: none;
+}
+.close-container{
+  position: relative;
+  top: 0;
+  right: 0;
+}
