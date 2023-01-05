@@ -35,6 +35,7 @@ class Mdl_users
         } else {
             $res = null;
         }
+        $this->__destruct();
         return $res;
     }
 
@@ -48,6 +49,8 @@ class Mdl_users
         } else {
             $res = null;
         }
+        $this->__destruct();
+
         return $res;
     }
 
@@ -63,34 +66,13 @@ class Mdl_users
 
         //Comprovem si la contrasenya es valida(es podrien fer mes comprovacions)
         if (strlen($password) < 8) {
+            echo "La contrasenya ha de tenir almenys 8 caracters";
             return false;
         }
 
         // Apliquem el hash a la contrasenya
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        
-        //Print all the vars and format them
-        echo "<pre>";
-        print_r ($nick);
-        echo "</pre>";
-        echo "<pre>";
-        print_r ($name);
-        echo "</pre>";
-        echo "<pre>";
-        print_r ($email);
-        echo "</pre>";
-        echo "<pre>";
-        print_r ($age);
-        echo "</pre>";
-        echo "<pre>";
-        print_r ($hashedPassword);
-        echo "</pre>";
-        echo "<pre>";
-        print_r ($id);
-        echo "</pre>";
-        
-
-
+        $name=ucwords($name);
         // Preparem la sentencia SQL i mirem si es un insert o un update
         if ($id == 0) {
             //El nivell el canvio jo manualment a la BBDD
@@ -103,21 +85,47 @@ class Mdl_users
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param("sssssi", $nick, $name, $email, $hashedPassword, $age, $id);
         }
-
         // Executem la sentencia i retornem el resultat
         if (!$stmt->execute()) {
             // An error occurred
             $error = $stmt->error;
-            // You could log the error, display an error message to the user, or take other appropriate action
-            
+
             echo "<pre>";
-            print_r ($error);
+            print_r($error);
             echo "</pre>";
-            
             return false;
-        } else {
-            return true;
         }
-        
+        return true;
+    }
+
+    function loginUser(string $nick, string $password): bool
+    {   
+        // Set up SQL query
+        $sql = "SELECT * FROM user WHERE nick = ?";
+        $stmt = $this->db->prepare($sql);
+        if ($stmt) {
+            // Bind parameters and execute query
+            $stmt->bind_param("s", $nick);
+            $stmt->execute();
+
+            // Get query result
+            $result = $stmt->get_result();
+            if ($result) {
+                // Fetch first row as associative array
+                $row = $result->fetch_assoc();
+
+                // Check if provided password matches hashed password in database
+                if (isset($row['contrasenya']) && password_verify($password, $row['contrasenya'])) {
+                    $result = true;
+                    echo 'la contrasenya es correcta';
+                } else {
+                    echo 'la contrasenya no es correcta';
+                    $result = false;
+                }
+            }
+        }
+
+        // Return result
+        return $result;
     }
 }

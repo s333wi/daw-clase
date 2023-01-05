@@ -1,11 +1,23 @@
-body {
+body.register {
   font-family: monospace;
   background: #004979;
   background: linear-gradient(to right, #e04f5f, #2289d0);
 }
 
-.bg {
-  background-image: url("../../../App/views/images/bg.jpg");
+body.login {
+  font-family: monospace;
+  background: #004979;
+  background: linear-gradient(to right, #00c98c, #e04f5f);
+}
+
+.bg-register {
+  background-image: url("../../../App/views/images/register_bg.jpg");
+  background-position: center center;
+  background-size: cover;
+}
+
+.bg-login {
+  background-image: url("../../../App/views/images/login_bg.jpg");
   background-position: center center;
   background-size: cover;
 }
@@ -55,7 +67,7 @@ body {
   }
 }
 
-#close-btn{
+#close-btn {
   position: absolute;
   top: 0;
   right: 0;
@@ -64,7 +76,8 @@ body {
   color: #fff;
   text-decoration: none;
 }
-.close-container{
+
+.close-container {
   position: relative;
   top: 0;
   right: 0;
