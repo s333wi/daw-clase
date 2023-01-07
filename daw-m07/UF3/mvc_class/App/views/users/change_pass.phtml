@@ -1,0 +1,62 @@
+<?php
+defined('MVC_APP') or die('Access denied');
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Change pass</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="App/views/css/formularis.css">
+    <script defer src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/2a59fbfff2.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="users">
+    <div class="users-container d-flex align-items-center justify-content-center vh-100">
+        <div class="container w-75">
+            <div class="row box-shadow">
+                <div class="col bg-users d-none d-lg-block col-md-5 col-lg-5 col-xl-6 rounded-start" loading="lazy"></div>
+                <div class="col bg-body p-5 rounded-end">
+                    <!-- Logo -->
+
+                    <div class="d-flex align-items-center">
+                        <a href="index.php" class="text-decoration-none d-flex text-dark align-items-center">
+                            <img class="me-2" src="App/views/images/logo.png" loading="lazy" alt="" width="48" />
+                            <div id="text">
+                                <div id="effect" class="d-flex">
+                                    <span class="fs-4">Coding Souls</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <h2 class="fw-bold text-center py-5">Canvia la contrasenya</h2>
+
+                    <!-- Formulari login -->
+                    <form action="index.php?action=change_pass" method="POST">
+                        <input type="hidden" name="nick" value='<?= $_SESSION['username']?>' />
+                        <div class="form-group mb-3">
+                            <label for="password" class="text-uppercase mb-1">Contrasenya</label>
+                            <input type="password" class="form-control" id="password" name="contrasenya" placeholder="Contrasenya">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="password" class="text-uppercase mb-1">Repeteix la contrasenya</label>
+                            <input type="password" class="form-control" id="password" name="contrasenya2" placeholder="Repeteix la contrasenya">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Canviar contrasenya</button>
+                    </form>
+
+                    <div class="row mt-2 justify-content-center">
+                        <a href="index.php?action=manage_users" class="btn btn-secondary w-25">Torna enrere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

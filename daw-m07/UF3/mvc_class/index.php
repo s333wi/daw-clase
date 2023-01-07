@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 
 use App\Controllers\Ctl_users;
 use App\Controllers\Ctl_main;
-
+use App\Controllers\Ctl_news;
 
 define('MVC_APP', 'APP');
 
@@ -28,11 +28,7 @@ include_once "App/config/db.php";
 
 /********* MANAGE ROUTES AND ACTIONS **************************/
 
-if (isset($_GET['action']) && $_GET['action'] == 'users') //mostra una pagina concreta
-{
-  $usr = new Ctl_users();
-  $usr->users_list();
-} else if (isset($_GET['action']) && $_GET['action'] == 'register') {
+if (isset($_GET['action']) && $_GET['action'] == 'register') {
   $register = new Ctl_main();
   $register->register();
 } else if (isset($_GET['action']) && $_GET['action'] == 'register_user') {
@@ -46,19 +42,42 @@ if (isset($_GET['action']) && $_GET['action'] == 'users') //mostra una pagina co
   $login->login_user();
 } else if (isset($_GET['action']) && $_GET['action'] == 'logout') {
   $logout = new Ctl_main();
-  $logout->logout();
-} else if (isset($_GET['action']) && $_GET['action'] == 'delete_user') {
-  $delete = new Ctl_users();
-  // $delete->delete_user();
-} else if (isset($_GET['action']) && $_GET['action'] == 'update_user') {
-  $update = new Ctl_users();
-  // $update->update_user();
-} else if (isset($_GET['action']) && $_GET['action'] == 'update_user_form') {
-  $update = new Ctl_users();
-  // $update->update_user_form();
+  $logout->logout($_SESSION['username']);
+} else if (isset($_GET['action']) && $_GET['action'] == 'manage_users') {
+  $users = new Ctl_users();
+  $users->loadView();
 } else if (isset($_GET['action']) && $_GET['action'] == 'dashboard') {
   $dashboard = new Ctl_main();
   $dashboard->dashboard();
+} else if (isset($_GET['action']) && $_GET['action'] == 'manage_news') {
+  $news = new Ctl_news();
+  $news->loadView();
+} else if (isset($_GET['action']) && $_GET['action'] == 'view_save_news') {
+  $news = new Ctl_main();
+  $id = !empty($_GET['id']) ? $_GET['id'] : 0;
+  $news->viewAddNews($id);
+} else if (isset($_GET['action']) && $_GET['action'] == 'view_save_user') {
+  $users = new Ctl_main();
+  $id = !empty($_GET['id']) ? $_GET['id'] : '';
+  $users->viewAddUsers($id);
+} else if (isset($_GET['action']) && $_GET['action'] == 'save_news') {
+  $news = new Ctl_news();
+  $news->addNews();
+} else if (isset($_GET['action']) && $_GET['action'] == 'delete_news') {
+  $news = new Ctl_news();
+  $news->deleteNews($_GET['id']);
+} else if (isset($_GET['action']) && $_GET['action'] == 'save_user') {
+  $user = new Ctl_users();
+  $user->addUser();
+} else if (isset($_GET['action']) && $_GET['action'] == 'delete_user') {
+  $news = new Ctl_news();
+  $news->deleteNews($_GET['id']);
+} else if (isset($_GET['action']) && $_GET['action'] == 'change_pass_view') {
+  $user = new Ctl_main();
+  $user->change_pass_view();
+} else if (isset($_GET['action']) && $_GET['action'] == 'change_pass') {
+  $user = new Ctl_users();
+  $user->change_pass();
 } else { //Si no existeix GET o POST -> mostra la pagina principal
   $main = new Ctl_main();
   $main->default_page();

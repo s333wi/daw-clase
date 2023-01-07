@@ -43,7 +43,53 @@ defined('MVC_APP') or die('Access denied');
 
     <div class="container-fluid d-flex mt-5 mb-4 justify-content-around align-items-start">
         <div class="col-9 bg-white rounded p-4">
-            <h2 class="text-uppercase text-dark"><span class="fw-bold">Benvinguts</span> al portal genèric</h2>
+            <div class="row">
+                <div class="col-9">
+                    <h2 class="text-uppercase text-dark"><span class="fw-bold">Gestió</span> noticies</h2>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col d-flex justify-content-end">
+                            <a href="index.php?action=view_save_news" class="btn btn-outline-success me-2">Nova notícia</a>
+                            <a href="index.php?action=dashboard" class="btn btn-danger">Tornar</a>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row px-5">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Titol</th>
+                            <th scope="col">Descripcio</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Accions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($info_news)) : ?>
+                            <?php foreach ($info_news as $news) : ?>
+                                <tr class="align-middle">
+                                    <td><?= $news['titol'] ?></td>
+                                    <td><?= $news['descripcio'] ?></td>
+                                    <td><?= date('d/m/Y', strtotime($news['data'])) ?></td>
+                                    <td>
+                                        <a href="index.php?action=view_save_news&id=<?= $news['codin'] ?>" class="btn btn-outline-success">Editar</a>
+                                        <a href="index.php?action=delete_news&id=<?= $news['codin'] ?>" class="btn btn-outline-danger">Eliminar</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <tr>
+                                <td colspan="4" class="text-center">No hi ha noticies disponibles</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+
+            </div>
         </div>
         <div class="col-2 bg-white rounded text-dark p-4">
             <div class="row">
@@ -78,7 +124,7 @@ defined('MVC_APP') or die('Access denied');
             <div class="row mt-2">
                 <ul class="nav d-flex flex-column ps-2">
                     <li class="nav-item mb-3">
-                        <a class="text-dark" href="index.php?action=change_pass_view&id=<?= $_SESSION['username'] ?>">Canviar contrasenya</a>
+                        <a class="text-dark" href="index.php?action=change_pass">Canviar contrasenya</a>
                     </li>
                     <li class="nav-item">
                         <a href="index.php?action=logout" class="btn btn-danger w-100">Desconnectar</a>

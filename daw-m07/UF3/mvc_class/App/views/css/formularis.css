@@ -10,6 +10,18 @@ body.login {
   background: linear-gradient(to right, #00c98c, #e04f5f);
 }
 
+body.news{
+  font-family: monospace;
+  background: #004979;
+  background: linear-gradient(to right, #e04f5f, #b3b6bb);
+}
+
+body.users{
+  font-family: monospace;
+  background: #004979;
+  background: linear-gradient(to right, #000000, #b3b6bb);
+}
+
 .bg-register {
   background-image: url("../../../App/views/images/register_bg.jpg");
   background-position: center center;
@@ -18,6 +30,18 @@ body.login {
 
 .bg-login {
   background-image: url("../../../App/views/images/login_bg.jpg");
+  background-position: center center;
+  background-size: cover;
+}
+
+.bg-news{
+  background-image: url("../../../App/views/images/bg_news.jpg");
+  background-position: center center;
+  background-size: cover;
+}
+
+.bg-users{
+  background-image: url("../../../App/views/images/bg_users.jpg");
   background-position: center center;
   background-size: cover;
 }
