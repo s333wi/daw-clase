@@ -148,15 +148,6 @@ if (!empty($_POST['createFileDir'])) {
     }
 }
 
-
-
-/**
- * Comprimeix un fitxer o directori en un arxiu zip
- *
- * @param string $src Ruta del fitxer o directori a comprimir
- * @param string $zipName Nom del nou arxiu zip
- * @return bool True si s'ha comprimit correctament, False en cas contrari
- */
 function compress($src, $zipName)
 {
     // Crea una instància de la classe ZipArchive

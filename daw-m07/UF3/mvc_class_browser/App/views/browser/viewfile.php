@@ -11,4 +11,4 @@
  fclose($myfile);
  $filename = basename($ruta_file);
  $link_user_sanitize = str_replace("/" . $filename, "", $link_user_sanitize);
- echo "<a href='browser.php?link=" . $link_user_sanitize . '\\..' . "'>GO BACK</a>";
+ echo "<a href='index.php?action=browser&link=" . $link_user_sanitize . '\\..' . "'>GO BACK</a>";

@@ -5,7 +5,7 @@ if (empty($_SESSION['username'])) {
     header("Location:index.php");
 }
 include_once 'browserFunctions.php';
-
+echo $link_user_sanitize;
 if (strpos($ruta_user, $ruta_root) === false) {
     header("Location:index.php?action=browser");
 }
@@ -57,7 +57,7 @@ if (strpos($ruta_user, $ruta_root) === false) {
         ?>
 
         <!-- Formulari per copiar o moure els arxius/directoris -->
-        <form action="./browser.php?link=<?= $link_user_sanitize ?>" method="post">
+        <form action="index.php?action=browser&link=<?= $link_user_sanitize ?>" method="post">
             <label for="mainFile">From: </label>
             <select name="mainFile" id="mainFile">
                 <?php
@@ -91,7 +91,7 @@ if (strpos($ruta_user, $ruta_root) === false) {
         </form>
 
         <!-- Formulari per la creacio d'arxius/directoris -->
-        <form action="./browser.php?link=<?= $link_user_sanitize ?>" method="post">
+        <form action="index.php?action=browser&link=<?= $link_user_sanitize ?>" method="post">
             <label for="inpNameFile">Create file/dir</label>
             <input type="text" name="nameFile" id="inpNameFile">
             <label for="inpTypeFile">Type:</label>
