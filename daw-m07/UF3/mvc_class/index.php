@@ -42,7 +42,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'register') {
   $login->login_user();
 } else if (isset($_GET['action']) && $_GET['action'] == 'logout') {
   $logout = new Ctl_main();
-  $logout->logout($_SESSION['username']);
+  $logout->logout();
 } else if (isset($_GET['action']) && $_GET['action'] == 'manage_users') {
   $users = new Ctl_users();
   $users->loadView();
@@ -70,8 +70,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'register') {
   $user = new Ctl_users();
   $user->addUser();
 } else if (isset($_GET['action']) && $_GET['action'] == 'delete_user') {
-  $news = new Ctl_news();
-  $news->deleteNews($_GET['id']);
+  $news = new Ctl_users();
+  $news->deleteUser($_GET['id']);
 } else if (isset($_GET['action']) && $_GET['action'] == 'change_pass_view') {
   $user = new Ctl_main();
   $user->change_pass_view();

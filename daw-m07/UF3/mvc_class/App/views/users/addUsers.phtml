@@ -38,6 +38,7 @@ defined('MVC_APP') or die('Access denied');
 
                     <!-- Formulari login -->
                     <form action="index.php?action=save_user" method="POST">
+                        <!-- Aquest input el fico per recuperar el id al controller-->
                         <input type="hidden" name="id" value='<?php echo (!empty($info_users['nick'])) ? $info_users['nick'] : '' ?>' />
                         <div class="form-group mb-3">
                             <label for="nomcognoms" class="text-uppercase mb-1">Nom i cognoms</label>
@@ -45,7 +46,7 @@ defined('MVC_APP') or die('Access denied');
                         </div>
                         <div class="form-group mb-3">
                             <label for="edat" class="text-uppercase mb-1">Edat</label>
-                            <input type="text" class="form-control" id="edat" name="edat" value="<?php echo (!empty($info_user['edat'])) ? $info_user['edat'] : 0 ?>" placeholder="Edat" required>
+                            <input type="text" class="form-control" id="edat" name="edat" value="<?php echo (!empty($info_user['edat'])) ? $info_user['edat'] : '' ?>" placeholder="Edat" required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="email" class="text-uppercase mb-1">Correu electronic</label>
@@ -53,14 +54,14 @@ defined('MVC_APP') or die('Access denied');
                         </div>
                         <div class="form-group mb-3">
                             <label for="nick" class="text-uppercase mb-1">Usuari d'acces</label>
-                            <input type="text" class="form-control" id="nick" name="nick" value="<?php echo (!empty($info_user['nick'])) ? $info_user['nick'] : '' ?>" placeholder="Nick" required>
+                            <input type="text" class="form-control-plaintext" id="nick" name="nick" value="<?php echo (!empty($info_user['nick'])) ? $info_user['nick'] : '' ?>" placeholder="Nick" readonly required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="password" class="text-uppercase mb-1">Contrasenya</label>
                             <input type="password" class="form-control" id="password" name="contrasenya" placeholder="Contrasenya">
                         </div>
                         <div class="form-group mb-3">
-                            <label for="nivell" class="text-uppercase mb-1">Rol</label>
+                            <label for="nivell" class="text-uppercase mb-1">Nivell</label>
                             <input type="text" class="form-control" id="nivell" name="level" value="<?php echo (!empty($info_user['nivell'])) ? $info_user['nivell'] : '' ?>" placeholder="Nivell">
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Afegeix el usuari</button>

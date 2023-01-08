@@ -36,21 +36,20 @@ defined('MVC_APP') or die('Access denied');
 
             <ul class="nav nav-pills text-decoration-none">
                 <li class="nav-item"><a href="index.php" class="nav-link active">Home</a></li>
-                <li class="nav-item"><a href="index.php?action=login" class="nav-link">Log In</a></li>
-                <li class="nav-item"><a href="index.php?action=register" class="nav-link">Register</a></li>
-                <li class="nav-item"><a href="webo" class="nav-link">FAQs</a></li>
-                <li class="nav-item"><a href="webo" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="index.php?action=login" class="nav-link">Accedeix</a></li>
+                <li class="nav-item"><a href="index.php?action=register" class="nav-link">Registrar-se</a></li>
+                <li class="nav-item"><a href="https://reskyt.com/ca/educacio/iescaparrella/formulari/t-3764" class="nav-link">Contacta'ns</a></li>
             </ul>
         </header>
     </div>
 
 
     <!-- ALERTA DE REGISTRE -->
-    <?php if (!empty($result)) : ?>
-        <div class="toast top-0 align-items-center border-0 <?= $result ? 'text-bg-success' : 'text-bg-warning' ?> mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+    <?php if (!empty($_GET['register'])) : ?>
+        <div class="toast top-0 align-items-center border-0 <?= $_GET['register'] == 1 ? 'text-bg-success' : 'text-bg-warning' ?> mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
             <div class="d-flex">
                 <div class="toast-body">
-                    <?= $result ? 'T\'has registrat correctament!' : 'Hi ha hagut un error, torna a intentar-ho mes tard' ?>
+                    <?= $_GET['register'] == 1  ? 'T\'has registrat correctament!' : 'Hi ha hagut un error, torna a intentar-ho mes tard' ?>
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
@@ -83,6 +82,10 @@ defined('MVC_APP') or die('Access denied');
                     <?php endif; ?>
                 <?php endforeach; ?>
                     </div>
+                    <?php else:?>
+                        <div class="alert alert-warning" role="alert">
+                            No hi ha noticies disponibles
+                        </div>
                 <?php endif; ?>
             </div>
         </div>
@@ -91,8 +94,7 @@ defined('MVC_APP') or die('Access denied');
 
 
     <!-- SECCIO DEL FOOTER -->
-    <div class="container-fluid footer">
-
+    <div class="container-fluid mt-auto footer bottom">
         <div class="row p-5 bg-body text-dark">
             <div class="col-xs-12 col-md-6 col-lg-3 d-flex flex-column">
                 <img src="App/views/images/logo-capa.png" style="width:300px;" alt="logo_capa">

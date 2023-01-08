@@ -35,16 +35,17 @@ class Mdl_news
         } else {
             $res = null;
         }
-
         return $res;
     }
 
     public function addNews(string $titol, string $descripcio, int $id = 0): bool
     {
+        //Modifiquem les variables avans de fer la consulta
         $dateToday = date("Y-m-d");
         $titol=ucfirst($titol);
         $descripcio=ucfirst($descripcio);
-    
+
+        //Si l'id es 0 vol dir que es una insercio, sino es una actualitzacio
         if ($id == 0) {
             $sql = "INSERT INTO news (titol, descripcio, data) VALUES (?,?,?)";
             $stmt = $this->db->prepare($sql);
@@ -69,9 +70,10 @@ class Mdl_news
         return true;
     }
 
+    //Funcio que elimina una noticia
     public function deleteNews(int $id)
     {
-            echo $id;
+        //Preparem la sentencia
         $sql = "DELETE FROM news WHERE codin=?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("i", $id);
@@ -89,6 +91,7 @@ class Mdl_news
         return true;
     }
 
+    //Funcio que retorna una noticia en concret
     public function getNews(int $id){
         $sql = "SELECT * FROM news WHERE codin=?";
         $stmt = $this->db->prepare($sql);
@@ -101,6 +104,7 @@ class Mdl_news
             return false;
         }
         
+        //Obtenim el resultat
         $result = $stmt->get_result();
         $res = $result->fetch_assoc();
         return $res;

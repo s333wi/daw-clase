@@ -25,20 +25,7 @@ class Mdl_users
             $this->db->close();
     }
 
-    public function getAllGuests()
-    {
-        $sql = "SELECT * FROM myguests";
-        $result = $this->db->query($sql);
-
-        if ($result->num_rows > 0) {
-            $res = $result->fetch_all(MYSQLI_ASSOC);
-        } else {
-            $res = null;
-        }
-        $this->__destruct();
-        return $res;
-    }
-
+    //Funcio que retorna un llistat de tots els usuaris
     public function getAllUsers()
     {
         $sql = "SELECT * FROM users";
@@ -52,7 +39,7 @@ class Mdl_users
         return $res;
     }
 
-    //Funcio que inserta o guarda un usuari
+    //Funcio que inserta o guarda un usuari segons si existeix o no el nick
     public function saveUser(
         string $nick,
         string $name,
@@ -62,29 +49,27 @@ class Mdl_users
         string $level = '0',
     ): bool {
 
-        //Comprovem si la contrasenya es valida(es podrien fer mes comprovacions)
-        if (strlen($password) < 8) {
-            echo "La contrasenya ha de tenir almenys 8 caracters";
-            return false;
-        }
-
         //Aquest check el faig perque al editar un usuari, si deixa el camp nivell buit el fico a 0
         if ($level == '') {
             $level = '0';
         }
+
         // Apliquem el hash a la contrasenya
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $name = ucwords($name);
-        // Preparem la sentencia SQL i mirem si es un insert o un update
 
-        //Comprovem si el usuari ja existeix
+        // Preparem la sentencia SQL i mirem si es un insert o un update
         $stmt = $this->db->prepare("SELECT * FROM users WHERE nick = ?");
         $stmt->bind_param("s", $nick);
         $stmt->execute();
         $result = $stmt->get_result();
+        //Comprovem si el usuari ja existeix
         if ($result->num_rows > 0) {
+            //En cas de que existeixi, fem un update dels camps
             $sql = "UPDATE users SET nick = ?, nomcognoms = ?, contrasenya = ?, mail = ?, edat = ?, nivell = ? WHERE nick = ?";
             $stmt = $this->db->prepare($sql);
+
+            //Vinculem els parametres 
             $stmt->bind_param(
                 "sssssss",
                 $nick,
@@ -96,8 +81,11 @@ class Mdl_users
                 $nick
             );
         } else {
+            //En cas de que no existeixi, fem un insert
             $sql = "INSERT INTO users (nick,nomcognoms,contrasenya,mail,edat,nivell) VALUES (?, ?, ?, ?, ?,?)";
             $stmt = $this->db->prepare($sql);
+
+            //Vinculem els parametres
             $stmt->bind_param(
                 "ssssss",
                 $nick,
@@ -122,30 +110,34 @@ class Mdl_users
         return true;
     }
 
+    //Funcio que mira si un usuari existeix i si la contrasenya es correcta
     function loginUser(string $nick, string $password): bool
     {
-        // Set up SQL query
+        //Prearem la sentencia SQL
         $sql = "SELECT * FROM users WHERE nick = ?";
         $stmt = $this->db->prepare($sql);
 
         if ($stmt) {
-            // Bind parameters and execute query
+            //Vinculem els parametres i executem la sentencia
             $stmt->bind_param("s", $nick);
             $stmt->execute();
-            
-            // Get query result
+
+            // Obtenim el resultat de la sentencia
             $result = $stmt->get_result();
+
+            //Si existeix l'usuari comprovem la contrasenya
             if ($result) {
-                // Fetch first row as associative array
-                
+
                 $row = $result->fetch_assoc();
 
-                // Check if provided password matches hashed password in database
+                //Comprovem la contrasenya coincideix amb el hash de la BBDD
                 if (isset($row['contrasenya']) && password_verify($password, $row['contrasenya'])) {
                     $result = true;
                 } else {
                     $result = false;
                 }
+            } else {
+                $result = false;
             }
         }
 
@@ -153,16 +145,16 @@ class Mdl_users
         return $result;
     }
 
+    //Funcio que retorna el nivell d'un usuari
     function getUserLevel(string $nick)
     {
         $sql = "SELECT nivell FROM users WHERE nick = ?";
         $stmt = $this->db->prepare($sql);
         if ($stmt) {
-            // Bind parameters and execute query
+            // Vinculem els parametres i executem la sentencia
             $stmt->bind_param("s", $nick);
             $stmt->execute();
 
-            // Get query result
             $result = $stmt->get_result();
             if ($result) {
                 //Agafem el nivell de l'usuari
@@ -170,19 +162,21 @@ class Mdl_users
                 return $row['nivell'];
             }
         }
+        //Si no s'ha trobat l'usuari retornem 0
         return "0";
     }
 
+    //Funcio que retorna un usuari segons el nick
     function getUser(string $id)
     {
+        // Preparem la sentencia SQL
         $sql = "SELECT * FROM users WHERE nick = ?";
         $stmt = $this->db->prepare($sql);
         if ($stmt) {
-            // Bind parameters and execute query
+            // Vinculem els parametres i executem la sentencia
             $stmt->bind_param("s", $id);
             $stmt->execute();
 
-            // Get query result
             $result = $stmt->get_result();
             if ($result) {
                 //Agafem el nivell de l'usuari
@@ -190,14 +184,34 @@ class Mdl_users
                 return $row;
             }
         }
+        //Si no s'ha trobat l'usuari retornem null
         return null;
     }
 
-    function changePass(string $contrasenya, string $nick)
+    //Funcio que esborra un usuari segons el nick
+    function deleteUser(string $id)
     {
+        $sql = "DELETE FROM users WHERE nick = ?";
+        $stmt = $this->db->prepare($sql);
+        if ($stmt) {
+            // Vinculem els parametres i executem la sentencia
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+        }
+    }
+
+
+    //Funcio que canvia la contrasenya d'un usuari especific
+    function changePass(string $contrasenya, string $nick)
+    {   
+        //Encriptem la contrasenya amb un hash
         $hashedPassword = password_hash($contrasenya, PASSWORD_DEFAULT);
+
+        // Preparem la sentencia SQL
         $sql = "UPDATE users SET contrasenya = ? WHERE nick = ?";
         $stmt = $this->db->prepare($sql);
+
+        // Vinculem els parametres i executem la sentencia
         $stmt->bind_param(
             "ss",
             $hashedPassword,

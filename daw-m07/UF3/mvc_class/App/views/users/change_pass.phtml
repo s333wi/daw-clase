@@ -38,7 +38,7 @@ defined('MVC_APP') or die('Access denied');
 
                     <!-- Formulari login -->
                     <form action="index.php?action=change_pass" method="POST">
-                        <input type="hidden" name="nick" value='<?= $_SESSION['username']?>' />
+                        <input type="hidden" name="nick" value='<?= $_SESSION['username'] ?>' />
                         <div class="form-group mb-3">
                             <label for="password" class="text-uppercase mb-1">Contrasenya</label>
                             <input type="password" class="form-control" id="password" name="contrasenya" placeholder="Contrasenya">
@@ -49,7 +49,11 @@ defined('MVC_APP') or die('Access denied');
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Canviar contrasenya</button>
                     </form>
-
+                    <?php if (isset($_GET['error'])) : ?>
+                        <div class="alert alert-warning mt-3" role="alert">
+                            Les contrasenyes no coincideixen
+                        </div>
+                    <?php endif; ?>
                     <div class="row mt-2 justify-content-center">
                         <a href="index.php?action=manage_users" class="btn btn-secondary w-25">Torna enrere</a>
                     </div>
