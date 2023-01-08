@@ -68,8 +68,14 @@ defined('MVC_APP') or die('Access denied');
                                     <td><?= $news['descripcio'] ?></td>
                                     <td><?= date('d/m/Y', strtotime($news['data'])) ?></td>
                                     <td>
-                                        <a href="index.php?action=view_save_news&id=<?= $news['codin'] ?>" class="btn btn-outline-success">Editar</a>
-                                        <a href="index.php?action=delete_news&id=<?= $news['codin'] ?>" class="btn btn-outline-danger">Eliminar</a>
+                                        <div class="row">
+                                            <div class="col">
+                                                <a href="index.php?action=view_save_news&id=<?= $news['codin'] ?>" class="btn btn-outline-success w-100">Editar</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="index.php?action=delete_news&id=<?= $news['codin'] ?>" class="btn btn-outline-danger w-100">Eliminar</a>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

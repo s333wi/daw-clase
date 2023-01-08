@@ -51,7 +51,6 @@ class Mdl_news
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param("sss", $titol, $descripcio, $dateToday);
         } else {
-            echo $id;
             $sql = "UPDATE news SET titol=?, descripcio=?, data=? WHERE codin=?";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param("sssi", $titol, $descripcio, $dateToday, $id);
