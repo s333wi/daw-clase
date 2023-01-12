@@ -78,45 +78,50 @@ class Ctl_news
 
         //Instanciem el model de noticies i extreiem la noticia
         $usr_news = new Mdl_news();
-        $news = $usr_news->getNews($id);
-        $usr_model = new Mdl_users();
-        include 'App/views/news/view_news.phtml';
+        if ($news = $usr_news->getNews($id)) {
+            include 'App/views/news/view_news.phtml';
+        } else {
+            header('Location: index.php');
+        }
     }
 
     function pdf_news(int $id)
     {
         //make a pdf with tcdpf that contains all the data of a news article 
         $news_model = new Mdl_news();
-        $info_news = $news_model->getNews($id);
-        $url = 'http://' . $_SERVER['HTTP_HOST'] . '/daw-clase/daw-m07/UF3/mvc_class_pdf/index.php?action=view_news&id=' . $id;
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('s333wi');
-        $pdf->SetTitle('News PDF ' . $id);
-        $pdf->SetSubject('News');
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        $pdf->SetFont('helvetica', '', 12);
-        $pdf->AddPage();
-        $this->printPdf($pdf, $info_news, $url);
-        $pdf->Output('news' . $id . '.pdf', 'I');
+        if ($info_news = $news_model->getNews($id)) {
+            $url = 'http://' . $_SERVER['HTTP_HOST'] . '/daw-clase/daw-m07/UF3/mvc_class_pdf/index.php?action=view_news&id=' . $id;
+            $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('s333wi');
+            $pdf->SetTitle('News PDF ' . $id);
+            $pdf->SetSubject('News');
+            $pdf->setPrintHeader(false);
+            $pdf->setPrintFooter(false);
+            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+            $pdf->SetFont('helvetica', '', 12);
+            $pdf->AddPage();
+            $this->printPdf($pdf, $info_news, $url);
+            $pdf->Output('news' . $id . '.pdf', 'D');
+        } else {
+            header('Location: index.php');
+        }
     }
 
     function pdfAllNews()
     {
         //check if user its logged in and has level 10
-        if(!isset($_SESSION['username'])){
+        if (!isset($_SESSION['username'])) {
             header('Location: index.php');
             exit;
         }
         $usr_model = new Mdl_users();
         $level = $usr_model->getUserLevel($_SESSION['username']);
 
-        if($level < 10){
+        if ($level < 10) {
             header('Location: index.php');
             exit;
         }
