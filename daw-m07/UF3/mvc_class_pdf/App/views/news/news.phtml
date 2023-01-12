@@ -50,13 +50,14 @@ defined('MVC_APP') or die('Access denied');
                     </div>
                 </div>
             </div>
-            <div class="row px-5">
+            <div class="row px-5 justify-content-center">
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
                             <th scope="col">Titol</th>
                             <th scope="col">Descripcio</th>
                             <th scope="col">Data</th>
+                            <th scope="col">Autor</th>
                             <th scope="col">Accions</th>
                         </tr>
                     </thead>
@@ -67,8 +68,9 @@ defined('MVC_APP') or die('Access denied');
                                     <td><?= $news['titol'] ?></td>
                                     <td><?= $news['descripcio'] ?></td>
                                     <td><?= date('d/m/Y', strtotime($news['data'])) ?></td>
+                                    <td><?= $news['autor'] ?></td>
                                     <td>
-                                        <div class="row">
+                                        <div class="row g-2">
                                             <div class="col">
                                                 <a href="index.php?action=view_save_news&id=<?= $news['codin'] ?>" class="btn btn-outline-success w-100">Editar</a>
                                             </div>
@@ -76,7 +78,7 @@ defined('MVC_APP') or die('Access denied');
                                                 <a href="index.php?action=delete_news&id=<?= $news['codin'] ?>" class="btn btn-outline-danger w-100">Eliminar</a>
                                             </div>
                                             <div class="col">
-                                                <a href="index.php?action=pdf_news&id=<?= $news['codin'] ?>" class="btn btn-outline-warning w-100">PDF</a>
+                                                <a href="index.php?action=pdf_news&id=<?= $news['codin'] ?>" class="btn btn-warning w-100">PDF <i class="fa-solid fa-file-pdf"></i></a>
                                             </div>
                                         </div>
                                     </td>
@@ -89,7 +91,9 @@ defined('MVC_APP') or die('Access denied');
                         <?php endif; ?>
                     </tbody>
                 </table>
-
+                <?php if ($level == 10) : ?>
+                    <a href="index.php?action=pdf_all_news" class="btn btn-outline-danger w-50 mt-2">Descarrega totes les noticies</a>
+                <?php endif; ?>
             </div>
         </div>
         <div class="col-2 bg-white rounded text-dark p-4">

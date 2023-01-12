@@ -72,6 +72,8 @@ class Ctl_main
             $news_model = new Mdl_news();
             $info_news = $news_model->getNews($id);
         }
+        $usr_model = new Mdl_users();
+        $users = $usr_model->getAllUsers();
         include 'App/views/news/addNews.phtml';
     }
 

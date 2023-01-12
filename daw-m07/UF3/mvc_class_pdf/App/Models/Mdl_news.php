@@ -38,23 +38,22 @@ class Mdl_news
         return $res;
     }
 
-    public function addNews(string $titol, string $descripcio, int $id = 0): bool
+    public function addNews(string $titol, string $descripcio, string $autor, int $id = 0): bool
     {
         //Modifiquem les variables avans de fer la consulta
         $dateToday = date("Y-m-d");
-        $titol=ucfirst($titol);
-        $descripcio=ucfirst($descripcio);
-
+        $titol = ucfirst($titol);
+        $descripcio = ucfirst($descripcio);
         //Si l'id es 0 vol dir que es una insercio, sino es una actualitzacio
         if ($id == 0) {
-            $sql = "INSERT INTO news (titol, descripcio, data) VALUES (?,?,?)";
+            $sql = "INSERT INTO news (titol, descripcio, data,autor) VALUES (?,?,?,?)";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("sss", $titol, $descripcio, $dateToday);
+            $stmt->bind_param("ssss", $titol, $descripcio, $dateToday, $autor);
         } else {
             echo $id;
-            $sql = "UPDATE news SET titol=?, descripcio=?, data=? WHERE codin=?";
+            $sql = "UPDATE news SET titol=?, descripcio=?, data=?, autor=? WHERE codin=?";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("sssi", $titol, $descripcio, $dateToday, $id);
+            $stmt->bind_param("ssssi", $titol, $descripcio, $dateToday, $autor, $id);
         }
 
 
@@ -92,18 +91,19 @@ class Mdl_news
     }
 
     //Funcio que retorna una noticia en concret
-    public function getNews(int $id){
+    public function getNews(int $id)
+    {
         $sql = "SELECT * FROM news WHERE codin=?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("i", $id);
-        if(!$stmt->execute()){
+        if (!$stmt->execute()) {
             $error = $stmt->error;
             echo "<pre>";
             print_r($error);
             echo "</pre>";
             return false;
         }
-        
+
         //Obtenim el resultat
         $result = $stmt->get_result();
         $res = $result->fetch_assoc();

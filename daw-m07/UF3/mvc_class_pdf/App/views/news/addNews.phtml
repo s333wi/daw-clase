@@ -44,6 +44,15 @@ defined('MVC_APP') or die('Access denied');
                             <input type="text" value='<?php echo (!empty($info_news['titol'])) ? $info_news['titol'] : '' ?>' name="titol" class="form-control" id="title" placeholder="Fica un titol clickbait" required />
                         </div>
                         <div class="form-group mb-3">
+                            <label for="autor" class="text-uppercase mb-1">Autor</label>
+                            <!-- make a select with the users-->
+                            <select name="autor" id="autor" class="form-control">
+                                <?php foreach ($users as $user) : ?>
+                                    <option value="<?php echo $user['nick'] ?>" <?php echo (!empty($info_news['autor']) && $info_news['autor'] == $user['nick']) ? 'selected' : '' ?>><?php echo $user['nick'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
                             <label for="description" class="text-uppercase mb-1">Descripcio</label>
                             <textarea name="descripcio" id="description" class="form-control" max-length="255"><?php echo (!empty($info_news['descripcio'])) ? $info_news['descripcio'] : '' ?></textarea>
                         </div>

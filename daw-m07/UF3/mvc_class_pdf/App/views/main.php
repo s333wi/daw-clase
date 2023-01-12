@@ -70,7 +70,8 @@ defined('MVC_APP') or die('Access denied');
                                         <h3 class="card-title text-center bg-dark text-light p-2"><?php echo $news['titol'] ?></h3>
                                         <p class="card-text px-2 py-4 text-light"><?php echo $news['descripcio'] ?></p>
                                     </div>
-                                    <div class="card-footer bg-dark text-light text-end">
+                                    <div class="card-footer bg-dark text-light d-flex justify-content-around">
+                                        <a href="index.php?action=view_news&id=<?= $news['codin']?>" class="text-decoration-none text-danger">Veure mes...</a>
                                         <span><?= date('d/m/Y', strtotime($news['data'])) ?></span>
                                     </div>
                                 </div>

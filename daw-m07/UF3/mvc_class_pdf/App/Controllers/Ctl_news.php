@@ -6,9 +6,9 @@ require_once 'App/../../../vendor/autoload.php';
 defined('MVC_APP') or die('Access denied');
 session_start();
 
-use TCPDF;
 use App\Models\Mdl_users;
 use app\Models\Mdl_news;
+use TCPDF;
 
 class Ctl_news
 {
@@ -51,10 +51,10 @@ class Ctl_news
         //Extreiem el post amb el metode habitual
         $data = filter_input_array(INPUT_POST);
         extract($data);
-
+        var_dump($autor);
         //Instanciem el model de noticies i afegim la noticia
         $usr_news = new Mdl_news();
-        $result = $usr_news->addNews(trim($titol), trim($descripcio), intval($id));
+        $result = $usr_news->addNews(trim($titol), trim($descripcio), $autor, intval($id));
 
         //Redirigim a la pagina de gestio de noticies
         header('Location: index.php?action=manage_news');
@@ -73,46 +73,90 @@ class Ctl_news
         header('Location: index.php?action=manage_news');
     }
 
+    function viewNews(int $id)
+    {
+
+        //Instanciem el model de noticies i extreiem la noticia
+        $usr_news = new Mdl_news();
+        $news = $usr_news->getNews($id);
+        $usr_model = new Mdl_users();
+        include 'App/views/news/view_news.phtml';
+    }
+
     function pdf_news(int $id)
     {
-        ob_start();
-        error_reporting(E_ALL & ~E_NOTICE);
-        ini_set('display_errors', 0);
-        ini_set('log_errors', 1);
-        // Create a new PDF document
+        //make a pdf with tcdpf that contains all the data of a news article 
+        $news_model = new Mdl_news();
+        $info_news = $news_model->getNews($id);
+        $url = 'http://' . $_SERVER['HTTP_HOST'] . '/daw-clase/daw-m07/UF3/mvc_class_pdf/index.php?action=view_news&id=' . $id;
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-        // Set the document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Your Name');
-        $pdf->SetTitle('My PDF');
-        $pdf->SetSubject('My PDF Subject');
-        $pdf->SetKeywords('PDF, TCPDF, example');
-
-        // Add a page
-        $pdf->AddPage();
-
-        // Set the font
-        $pdf->SetFont('helvetica', 'B', 20);
-
-        // Add the title
-        $pdf->Cell(0, 0, 'Title', 0, 1, 'C');
-
-        // Set the font
+        $pdf->SetAuthor('s333wi');
+        $pdf->SetTitle('News PDF ' . $id);
+        $pdf->SetSubject('News');
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->SetFont('helvetica', '', 12);
+        $pdf->AddPage();
+        $this->printPdf($pdf, $info_news, $url);
+        $pdf->Output('news' . $id . '.pdf', 'I');
+    }
 
-        // Add the author
-        $pdf->Cell(0, 20, 'Author: Your Name', 0, 1, 'L');
+    function pdfAllNews()
+    {
+        //check if user its logged in and has level 10
+        if(!isset($_SESSION['username'])){
+            header('Location: index.php');
+            exit;
+        }
+        $usr_model = new Mdl_users();
+        $level = $usr_model->getUserLevel($_SESSION['username']);
 
-        // Add the description
-        $pdf->MultiCell(0, 20, 'Description: This is my PDF document. It contains a title, author, description, and date.', 0, 'L');
+        if($level < 10){
+            header('Location: index.php');
+            exit;
+        }
 
-        // Add the date
-        $pdf->Cell(0, 20, 'Date: ' . date('F j, Y'), 0, 1, 'R');
+        $news_model = new Mdl_news();
+        $info_news = $news_model->fetchAllNews();
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('s333wi');
+        $pdf->SetTitle('ALL News PDF');
+        $pdf->SetSubject('News');
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->SetFont('helvetica', '', 12);
+        foreach ($info_news as $news) {
+            $pdf->AddPage();
+            $url = 'http://' . $_SERVER['HTTP_HOST'] . '/daw-clase/daw-m07/UF3/mvc_class_pdf/index.php?action=view_news&id=' . $news['codin'];
+            $this->printPdf($pdf, $news, $url);
+        }
+        $pdf->Output('all_news.pdf', 'D');
+    }
 
-
-        ob_end_clean();
-        // Output the PDF
-        $pdf->Output('efe.pdf', 'I');
+    function printPdf($pdf, $info_news, $url)
+    {
+        $html_title = '<h1>Titol: ' . $info_news['titol'] . '</h1>';
+        $html_autor = '<h3>Autor: ' . $info_news['autor'] . '</h3>';
+        $html_data = '<h6>Data: ' . $info_news['data'] . '</h6>';
+        $html_body = '<p>Contingut: ' . $info_news['descripcio'] . '</p>';
+        $html_url = '<p>URL: <a href="' . $url . '">' . $url . '</a></p>';
+        $html_generacio_pdf = '<p>Generat : ' . date('d/m/Y h:i:s') . '</p>
+        <p>Generat per: ' . ($_SESSION['username'] ?? "Visitant") . '</p>';
+        $pdf->writeHTML($html_title, true, false, true, false, '');
+        $pdf->writeHTML($html_autor, true, false, true, false, '');
+        $pdf->writeHTML($html_data, true, false, true, false, '');
+        $pdf->writeHTML($html_body, true, false, true, false, '');
+        $pdf->writeHTML($html_url, true, false, true, false, '');
+        $pdf->writeHTML($html_generacio_pdf, true, false, true, false, '');
     }
 }
