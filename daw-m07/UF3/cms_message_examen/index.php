@@ -19,7 +19,7 @@ define('MVC_APP', 'APP');
 // });
 
 
-// Autoload via classe 
+// Autoload via classe
 require __DIR__ . '/Loader.php';
 Loader::init(__DIR__ . '/App');    // definir carpeta on cercar -> Loader::init(__DIR__.'/src' );
 
@@ -92,10 +92,26 @@ if (isset($_GET['action']) && $_GET['action'] == 'register') {
   $news = new Ctl_news();
   $news->pdfAllNews();
 } else if (isset($_GET['action']) && $_GET['action'] == 'view_messenger') {
-  echo 'webo';die;
   $messenger = new Ctl_messenger();
   $messenger->loadView();
-} else { //Si no existeix GET o POST -> mostra la pagina principal
+} else if (isset($_GET['action']) && $_GET['action'] == 'view_save_message') {
+  $messenger = new Ctl_messenger();
+  $id = !empty($_GET['id']) ? $_GET['id'] : '';
+  $messenger->viewSave(intval($id));
+} else if (isset($_GET['action']) && $_GET['action'] == 'save_message') {
+  $messenger = new Ctl_messenger();
+  $messenger->saveMessage();
+} else if (isset($_GET['action']) && $_GET['action'] == 'delete_message') {
+  $messenger = new Ctl_messenger();
+  $messenger->deleteMessage(intval($_GET['id']));
+} else if (isset($_GET['action']) && $_GET['action'] == 'view_message') {
+  $messenger = new Ctl_messenger();
+  $messenger->viewMessage(intval($_GET['id']));
+} else if (isset($_GET['action']) && $_GET['action'] == 'pdf_message') {
+  $messenger = new Ctl_messenger();
+  $messenger->pdfMessage(intval($_GET['id']));
+  
+}  else { //Si no existeix GET o POST -> mostra la pagina principal
   $main = new Ctl_main();
   $main->default_page();
 }
