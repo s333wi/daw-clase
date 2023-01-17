@@ -85,6 +85,7 @@ window.onload = function () {
   }
 
   function stopCrono() {
+    //Si existeix una animacio la parem
     if (animFrameId) {
       window.cancelAnimationFrame(animFrameId);
     }
@@ -96,6 +97,7 @@ window.onload = function () {
     startCrono();
   }
 
+  //Funcio per a crear el gradient de la barra
   function createGradient() {
     let gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
     gradient.addColorStop("0", "#000");
@@ -103,6 +105,7 @@ window.onload = function () {
     return gradient;
   }
 
+  //Afegeixo els listeners als botons 
   document.getElementById("cronoStart").addEventListener("click", startCrono);
   document.getElementById("cronoPause").addEventListener("click", stopCrono);
   document.getElementById("cronoReset").addEventListener("click", resetCrono);
