@@ -3,31 +3,86 @@ window.onload = function () {
   let boolStop = false;
   let animFrameId;
   let timeStart;
+  let timeNow;
+  let miliseconds;
+  let seconds;
+  let minutes;
+  let timePaused;
 
   //Variables per a poder dibuixar el crono
   let espaiBarra = 20;
   let canvas = document.getElementById("crono");
   let ctx = canvas.getContext("2d");
+  let text = "00:00";
 
+  //Funcio main que fa la animacio del crono
   function crono() {
-    //Si  boolStop es true no iniciem/parem el crono
-    if (boolStop === true) {
-      return;
+    if (!boolStop) {
+      timeNow = new Date(new Date() - timeStart);
+      //Agafem els milisegons, segons i minuts per poder dibuixar el temps del cronòmetre
+      //I els convertim a string per poder afegir els 0 que falten a l'esquerra
+      miliseconds = timeNow.getMilliseconds().toString().padStart(3, "0");
+      seconds = timeNow.getSeconds().toString().padStart(2, "0");
+      minutes = timeNow.getMinutes().toString().padStart(2, "0");
+      text = `${minutes}:${seconds}`;
+      printCrono();
+
+      window.requestAnimationFrame(crono);
     }
+  }
+
+  //Funcions per a poder parar, començar i reiniciar el crono
+  function startCrono() {
+    boolStop = false;
+    //Si el crono esta pausat, agafem el temps que ha passat i el guardem a timeStart per a poder continuar
+    //Si no, guardem el temps actual a timeStart per a poder començar a contar
+    if (timePaused) {
+      timeStart = new Date(new Date() - timePaused);
+      timePaused = null;
+    } else {
+      timeStart = new Date();
+    }
+    animFrameId = window.requestAnimationFrame(crono);
+  }
+
+  function stopCrono() {
+    //Cancelo la peticio de frame per a que no es dibuixi el crono
+    if (animFrameId) {
+      window.cancelAnimationFrame(animFrameId);
+    }
+    //Canvio el boolea per a que no es dibuixi el crono
+    boolStop = true;
+
+    //Guardem el temps que ha passat per a poder continuar despres el crono
+    timePaused = new Date(new Date() - timeStart);
+  }
+
+  function resetCrono() {
+    stopCrono();
+    //Reiniciem les variables per a poder tornar a començar el crono
+    text = "00:00";
+    timeStart = null;
+    timePaused = null;
+    timeNow = null;
+    miliseconds = undefined;
+    animFrameId = requestAnimationFrame(printCrono);
+  }
+
+  //Funcio per a crear el gradient de la barra
+  function createGradient() {
+    let gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    gradient.addColorStop("0", "#000");
+    gradient.addColorStop("1.0", "#9933ff");
+    return gradient;
+  }
+
+  //Funcio per a dibuixar el crono i la barra
+  function printCrono() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    let timeNow = new Date(new Date() - timeStart);
-    //Agafem els milisegons, segons i minuts per poder dibuixar el temps del cronòmetre
-    //I els convertim a string per poder afegir els 0 que falten a l'esquerra
-    let miliseconds = timeNow.getMilliseconds().toString().padStart(3, "0");
-    let seconds = timeNow.getSeconds().toString().padStart(2, "0");
-    let minutes = timeNow.getMinutes().toString().padStart(2, "0");
-    let text = `${minutes}:${seconds}`;
-    let widthBarra 
     //Agafem l'amplada del text per poder dibuixar la barra
     let widthText = ctx.measureText(text).width;
     //Creem el gradient per la barra
     let gradientStyle = createGradient();
-
     //Dibuixem el temps del cronòmetre
     ctx.font = "bold 100px Arial";
     ctx.textAlign = "center";
@@ -75,38 +130,13 @@ window.onload = function () {
 
     //Finalment restaurem el context per a poder dibuixar el crono en la seguent iteracio
     ctx.restore();
-    window.requestAnimationFrame(crono);
   }
 
-  function startCrono() {
-    boolStop = false;
-    animFrameId = window.requestAnimationFrame(crono);
-    timeStart = new Date();
-  }
-
-  function stopCrono() {
-    //Si existeix una animacio la parem
-    if (animFrameId) {
-      window.cancelAnimationFrame(animFrameId);
-    }
-    boolStop = true;
-  }
-
-  function resetCrono() {
-    stopCrono();
-    startCrono();
-  }
-
-  //Funcio per a crear el gradient de la barra
-  function createGradient() {
-    let gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-    gradient.addColorStop("0", "#000");
-    gradient.addColorStop("1.0", "#9933ff");
-    return gradient;
-  }
-
-  //Afegeixo els listeners als botons 
+  //Afegeixo els listeners als botons
   document.getElementById("cronoStart").addEventListener("click", startCrono);
   document.getElementById("cronoPause").addEventListener("click", stopCrono);
   document.getElementById("cronoReset").addEventListener("click", resetCrono);
+
+  //Printo per primera vegada el crono
+  printCrono();
 };
