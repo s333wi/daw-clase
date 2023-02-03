@@ -1,9 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
+  /**
+   * Variables globals
+   * @type {HTMLButtonElement} btnStartCanvas
+   * @type {boolean} blnStartCanvas
+   * @type {HTMLCanvasElement} canvas
+   * @type {CanvasRenderingContext2D} ctx
+   * @type {number} animId
+   * @type {number} startX
+   * @type {number} startY
+   */
   let btnStartCanvas = document.getElementById("canvasStart");
   let blnStartCanvas = false;
   let canvas = document.getElementById("dawAudi");
   let ctx = canvas.getContext("2d");
   let animId;
+
+  //Posicio inicial del logo
   let startX = canvas.width / 2 - 105;
   let startY = -100;
 
@@ -18,19 +30,25 @@ document.addEventListener("DOMContentLoaded", function () {
   function drawCanvas() {
     if (ctx) {
       ctx.save();
+      //Primer dibuixem el fons del canvas
       let audiFons = new Image();
       audiFons.src = "./audi-fons.png";
       audiFons.onload = function () {
+        //Quan la imatge s'hagi carregat, la dibuixem
         ctx.drawImage(audiFons, 0, 0, canvas.width, canvas.height);
+
+        //La resta de dibuixos nomes es faran si s'ha clicat el boto
         if (blnStartCanvas) {
           //Si el logo ha arribat al mig del canvas, parem l'animació
-          if (startY > canvas.height / 2) {
+          if (startY < canvas.height / 2) {
             drawAudiLogo();
-            startY += 1;
+            //Augmentem la posicio del logo per a que es mogui cap avall
+            startY += 10;
             animId = window.requestAnimationFrame(drawCanvas);
           } else {
             window.cancelAnimationFrame(animId);
             drawFinal();
+            restartCanvas();
           }
         }
         ctx.restore();
@@ -103,14 +121,16 @@ document.addEventListener("DOMContentLoaded", function () {
    * @return {void}
    */
   function drawTextJs() {
+    //Posiciono el text al cercle de la dreta
     startX -= 70;
     let radius = 50;
     let text = "JS";
     let textWidth = ctx.measureText(text).width;
     let charWidth = textWidth / text.length;
 
+    //Calculo els angles necessaris per poder fer les rotacions
     let totalAngle = (2 * Math.PI * radius) / charWidth;
-    let charAngle = totalAngle / text.length;
+    let charAngle = totalAngle / text.length - 0.5;
 
     let angle = Math.PI / 2 + charAngle / 4;
     ctx.save();
@@ -118,12 +138,13 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.fillStyle = "#ffffff";
     ctx.textAlign = "center";
 
+    //Dibuixo lletra a lletra i vaig canviant l'angle
     for (let i = 0; i < text.length; i++) {
       let char = text[i];
       ctx.save();
       ctx.translate(
         startX + radius * Math.cos(angle),
-        startY + radius * Math.sin(angle) + 30
+        startY + radius * Math.sin(angle) + 30 //Els 30px son per fer un margin amb el cercle
       );
       ctx.rotate(angle + (3 * Math.PI) / 2);
       ctx.fillText(char, 0, 0);
@@ -134,30 +155,70 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.restore();
   }
 
+  /**
+   * Dibuixa el frame final de l'animacio
+   * @return {void}
+   */
   function drawFinal() {
-    // Set the rectangle fill color to white with alpha of 0.5
+    //Fem el fons del rectangle semitransparent
     ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
-    let rectTotalHeight = 200;
-    let rectTotalWidth = 100;
-    // Draw the rectangle in the center of the canvas
+    let rectMarginHeight = 200;
+    let rectMarginWidth = 100;
+
     ctx.fillRect(
-      rectTotalWidth,
-      canvas.height / 2 - rectTotalHeight / 2,
-      canvas.width - 300,
-      rectTotalHeight
+      rectMarginWidth,
+      canvas.height / 2 - rectMarginHeight / 2,
+      canvas.width - 200,
+      rectMarginHeight
     );
 
-    // Draw a 10px border around the rectangle
-    ctx.strokeStyle = "blue";
+    //Ara fem el borde del rectangle
+    ctx.strokeStyle = "#000447";
     ctx.lineWidth = 10;
     ctx.strokeRect(
-      rectTotalWidth,
-      canvas.height / 2 - rectTotalHeight / 2,
-      canvas.width - 300,
-      rectTotalHeight
+      rectMarginWidth,
+      canvas.height / 2 - rectMarginHeight / 2,
+      canvas.width - 200,
+      rectMarginHeight
     );
-    startX -= 100;
+
+    //Dibuixem el text amb ombra
+    ctx.save();
+    ctx.font = "40px Arial";
+    ctx.fillStyle = "#ffffff";
+    ctx.strokeStyle = "black";
+
+    //Redueixo el borde de la linia per a que quedi mes bonic i configuro el shadow
+    ctx.lineWidth = 8;
+    ctx.shadowBlur = 5;
+    ctx.shadowColor = "black";
+
+    //Les mesures no tenen cap calcul, estan fetes a l'ull
+    ctx.strokeText("D A W", canvas.width - 240, canvas.height / 2 - 10);
+    ctx.fillText("D A W", canvas.width - 240, canvas.height / 2 - 10);
+    ctx.font = "20px Arial";
+    ctx.strokeText(
+      "m'agrada canvas",
+      canvas.width - 260,
+      canvas.height / 2 + 30
+    );
+    ctx.fillText("m'agrada canvas", canvas.width - 260, canvas.height / 2 + 30);
+    ctx.restore();
+
+    //Per ultim dibuixem el logo de Audi
+    startX -= 75;
     drawAudiLogo();
+  }
+
+  /**
+   * Reinicia les variables per poder tornar a fer l'animacio
+   * @return {void}
+   */
+  function restartCanvas() {
+    btnStartCanvas.disabled = false;
+    blnStartCanvas = false;
+    startX = canvas.width / 2 - 105;
+    startY = -100;
   }
 
   /**
@@ -170,6 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
    *
    */
   btnStartCanvas.addEventListener("click", function () {
+    console.log("start", { blnStartCanvas });
     btnStartCanvas.disabled = true;
     blnStartCanvas = true;
     window.requestAnimationFrame(drawCanvas);
