@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
    * @type {number} animId
    * @type {number} startX
    * @type {number} startY
+   * @type {Audio} audioAnim
    */
   let btnStartCanvas = document.getElementById("canvasStart");
   let blnStartCanvas = false;
@@ -19,6 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let startX = canvas.width / 2 - 105;
   let startY = -100;
 
+  //Audio animacio
+  let audioAnim = new Audio("./me-gusta-canvas.mp3");
   /**
    * Functions
    */
@@ -43,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (startY < canvas.height / 2) {
             drawAudiLogo();
             //Augmentem la posicio del logo per a que es mogui cap avall
-            startY += 10;
+            startY += 0.3;
             animId = window.requestAnimationFrame(drawCanvas);
           } else {
             window.cancelAnimationFrame(animId);
@@ -235,6 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
     btnStartCanvas.disabled = true;
     blnStartCanvas = true;
     window.requestAnimationFrame(drawCanvas);
+    audioAnim.play();
   });
 
   //Iniciem el canvas quan carregui la pàgina
