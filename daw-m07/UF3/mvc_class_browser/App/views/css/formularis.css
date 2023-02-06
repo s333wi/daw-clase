@@ -1,0 +1,84 @@
+body.register {
+  font-family: monospace;
+  background: #004979;
+  background: linear-gradient(to right, #e04f5f, #2289d0);
+}
+
+body.login {
+  font-family: monospace;
+  background: #004979;
+  background: linear-gradient(to right, #00c98c, #e04f5f);
+}
+
+.bg-register {
+  background-image: url("../../../App/views/images/register_bg.jpg");
+  background-position: center center;
+  background-size: cover;
+}
+
+.bg-login {
+  background-image: url("../../../App/views/images/login_bg.jpg");
+  background-position: center center;
+  background-size: cover;
+}
+
+.btn-primary {
+  background-color: #e04f5f;
+  border-color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #aa3f4b;
+  border-color: #fff;
+}
+
+#text {
+  display: flex;
+  justify-content: center;
+  height: 33px;
+}
+
+#effect {
+  font-size: 30px;
+  font-family: monospace;
+  border-right: 3px solid;
+  width: 10ch;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: text 1s steps(24), effect 0.5s steps(1) infinite alternate;
+}
+
+@keyframes text {
+  0% {
+    width: 0;
+  }
+
+  50% {
+    width: 5ch;
+  }
+  75% {
+    width: 7.5ch;
+  }
+}
+
+@keyframes effect {
+  50% {
+    border-color: #0000;
+  }
+}
+
+#close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 20px;
+  font-size: 20px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.close-container {
+  position: relative;
+  top: 0;
+  right: 0;
+}

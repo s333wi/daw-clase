@@ -21,8 +21,9 @@ class Mdl_users
 
     public function __destruct()
     {
-        if ($this->db != null)
+        if ($this->db != null) {
             $this->db->close();
+        }
     }
 
     public function getAllGuests()
@@ -72,7 +73,7 @@ class Mdl_users
 
         // Apliquem el hash a la contrasenya
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $name=ucwords($name);
+        $name = ucwords($name);
         // Preparem la sentencia SQL i mirem si es un insert o un update
         if ($id == 0) {
             //El nivell el canvio jo manualment a la BBDD
@@ -98,8 +99,8 @@ class Mdl_users
         return true;
     }
 
-    function loginUser(string $nick, string $password): bool
-    {   
+    public function loginUser(string $nick, string $password): bool
+    {
         // Set up SQL query
         $sql = "SELECT * FROM user WHERE nick = ?";
         $stmt = $this->db->prepare($sql);
