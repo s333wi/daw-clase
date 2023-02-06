@@ -1,0 +1,109 @@
+<?php
+defined('MVC_APP') or die('Access denied');
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coding Souls Dashboard</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="App/views/css/estil.css">
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/2a59fbfff2.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+    <!-- SECCIO DEL HEADER -->
+    <div class="container-fluid header p-0">
+        <header class="d-flex flex-wrap justify-content-center p-2 align-items-center w-100 bg-body">
+            <div class="d-flex align-items-center mb-md-0 me-md-auto text-dark text-decoration-none">
+                <a href="index.php">
+                    <img alt="logo" class="logotip" height="50px" src="App/views/images/logo.png">
+                </a>
+                <div id="text">
+                    <div id="effect" class="d-flex">
+                        <span class="ms-1 fs-4">Coding Souls</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <?php if (!empty($_GET['change_pass'])) : ?>
+        <div class="toast top-0 mt-2 align-items-center border-0 <?= $_GET['change_pass'] == 1 ? 'text-bg-success' : 'text-bg-warning' ?> mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <?= $_GET['change_pass'] == 1  ? 'Has canviat de contrasenya' : 'Hi ha hagut un error, torna a intentar-ho mes tard' ?>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <div class="container-fluid d-flex mt-5 mb-4 justify-content-around align-items-start">
+        <div class="col-9 bg-white rounded p-4">
+            <h2 class="text-uppercase text-dark"><span class="fw-bold">Benvingut</span> al portal genèric</h2>
+        </div>
+        <div class="col-2 bg-white rounded text-dark p-4">
+            <div class="row">
+                <div class="col">
+                    <p><span class="fw-bold text-uppercase">Usuari</span>: <?= $_SESSION['username'] ?></p>
+                </div>
+            </div>
+            <a href="index.php?action=view_messenger" class="text-dark">Missatgeria</a>
+
+            <?php if ($level >= 5) : ?>
+                <div class="row">
+                    <div class="row border-bottom text-center">
+                        <div class="col">
+                            <p class="text-secondary fw-bold text-uppercase">Administració</p>
+                        </div>
+                    </div>
+                    <ul class="nav d-flex flex-column ps-2">
+                        <?php if ($level == 10) : ?>
+                            <li class="nav-item">
+                                <a href="index.php?action=manage_users" class="text-dark">Gestió usuaris</a>
+                            </li>
+                        <?php endif; ?>
+                        <li class="nav-item">
+                            <a href="index.php?action=manage_news" class="text-dark">Gestió notícies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?action=browser" class="text-dark">Browser</a>
+                        </li>
+                    </ul>
+                </div>
+            <?php endif; ?>
+            <div class="row border-bottom text-center mt-3">
+                <div class="col">
+                    <p class="text-secondary">Opcions d'usuari</p>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <ul class="nav d-flex flex-column ps-2">
+                    <li class="nav-item mb-3">
+                        <a class="text-dark" href="index.php?action=change_pass_view&id=<?= $_SESSION['username'] ?>">Canviar contrasenya</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.php?action=logout" class="btn btn-danger w-100">Desconnectar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Script per mostrar els toast -->
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script>
+            let toast = document.querySelector('.toast');
+            if (toast) {
+                let toastAlert = new bootstrap.Toast(toast);
+                toastAlert.show();
+            }
+        </script>
+</body>
+
+</html>

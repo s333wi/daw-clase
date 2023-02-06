@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cronometre Canvas</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            .canvasContainer{
+                margin-top: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .buttonsCanvas{
+                margin-top: 20px;
+                display: flex;
+                justify-content: space-around;
+                width: 500px;
+            }
+
+            .buttonsCanvas button{
+                width: 100px;
+                height: 50px;
+                border-radius: 10px;
+                border: 1px solid #000;
+                background-color: #fff;
+                cursor: pointer;
+            }
+
+            #crono{
+                border: 1px solid #000;
+            }
+
+            #cronoStart{
+                background-color: #0f0;
+            }
+
+            #cronoPause{
+                background-color: #ff0;
+            }
+
+            #cronoReset{
+                background-color: #f00;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="canvasContainer">
+            <canvas id="crono" width="500" height="200"></canvas>
+            <div class="buttonsCanvas">
+                <button id="cronoStart">Start</button>
+                <button id="cronoPause">Pause</button>
+                <button id="cronoReset">Reset</button>
+            </div>
+        </div>
+        <script src="./index.js"></script>
+    </body>
+</html>

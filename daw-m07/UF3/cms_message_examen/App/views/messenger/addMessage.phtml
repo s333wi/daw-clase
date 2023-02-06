@@ -1,0 +1,75 @@
+<?php
+defined('MVC_APP') or die('Access denied');
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Send message</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="App/views/css/formularis.css">
+    <script defer src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/2a59fbfff2.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="news">
+    <div class="news-container d-flex align-items-center justify-content-center vh-100">
+        <div class="container w-75">
+            <div class="row box-shadow">
+                <div class="col bg-news d-none d-lg-block col-md-5 col-lg-5 col-xl-6 rounded-start" loading="lazy"></div>
+                <div class="col bg-body p-5 rounded-end">
+                    <!-- Logo -->
+                    <div class="d-flex align-items-center">
+                        <a href="index.php" class="text-decoration-none d-flex text-dark align-items-center">
+                            <img class="me-2" src="App/views/images/logo.png" loading="lazy" alt="" width="48" />
+                            <div id="text">
+                                <div id="effect" class="d-flex">
+                                    <span class="fs-4">Coding Souls</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <h2 class="fw-bold text-center py-5">Afegeix la teva noticia</h2>
+
+                    <!-- Formulari login -->
+                    <form action="index.php?action=save_message" method="POST">
+                        <input type="hidden" name="id" value='<?= (!empty($info_messenger['id'])) ? $info_messenger['id'] : '' ?>' />
+                        <div class="form-group mb-3">
+                            <label for="assumpte" class="text-uppercase mb-1">Assumpte</label>
+                            <input type="text" value='<?= (!empty($info_messenger['assumpte'])) ? $info_messenger['assumpte'] : '' ?>' name="assumpte" class="form-control" id="Assumpte" placeholder="Assumpte" required />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="message" class="text-uppercase mb-1">Missatge</label>
+                            <textarea name="missatge" id="message" class="form-control" max-length="255" placeholder="Que vols dir?" required><?php echo (!empty($info_messenger['text'])) ? $info_messenger['text'] : '' ?></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="receptor" class="text-uppercase mb-1">Receptor</label>
+                            <!-- make a select with the users-->
+                            <select name="receptor" id="receptor" class="form-control">
+                                <?php if ($level == 10) : ?>
+                                    <option value="all">Tots els usuaris</option>
+                                <?php endif; ?>
+                                <?php foreach ($users as $user) : ?>
+                                    <?php if ($user['nick'] != $_SESSION['username']) : ?>
+                                        <option value="<?php echo $user['nick'] ?>"><?php echo $user['nick'] ?></option>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100"><?= (!empty($info_messenger['id'])) ? 'Reenvia' : 'Envia' ?> el missatge</button>
+                    </form>
+
+                    <div class="row mt-2 justify-content-center">
+                        <a href="index.php?action=view_messenger" class="btn btn-secondary w-25">Torna enrere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
