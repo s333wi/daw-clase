@@ -1,4 +1,4 @@
-let cardContainerElem = document.querySelector(".card-container");
+let cardContainerElem = document.getElementById("game");
 let cardBackImgPath = "./resources/trasera.png";
 let matchSpan = document.getElementById("encerts");
 let triesSpan = document.getElementById("intents");
@@ -207,36 +207,6 @@ function addEvent() {
         }
         triesSpan.innerHTML = ++triesResult;
       }
-//       const action = (cardId === lastCardId)
-//   ? () => {
-//     clearTimeout(flipTime);
-//     document.querySelectorAll(".flip").forEach((card) => {
-//       card.classList.remove("flip");
-//       card.classList.add("match");
-//       card.style.cursor = "not-allowed";
-//     });
-//     matchSpan.innerHTML = ++matchResult;
-//     if (matchResult === pairs) {
-//       document.getElementById("gameWon").style.display = "block";
-//     }
-//     cardsFlipped = 0;
-//   }
-//   : () => {
-//     setTimeout(() => {
-//       document.querySelectorAll(".flip").forEach((card) => {
-//         card.classList.remove("flip");
-//         cardsFlipped = 0;
-//       });
-//     }, 1000);
-//     triesSpan.innerHTML = ++triesResult;
-//   };
-// if (
-//   cardsFlipped === 2 &&
-//   flipTime === undefined &&
-//   !innerCard.classList.contains("match")
-// ) {
-//   action();
-// }
       lastCardId = cardId;
     });
   });
