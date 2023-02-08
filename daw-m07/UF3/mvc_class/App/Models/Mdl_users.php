@@ -21,8 +21,9 @@ class Mdl_users
 
     public function __destruct()
     {
-        if ($this->db != null)
+        if ($this->db != null) {
             $this->db->close();
+        }
     }
 
     //Funcio que retorna un llistat de tots els usuaris
@@ -57,7 +58,6 @@ class Mdl_users
         // Apliquem el hash a la contrasenya
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $name = ucwords($name);
-
         // Preparem la sentencia SQL i mirem si es un insert o un update
         $stmt = $this->db->prepare("SELECT * FROM users WHERE nick = ?");
         $stmt->bind_param("s", $nick);

@@ -1,13 +1,7 @@
 let pairs = 8;
 let maxNumPairs = 12;
 let totalCards = pairs * 2;
-//Make an array of objects that will contain the id and the path of the front image with a loop, make one pair per path
-let cardssObj = [];
-for (let i = 1; i <= maxNumPairs*2; i+=1) {
-  cardssObj.push({ id: i, imgPath: `./resources/frontal${i}.png` });
-  cardssObj.push({ id: i + 1, imgPath: `./resources/frontal${i}.png` });
-}
-console.log(cardssObj);
+
 //Array de les cartes amb un id i un path
 let cardsObj = [
   { id: 1, imgPath: "./resources/frontal1.png" },
@@ -43,7 +37,7 @@ for (let i = 8; i <= 12; i += 2) {
   document.getElementById("selPar").appendChild(option);
 }
 
-// Same path for the back image of the card
+//Ruta de la imatge del darrere de la carta
 let cardBackImgPath = "./resources/trasera.png";
 let cardContainerElem = document.querySelector(".card-container");
 let matchSpan = document.getElementById("encerts");
@@ -56,6 +50,7 @@ function createRandPos() {
     baseArr.push(i);
   }
   let baseArrClone = [...baseArr];
+  
   //Ara creem un array agafant valors random segons la longitud
   let randArr = [];
   for (let i = 0; i < totalCards; i++) {
