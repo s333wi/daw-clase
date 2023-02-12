@@ -16,7 +16,7 @@ class NewsController extends BaseController
         $model = model('NewsModel');
 
         $data['title'] = "Llista noticies";
-        $data['news'] = $model->getNews();
+        $data['info_news'] = $model->getNews();
 
         return view("news/news_list", $data);
     }
