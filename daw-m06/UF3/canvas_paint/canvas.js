@@ -1,5 +1,8 @@
+import { Circle } from "./figures.js";
+import { Rectangle } from "./figures.js";
+
 window.onload = function () {
-  let canvasElement = new PhotoDaw("canvasContainer");
+  let canvasElement = new PhotoDaw("canvasContainer", true);
 };
 
 /**
@@ -11,16 +14,16 @@ window.onload = function () {
  * @property {string} currentColor - color actual del dibuix
  */
 
-//create a class photodaw with a constructor that gets the id of the container where the canvas will be created and a boolean
-//that indicates if the canvas is editable or not
 class PhotoDaw {
   //Atributs de la classe
   idContainer = "";
   showCoords = false;
   container = null;
   currentColor = "#000000";
+  currentWidth = 5;
   canvas = null;
   ctx = null;
+  figures = [];
 
   /**
    * @constructor PhotoDaw
@@ -55,7 +58,49 @@ class PhotoDaw {
     this.canvas.height = "400";
     this.canvas.style.border = "1px solid black";
     this.canvas.id = "canvasPaint";
+    this.ctx.fillStyle = "black";
+    if (this.showCoords) {
+      this.canvas.addEventListener(
+        "mousemove",
+        (e) => {
+          this.drawCoords(e);
+        },
+        false
+      );
+    }
     this.container.appendChild(this.canvas);
+  }
+  drawCoords(e) {
+    let mousePos = this.getMousePos(this.canvas, e);
+    let message = "[" + mousePos.x + "," + mousePos.y + "]";
+    this.writeMessage(this.ctx, message);
+  }
+
+  writeMessage(context, message) {
+    //Clear the canvas where the text is going to be written
+    let widthText = context.measureText(message).width;
+    context.clearRect(
+      context.canvas.width - widthText - 15,
+      context.canvas.height - 30,
+      widthText + 15,
+      30
+    );
+    context.font = "18pt Calibri";
+    context.fillStyle = "black";
+
+    context.fillText(
+      message,
+      context.canvas.width - widthText - 10,
+      context.canvas.height - 10
+    );
+  }
+
+  getMousePos(canvas, evt) {
+    let rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top,
+    };
   }
 
   /**
@@ -100,6 +145,16 @@ class PhotoDaw {
     pointBtn.id = "point";
     pointBtn.classList.add("btn", "btn-primary");
     pointBtn.value = "point";
+    pointBtn.addEventListener("click", (e) => {
+      this.canvas.addEventListener(
+        "click",
+        (e) => {
+          let mousePos = this.getMousePos(this.canvas, e);
+          let point = new Point();
+        },
+        false
+      );
+    });
     container.appendChild(pointBtn);
   }
 
@@ -118,6 +173,7 @@ class PhotoDaw {
     rectangleBtn.id = "rectangle";
     rectangleBtn.classList.add("btn", "btn-info");
     rectangleBtn.value = "rectangle";
+    rectangleBtn.addEventListener("click", (e) => {});
     container.appendChild(rectangleBtn);
   }
 
@@ -128,6 +184,17 @@ class PhotoDaw {
     circleBtn.classList.add("btn", "btn-warning");
     circleBtn.value = "circle";
     container.appendChild(circleBtn);
+
+    circleBtn.addEventListener("click", (e) => {
+      let circle = new Circle(
+        100,
+        50,
+        20,
+        this.currentColor,
+        this.currentWidth
+      );
+      circle.draw(this.ctx);
+    });
   }
 
   createClearBtn(container) {
@@ -136,6 +203,11 @@ class PhotoDaw {
     clearBtn.id = "clear";
     clearBtn.classList.add("btn", "btn-danger");
     clearBtn.value = "clear";
+    clearBtn.addEventListener("click", (e) => {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.drawCoords(e);
+    });
+
     container.appendChild(clearBtn);
   }
 
@@ -152,6 +224,7 @@ class PhotoDaw {
     widthLineRange.addEventListener("change", (e) => {
       let widthLine = document.getElementById("widthLine");
       widthLine.innerHTML = `Gruix: ${widthLineRange.value}px`;
+      this.currentWidth = widthLineRange.value;
     });
     container.appendChild(widthLineRange);
   }
@@ -167,7 +240,6 @@ class PhotoDaw {
       "ms-2"
     );
     colorPicker.value = "#000000";
-    
     colorPicker.addEventListener("change", (e) => {
       this.currentColor = colorPicker.value;
     });
@@ -179,7 +251,6 @@ class PhotoDaw {
     let widthLineSpan = document.createElement("span");
     widthLineSpan.id = "widthLine";
     widthLineSpan.innerHTML = `Gruix: ${widthLineRange.value}px`;
-
     container.appendChild(widthLineSpan);
   }
 }
