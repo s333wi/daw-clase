@@ -1,5 +1,7 @@
+import { Point, Circle, Line, Rectangle, Pencil, Triangle } from "./figures.js";
+
 window.onload = function () {
-  let canvasElement = new PhotoDaw("canvasContainer");
+  let canvasElement = new PhotoDaw("canvasContainer", true);
 };
 
 /**
@@ -11,16 +13,19 @@ window.onload = function () {
  * @property {string} currentColor - color actual del dibuix
  */
 
-//create a class photodaw with a constructor that gets the id of the container where the canvas will be created and a boolean
-//that indicates if the canvas is editable or not
 class PhotoDaw {
   //Atributs de la classe
   idContainer = "";
   showCoords = false;
   container = null;
   currentColor = "#000000";
+  currentWidth = 5;
+  currentFigure = "Point";
+  currentFigureObject = null;
   canvas = null;
   ctx = null;
+  figures = [];
+  startDraw = false;
 
   /**
    * @constructor PhotoDaw
@@ -43,6 +48,16 @@ class PhotoDaw {
     //Creo el canvas i els botons per crear les figures geomètriques
     this.createCanvas();
     this.createOptions();
+    this.drawAllFigures = this.drawAllFigures.bind(this);
+  }
+
+  drawAllFigures() {
+    if (this.startDraw) {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.figures.forEach((figure) => {
+        figure.draw(this.ctx);
+      });
+    }
   }
 
   createCanvas() {
@@ -55,7 +70,120 @@ class PhotoDaw {
     this.canvas.height = "400";
     this.canvas.style.border = "1px solid black";
     this.canvas.id = "canvasPaint";
+    this.ctx.fillStyle = "black";
+    if (this.showCoords) {
+      this.canvas.addEventListener(
+        "mousemove",
+        (e) => {
+          this.drawCoords(e);
+        },
+        false
+      );
+    }
+
+    this.startDrawing = this.startDrawing.bind(this);
+    this.drawing = this.drawing.bind(this);
+    this.endDrawing = this.endDrawing.bind(this);
+
+    this.canvas.addEventListener("mousedown", this.startDrawing, false);
+    this.canvas.addEventListener("mousemove", this.drawing, false);
+    this.canvas.addEventListener("mouseup", this.endDrawing, false);
+    this.canvas.addEventListener("mouseout", this.endDrawing, false);
     this.container.appendChild(this.canvas);
+  }
+
+  drawCoords(e) {
+    let mousePos = this.getMousePos(this.canvas, e);
+    let message = "[" + mousePos.x + "," + mousePos.y + "]";
+    this.writeMessage(this.ctx, message);
+  }
+
+  //TODO: Mirar per que al tocar el borde les figures no es pinten
+  getMousePos(canvas, evt) {
+    let rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top,
+    };
+  }
+
+  writeMessage(context, message) {
+    //Clear the canvas where the text is going to be written
+    let widthText = context.measureText(message).width;
+    context.clearRect(
+      context.canvas.width - widthText - 15,
+      context.canvas.height - 30,
+      widthText + 15,
+      30
+    );
+    context.font = "18pt Calibri";
+    context.fillStyle = "black";
+
+    context.fillText(
+      message,
+      context.canvas.width - widthText - 10,
+      context.canvas.height - 10
+    );
+  }
+
+  startDrawing(e) {
+    this.startDraw = true;
+    switch (this.currentFigure) {
+      case "Point":
+        this.currentFigureObject = new Point();
+        break;
+      case "Line":
+        this.currentFigureObject = new Line();
+        break;
+      case "Rectangle":
+        this.currentFigureObject = new Rectangle();
+        break;
+      case "Circle":
+        this.currentFigureObject = new Circle();
+        break;
+      case "Triangle":
+        this.currentFigureObject = new Triangle();
+        break;
+      case "Pencil":
+        this.currentFigureObject = new Pencil();
+        break;
+      case "Polygon":
+        this.currentFigureObject = new Polygon();
+        break;
+      default:
+        break;
+    }
+
+    let mousePos = this.getMousePos(this.canvas, e);
+    this.currentFigureObject.xPos = mousePos.x;
+    this.currentFigureObject.yPos = mousePos.y;
+    this.currentFigureObject.color = this.currentColor;
+    this.currentFigureObject.lineWidth = this.currentWidth;
+  }
+
+  drawing(e) {
+    if (this.startDraw) {
+      let mousePos = this.getMousePos(this.canvas, e);
+      this.currentFigureObject.xEnd = mousePos.x;
+      this.currentFigureObject.yEnd = mousePos.y;
+      
+      this.drawAllFigures();
+      this.currentFigureObject.drawPreview(this.ctx);
+      this.drawCoords(this.canvas, e);
+    }
+  }
+
+  endDrawing(e) {
+    if (this.startDraw) {
+      let mousePos = this.getMousePos(this.canvas, e);
+
+      this.currentFigureObject.xEnd = mousePos.x;
+      this.currentFigureObject.yEnd = mousePos.y;
+
+      this.figures.push(this.currentFigureObject);
+      this.drawAllFigures();
+      this.startDraw = false;
+    }
   }
 
   /**
@@ -83,6 +211,8 @@ class PhotoDaw {
     this.createLineBtn(btnContainer);
     this.createRectangleBtn(btnContainer);
     this.createCircleBtn(btnContainer);
+    this.createTriangleBtn(btnContainer);
+    this.createPencilBtn(btnContainer);
     this.createClearBtn(btnContainer);
     this.createColorPicker(optionsContainer);
     this.createWidthLineRange(optionsContainer);
@@ -99,7 +229,10 @@ class PhotoDaw {
     pointBtn.innerHTML = "Punt";
     pointBtn.id = "point";
     pointBtn.classList.add("btn", "btn-primary");
-    pointBtn.value = "point";
+    pointBtn.value = "Point";
+    pointBtn.addEventListener("click", (e) => {
+      this.currentFigure = e.target.value;
+    });
     container.appendChild(pointBtn);
   }
 
@@ -108,7 +241,10 @@ class PhotoDaw {
     lineBtn.innerHTML = "Línia";
     lineBtn.id = "line";
     lineBtn.classList.add("btn", "btn-success");
-    lineBtn.value = "line";
+    lineBtn.value = "Line";
+    lineBtn.addEventListener("click", (e) => {
+      this.currentFigure = e.target.value;
+    });
     container.appendChild(lineBtn);
   }
 
@@ -117,7 +253,10 @@ class PhotoDaw {
     rectangleBtn.innerHTML = "Rectangle";
     rectangleBtn.id = "rectangle";
     rectangleBtn.classList.add("btn", "btn-info");
-    rectangleBtn.value = "rectangle";
+    rectangleBtn.value = "Rectangle";
+    rectangleBtn.addEventListener("click", (e) => {
+      this.currentFigure = e.target.value;
+    });
     container.appendChild(rectangleBtn);
   }
 
@@ -126,8 +265,49 @@ class PhotoDaw {
     circleBtn.innerHTML = "Cercle";
     circleBtn.id = "circle";
     circleBtn.classList.add("btn", "btn-warning");
-    circleBtn.value = "circle";
+    circleBtn.value = "Circle";
     container.appendChild(circleBtn);
+
+    circleBtn.addEventListener("click", (e) => {
+      this.currentFigure = e.target.value;
+    });
+  }
+
+  createTriangleBtn(container) {
+    let triangleBtn = document.createElement("button");
+    triangleBtn.innerHTML = "Triangle";
+    triangleBtn.id = "triangle";
+    triangleBtn.classList.add("btn", "btn-secondary");
+    triangleBtn.value = "Triangle";
+    container.appendChild(triangleBtn);
+
+    triangleBtn.addEventListener("click", (e) => {
+      this.currentFigure = e.target.value;
+    });
+  }
+
+  createPencilBtn(container) {
+    let pencilBtn = document.createElement("button");
+    pencilBtn.innerHTML = "Llapis";
+    pencilBtn.id = "pencil";
+    pencilBtn.classList.add("btn", "btn-dark");
+    pencilBtn.value = "Pencil";
+    pencilBtn.addEventListener("click", (e) => {
+      this.currentFigure = e.target.value;
+    });
+    container.appendChild(pencilBtn);
+  }
+
+  createPolygonBtn(container) {
+    let polygonBtn = document.createElement("button");
+    polygonBtn.innerHTML = "Polígon";
+    polygonBtn.id = "polygon";
+    polygonBtn.classList.add("btn", "btn-dark");
+    polygonBtn.value = "Polygon";
+    polygonBtn.addEventListener("click", (e) => {
+      this.currentFigure = e.target.value;
+    });
+    container.appendChild(polygonBtn);
   }
 
   createClearBtn(container) {
@@ -136,6 +316,11 @@ class PhotoDaw {
     clearBtn.id = "clear";
     clearBtn.classList.add("btn", "btn-danger");
     clearBtn.value = "clear";
+    clearBtn.addEventListener("click", (e) => {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.drawCoords(e);
+      this.figures = [];
+    });
     container.appendChild(clearBtn);
   }
 
@@ -152,6 +337,7 @@ class PhotoDaw {
     widthLineRange.addEventListener("change", (e) => {
       let widthLine = document.getElementById("widthLine");
       widthLine.innerHTML = `Gruix: ${widthLineRange.value}px`;
+      this.currentWidth = parseInt(widthLineRange.value);
     });
     container.appendChild(widthLineRange);
   }
@@ -167,7 +353,6 @@ class PhotoDaw {
       "ms-2"
     );
     colorPicker.value = "#000000";
-    
     colorPicker.addEventListener("change", (e) => {
       this.currentColor = colorPicker.value;
     });
@@ -179,7 +364,6 @@ class PhotoDaw {
     let widthLineSpan = document.createElement("span");
     widthLineSpan.id = "widthLine";
     widthLineSpan.innerHTML = `Gruix: ${widthLineRange.value}px`;
-
     container.appendChild(widthLineSpan);
   }
 }
