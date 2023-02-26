@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use Faker\Factory;
 
 class NewsModel extends Model
 {
@@ -71,6 +72,9 @@ class NewsModel extends Model
      */
     public function insertNews($data)
     {
+        $faker = Factory::create('es_ES');
+        $data['slug'] = url_title($data['title'], '-', true) . '-' . $faker->unique()->randomNumber(5);
+        $data['data_pub'] = date('Y-m-d H:i:s');
         $this->insert($data);
     }
 
@@ -80,6 +84,7 @@ class NewsModel extends Model
      * @param string $slug
      * @return array
      */
+
     public function getNews($slug = false)
     {
         if ($slug === false) {
@@ -88,5 +93,48 @@ class NewsModel extends Model
         return $this->asArray()
             ->where(['slug' => $slug])
             ->first();
+    }
+
+    //Lo mateix pero amb data de publicació anterior a la data actual
+    public function getNewsBeforeToday($slug = false)
+    {
+        if ($slug === false) {
+            return $this->findAll();
+        }
+        return $this->asArray()
+            ->where(['slug' => $slug])
+            ->where('data_pub <=', date('Y-m-d H:i:s'))
+            ->first();
+    }
+
+    /**
+     * Elimina una noticia de la base de dades
+     * @param int $id
+     * @return void
+     */
+    public function deleteNews($id)
+    {
+        if ($this->find($id))
+            $this->delete($id);
+    }
+
+    /**
+     * Actualitza una noticia de la base de dades
+     * @param string $slug
+     * @param array $data
+     * @return void
+     */
+    public function updateNews($slug, $data)
+    {
+        $faker = Factory::create('es_ES');
+        $news =  $this->asArray()
+            ->where(['slug' => $slug])
+            ->first();
+
+        if ($news) {
+            $data['slug'] = url_title($data['title'], '-', true) . '-' . $faker->unique()->randomNumber(5);
+            $data['data_pub'] = date('Y-m-d H:i:s');
+            $this->update($news['id'], $data);
+        }
     }
 }
