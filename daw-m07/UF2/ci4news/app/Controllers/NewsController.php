@@ -3,20 +3,19 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use CodeIgniter\Model;
 
 class NewsController extends BaseController
 {
     /**
      * Llista de noticies
-     * @return view
+     * @return view 
      */
-    public function index()
+    public function index(): string
     {
         $model = model('NewsModel');
 
         $data['title'] = "Llista noticies";
-        $data['info_news'] = $model->getNews();
+        $data['info_news'] = $model->getNewsBeforeToday();
 
         return view("news/news_list", $data);
     }
@@ -26,7 +25,7 @@ class NewsController extends BaseController
      * @param string $slug
      * @return 
      */
-    public function view($slug = null)
+    public function view($slug = null): string
     {
         $model = model('NewsModel');
 
@@ -41,15 +40,55 @@ class NewsController extends BaseController
         return view("news/news_view", $data);
     }
 
-    public function create()
+    /**
+     * Crear una noticia
+     * @return view
+     */
+
+    public function create(): string
     {
         $model = model('NewsModel');
         helper(["form"]);
         if ($this->request->getMethod() == 'post') {
             $model->insertNews($this->request->getPost());
-            return view("news/news_added");
+            return view("news/news_added", ['title' => 'Afegit correctament']);
         }
 
-        return view("news/news_create", ['title' => 'Create news']);
+        return view("news/news_create", ['title' => 'Crear noticia']);
+    }
+
+    /**
+     * Actualitzar una noticia
+     * @param string $slug
+     * @return view
+     */
+    public function update(string $slug = null)
+    {
+        $model = model('NewsModel');
+        $data['title'] = "Actualitzar noticia";
+        helper(["form"]);
+        $data['news'] = $model->getNews($slug);
+        if (empty($data['news'])) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot find the news item: ' . $slug);
+        }
+
+        if ($this->request->getMethod() == 'post') {
+            $model->updateNews($slug, $this->request->getPost());
+            return view("news/news_updated", ['title' => 'Actualitzat correcte']);
+        }
+        return view("news/news_update", $data);
+    }
+
+    /**
+     * Borrar una noticia
+     * @param int $id
+     * @return view
+     */
+
+    public function delete(int $id = 0) : string
+    {
+        $model = model('NewsModel');
+        $model->deleteNews($id);
+        return view("news/news_deleted", ['title' => 'Borrat correcte']);
     }
 }

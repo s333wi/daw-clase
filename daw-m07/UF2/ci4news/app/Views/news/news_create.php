@@ -1,24 +1,25 @@
-<?= $this->extend('layouts/news') ?>
+<?= $this->extend('layouts/layout_news') ?>
 
 <?= $this->section('news_content') ?>
 
 <h2><?= esc($title) ?></h2>
 
 <?= validation_list_errors() ?>
-<form action="/news/create" method="POST">
+<form action="<?= base_url('create') ?>" method="POST">
     <?= csrf_field(); ?>
+    <div class="form-group">
 
-    <label for="title">Title</label>
-    <input type="text" name="title" id="title"></br>
+        <label for="title" class="form-label">Titol</label>
+        <input type="text" name="title" id="title" class="form-control"></br>
 
-    <label for="body">Text</label>
-    <textarea name="body" id="body" cols="45" rows="4"></textarea></br>
+        <label for="body">Text</label>
+        <textarea name="body" id="body" cols="45" rows="4" class="form-control"></textarea></br>
 
-    <input type="submit" value="Create news">
+        <input type="submit" value="Crear" class="btn btn-primary">
+    </div>
 </form>
 
-<p><a href="/news">Tornar a noticies</a></p>
+<p><a href="<?= base_url() ?>">Tornar a noticies</a></p>
 
 
 <?= $this->endSection() ?>
- 
