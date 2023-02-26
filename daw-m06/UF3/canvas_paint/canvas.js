@@ -2,6 +2,12 @@ import { Point, Circle, Line, Rectangle, Pencil, Triangle } from "./figures.js";
 
 window.onload = function () {
   let canvasElement = new PhotoDaw("canvasContainer", true);
+  let figures = {};
+  figures.point = class{
+    constructor(){
+      this.object = new Point();
+    }
+  }
 };
 
 /**
@@ -72,13 +78,8 @@ class PhotoDaw {
     this.canvas.id = "canvasPaint";
     this.ctx.fillStyle = "black";
     if (this.showCoords) {
-      this.canvas.addEventListener(
-        "mousemove",
-        (e) => {
-          this.drawCoords(e);
-        },
-        false
-      );
+      this.drawCoords = this.drawCoords.bind(this);
+      this.canvas.addEventListener("mousemove", this.drawCoords, false);
     }
 
     this.startDrawing = this.startDrawing.bind(this);
@@ -92,14 +93,16 @@ class PhotoDaw {
     this.container.appendChild(this.canvas);
   }
 
-  drawCoords(e) {
-    let mousePos = this.getMousePos(this.canvas, e);
+  drawCoords() {
+    let mousePos = this.getMousePos(this.canvas, window.event);
+    console.log(window.event);
     let message = "[" + mousePos.x + "," + mousePos.y + "]";
     this.writeMessage(this.ctx, message);
   }
 
   //TODO: Mirar per que al tocar el borde les figures no es pinten
-  getMousePos(canvas, evt) {
+  getMousePos(canvas) {
+    let evt = window.event;
     let rect = canvas.getBoundingClientRect();
     return {
       x: evt.clientX - rect.left,
@@ -109,7 +112,7 @@ class PhotoDaw {
 
   writeMessage(context, message) {
     //Clear the canvas where the text is going to be written
-    let widthText = context.measureText(message).width;
+    let widthText = 95;
     context.clearRect(
       context.canvas.width - widthText - 15,
       context.canvas.height - 30,
@@ -126,56 +129,56 @@ class PhotoDaw {
     );
   }
 
-  startDrawing(e) {
+  startDrawing() {
     this.startDraw = true;
-    switch (this.currentFigure) {
-      case "Point":
-        this.currentFigureObject = new Point();
-        break;
-      case "Line":
-        this.currentFigureObject = new Line();
-        break;
-      case "Rectangle":
-        this.currentFigureObject = new Rectangle();
-        break;
-      case "Circle":
-        this.currentFigureObject = new Circle();
-        break;
-      case "Triangle":
-        this.currentFigureObject = new Triangle();
-        break;
-      case "Pencil":
-        this.currentFigureObject = new Pencil();
-        break;
-      case "Polygon":
-        this.currentFigureObject = new Polygon();
-        break;
-      default:
-        break;
-    }
-
-    let mousePos = this.getMousePos(this.canvas, e);
+    // switch (this.currentFigure) {
+    //   case "Point":
+    //     this.currentFigureObject = new Point();
+    //     break;
+    //   case "Line":
+    //     this.currentFigureObject = new Line();
+    //     break;
+    //   case "Rectangle":
+    //     this.currentFigureObject = new Rectangle();
+    //     break;
+    //   case "Circle":
+    //     this.currentFigureObject = new Circle();
+    //     break;
+    //   case "Triangle":
+    //     this.currentFigureObject = new Triangle();
+    //     break;
+    //   case "Pencil":
+    //     this.currentFigureObject = new Pencil();
+    //     break;
+    //   case "Polygon":
+    //     this.currentFigureObject = new Polygon();
+    //     break;
+    //   default:
+    //     break;
+    // }
+    this.currentFigure = new figures[point]
+    let mousePos = this.getMousePos(this.canvas);
     this.currentFigureObject.xPos = mousePos.x;
     this.currentFigureObject.yPos = mousePos.y;
     this.currentFigureObject.color = this.currentColor;
     this.currentFigureObject.lineWidth = this.currentWidth;
   }
 
-  drawing(e) {
+  drawing() {
     if (this.startDraw) {
-      let mousePos = this.getMousePos(this.canvas, e);
+      let mousePos = this.getMousePos(this.canvas);
       this.currentFigureObject.xEnd = mousePos.x;
       this.currentFigureObject.yEnd = mousePos.y;
-      
+
       this.drawAllFigures();
       this.currentFigureObject.drawPreview(this.ctx);
-      this.drawCoords(this.canvas, e);
+      this.drawCoords(this.canvas);
     }
   }
 
-  endDrawing(e) {
+  endDrawing() {
     if (this.startDraw) {
-      let mousePos = this.getMousePos(this.canvas, e);
+      let mousePos = this.getMousePos(this.canvas);
 
       this.currentFigureObject.xEnd = mousePos.x;
       this.currentFigureObject.yEnd = mousePos.y;
