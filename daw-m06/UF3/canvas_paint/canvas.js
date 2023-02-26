@@ -1,26 +1,60 @@
-import { Point, Circle, Line, Rectangle, Pencil, Triangle } from "./figures.js";
+import { Point, Circle, Line, Rectangle, Triangle } from "./figures.js";
 
 window.onload = function () {
-  let canvasElement = new PhotoDaw("canvasContainer", true);
+  //Objecte de figures que encapsula les instancies de les figures geomètriques
   let figures = {};
-  figures.point = class{
-    constructor(){
+  figures.point = class {
+    constructor() {
       this.object = new Point();
     }
-  }
+  };
+  figures.circle = class {
+    constructor() {
+      this.object = new Circle();
+    }
+  };
+
+  figures.line = class {
+    constructor() {
+      this.object = new Line();
+    }
+  };
+
+  figures.rectangle = class {
+    constructor() {
+      this.object = new Rectangle();
+    }
+  };
+
+  figures.triangle = class {
+    constructor() {
+      this.object = new Triangle();
+    }
+  };
+
+  let canvasElement = new PhotoDaw("canvasContainer", figures, true);
 };
 
 /**
  * @class PhotoDaw
  * @description Classe que permet crear un canvas amb les funcionalitats de dibuixar punts, línies, rectangles i cercles
+ *
  * @property {string} idContainer - id del div on es crearà el canvas
  * @property {boolean} showCoords - indica si es mostren les coordenades del ratolí al canvas
- * @property {HTMLElement} idContainer - element HTML on es crearà el canvas
- * @property {string} currentColor - color actual del dibuix
+ * @property {Object} container - objecte del div on es crearà el canvas
+ * @property {string} currentColor - color actual de la figura
+ * @property {number} currentWidth - amplada de la línia de la figura
+ * @property {string} currentFigure - figura actual que es dibuixarà
+ * @property {Object} currentFigureObject - objecte de la figura actual que es dibuixarà
+ * @property {Object} canvas - objecte del canvas
+ * @property {Object} ctx - objecte context del canvas
+ * @property {Array} arrSavedFigures - array amb les figures dibuixades
+ * @property {Object} objFigures - objecte amb les figures geomètriques que es poden dibuixar
+ * @property {boolean} startDraw - indica si s'ha iniciat el dibuix de la
+ *
  */
 
 class PhotoDaw {
-  //Atributs de la classe
   idContainer = "";
   showCoords = false;
   container = null;
@@ -30,42 +64,55 @@ class PhotoDaw {
   currentFigureObject = null;
   canvas = null;
   ctx = null;
-  figures = [];
+  arrSavedFigures = [];
+  objFigures;
   startDraw = false;
 
   /**
    * @constructor PhotoDaw
    * @description Constructor de la classe PhotoDaw
    * @param {string} idContainer - id del div on es crearà el canvas
+   * @param {Object} figures - objecte amb les figures geomètriques que es poden dibuixar
    * @param {boolean} showCoords - indica si es mostren les coordenades del ratolí al canvas
    * @return {PhotoDaw} - retorna un objecte de la classe PhotoDaw
    *
    * @example
-   * let canvasElement = new PhotoDaw("canvasContainer");
+   * let canvasElement = new PhotoDaw("canvasContainer",figures);
    * @example
-   * let canvasElement = new PhotoDaw("canvasContainer", true);
+   * let canvasElement = new PhotoDaw("canvasContainer",figures,true);
    */
-  constructor(idContainer, showCoords = false) {
+  constructor(idContainer, figures, showCoords = false) {
     //Inicialitzo els atributs de la classe
     this.idContainer = idContainer;
     this.showCoords = showCoords;
     this.container = document.getElementById(idContainer);
-
+    this.objFigures = figures;
     //Creo el canvas i els botons per crear les figures geomètriques
     this.createCanvas();
     this.createOptions();
     this.drawAllFigures = this.drawAllFigures.bind(this);
   }
 
+  /**
+   * @method drawAllFigures
+   * @description Metode que permet dibuixar totes les figures que hi ha a l'array arrSavedFigures.
+   * He de fer figure.object al bucle perque guardo l'instancia de la classe en l'atribut object.
+   * Aixo ho torno a fer als metodes @method startDrawing, @method drawing i @method endDrawing
+   */
   drawAllFigures() {
     if (this.startDraw) {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.figures.forEach((figure) => {
-        figure.draw(this.ctx);
+      this.arrSavedFigures.forEach((figure) => {
+        figure.object.draw(this.ctx);
       });
     }
   }
 
+  /**
+   * @method createCanvas
+   * @description Metode que permet crear el canvas i els events listeners corresponents
+   * @return {void}
+   */
   createCanvas() {
     //Creo el canvas i el seu context
     this.canvas = document.createElement("canvas");
@@ -82,10 +129,12 @@ class PhotoDaw {
       this.canvas.addEventListener("mousemove", this.drawCoords, false);
     }
 
+    //Canvio el contexte del this per a que sigui el mateix que del objecte @class PhotoDaw
     this.startDrawing = this.startDrawing.bind(this);
     this.drawing = this.drawing.bind(this);
     this.endDrawing = this.endDrawing.bind(this);
 
+    //Afegeixo els events listeners al canvas
     this.canvas.addEventListener("mousedown", this.startDrawing, false);
     this.canvas.addEventListener("mousemove", this.drawing, false);
     this.canvas.addEventListener("mouseup", this.endDrawing, false);
@@ -93,14 +142,25 @@ class PhotoDaw {
     this.container.appendChild(this.canvas);
   }
 
+  /**
+   * @method drawCoords
+   * @description Metode que permet mostrar les coordenades del ratolí al canvas
+   *
+   * @return {void}
+   */
   drawCoords() {
     let mousePos = this.getMousePos(this.canvas, window.event);
-    console.log(window.event);
     let message = "[" + mousePos.x + "," + mousePos.y + "]";
     this.writeMessage(this.ctx, message);
   }
 
-  //TODO: Mirar per que al tocar el borde les figures no es pinten
+  /**
+   * @method getMousePos
+   * @description Metode que permet obtenir les coordenades del ratolí
+   * @param {Object} canvas - objecte del canvas
+   *
+   * @return {Object} - retorna un objecte amb les coordenades del ratolí
+   */
   getMousePos(canvas) {
     let evt = window.event;
     let rect = canvas.getBoundingClientRect();
@@ -110,8 +170,17 @@ class PhotoDaw {
     };
   }
 
+  /**
+   * @method writeMessage
+   * @description Metode que permet escriure un missatge al canvas, en aquest cas nomes les coordenades del ratolí
+   * @param {Object} context - objecte context del canvas
+   * @param {string} message - missatge que es vol escriure al canvas
+   *
+   * @return {void}
+   */
   writeMessage(context, message) {
-    //Clear the canvas where the text is going to be written
+    //El valor del width esta hardcodejat perque quan les coordenades tenen menos de 3 digits,
+    // no es borren del tot el valor anterior. Avans utilitzava el mesureText per a saber el width del text.
     let widthText = 95;
     context.clearRect(
       context.canvas.width - widthText - 15,
@@ -129,61 +198,61 @@ class PhotoDaw {
     );
   }
 
+  /**
+   * @method startDrawing
+   * @description Metode que permet iniciar el dibuix, es crida quan es prem el botó del ratolí.
+   *
+   * @return {void}
+   */
   startDrawing() {
     this.startDraw = true;
-    // switch (this.currentFigure) {
-    //   case "Point":
-    //     this.currentFigureObject = new Point();
-    //     break;
-    //   case "Line":
-    //     this.currentFigureObject = new Line();
-    //     break;
-    //   case "Rectangle":
-    //     this.currentFigureObject = new Rectangle();
-    //     break;
-    //   case "Circle":
-    //     this.currentFigureObject = new Circle();
-    //     break;
-    //   case "Triangle":
-    //     this.currentFigureObject = new Triangle();
-    //     break;
-    //   case "Pencil":
-    //     this.currentFigureObject = new Pencil();
-    //     break;
-    //   case "Polygon":
-    //     this.currentFigureObject = new Polygon();
-    //     break;
-    //   default:
-    //     break;
-    // }
-    this.currentFigure = new figures[point]
+    //Creo una nova instancia de la classe que estigui utilitzant l'usuari, un objecte en JS el puc accedir amb [] tambe.
+    //Com el currentFigure es un string, el puc utilitzar per a accedir a l'objecte de la classe que vull utilitzar.
+    this.currentFigureObject = new this.objFigures[
+      this.currentFigure.toLowerCase()
+    ]();
+
     let mousePos = this.getMousePos(this.canvas);
-    this.currentFigureObject.xPos = mousePos.x;
-    this.currentFigureObject.yPos = mousePos.y;
-    this.currentFigureObject.color = this.currentColor;
-    this.currentFigureObject.lineWidth = this.currentWidth;
+    this.currentFigureObject.object.xPos = mousePos.x;
+    this.currentFigureObject.object.yPos = mousePos.y;
+    this.currentFigureObject.object.color = this.currentColor;
+    this.currentFigureObject.object.lineWidth = this.currentWidth;
   }
 
+  /**
+   * @method drawing
+   * @description Metode que permet dibuixar mentre es prem el botó del ratolí. Es veura el preview de la figura.
+   * Utilitzo el metode @method drawPreview de la classe que estigui utilitzant en aquell moment l'usuari.
+   *
+   * @return {void}
+   */
   drawing() {
     if (this.startDraw) {
       let mousePos = this.getMousePos(this.canvas);
-      this.currentFigureObject.xEnd = mousePos.x;
-      this.currentFigureObject.yEnd = mousePos.y;
+      this.currentFigureObject.object.xEnd = mousePos.x;
+      this.currentFigureObject.object.yEnd = mousePos.y;
 
       this.drawAllFigures();
-      this.currentFigureObject.drawPreview(this.ctx);
+      this.currentFigureObject.object.drawPreview(this.ctx);
       this.drawCoords(this.canvas);
     }
   }
 
+  /**
+   * @method endDrawing
+   * @description Metode que permet finalitzar el dibuix, es crida quan es deixa de premre el botó del ratolí.
+   * Es guarda la figura en un array i es dibuixa tot el canvas.
+   *
+   * @return {void}
+   */
   endDrawing() {
     if (this.startDraw) {
       let mousePos = this.getMousePos(this.canvas);
 
-      this.currentFigureObject.xEnd = mousePos.x;
-      this.currentFigureObject.yEnd = mousePos.y;
+      this.currentFigureObject.object.xEnd = mousePos.x;
+      this.currentFigureObject.object.yEnd = mousePos.y;
 
-      this.figures.push(this.currentFigureObject);
+      this.arrSavedFigures.push(this.currentFigureObject);
       this.drawAllFigures();
       this.startDraw = false;
     }
@@ -215,7 +284,6 @@ class PhotoDaw {
     this.createRectangleBtn(btnContainer);
     this.createCircleBtn(btnContainer);
     this.createTriangleBtn(btnContainer);
-    this.createPencilBtn(btnContainer);
     this.createClearBtn(btnContainer);
     this.createColorPicker(optionsContainer);
     this.createWidthLineRange(optionsContainer);
@@ -233,9 +301,11 @@ class PhotoDaw {
     pointBtn.id = "point";
     pointBtn.classList.add("btn", "btn-primary");
     pointBtn.value = "Point";
+
     pointBtn.addEventListener("click", (e) => {
       this.currentFigure = e.target.value;
     });
+
     container.appendChild(pointBtn);
   }
 
@@ -245,9 +315,11 @@ class PhotoDaw {
     lineBtn.id = "line";
     lineBtn.classList.add("btn", "btn-success");
     lineBtn.value = "Line";
+
     lineBtn.addEventListener("click", (e) => {
       this.currentFigure = e.target.value;
     });
+
     container.appendChild(lineBtn);
   }
 
@@ -257,9 +329,11 @@ class PhotoDaw {
     rectangleBtn.id = "rectangle";
     rectangleBtn.classList.add("btn", "btn-info");
     rectangleBtn.value = "Rectangle";
+
     rectangleBtn.addEventListener("click", (e) => {
       this.currentFigure = e.target.value;
     });
+
     container.appendChild(rectangleBtn);
   }
 
@@ -269,11 +343,12 @@ class PhotoDaw {
     circleBtn.id = "circle";
     circleBtn.classList.add("btn", "btn-warning");
     circleBtn.value = "Circle";
-    container.appendChild(circleBtn);
 
     circleBtn.addEventListener("click", (e) => {
       this.currentFigure = e.target.value;
     });
+
+    container.appendChild(circleBtn);
   }
 
   createTriangleBtn(container) {
@@ -282,11 +357,12 @@ class PhotoDaw {
     triangleBtn.id = "triangle";
     triangleBtn.classList.add("btn", "btn-secondary");
     triangleBtn.value = "Triangle";
-    container.appendChild(triangleBtn);
 
     triangleBtn.addEventListener("click", (e) => {
       this.currentFigure = e.target.value;
     });
+
+    container.appendChild(triangleBtn);
   }
 
   createPencilBtn(container) {
@@ -295,22 +371,12 @@ class PhotoDaw {
     pencilBtn.id = "pencil";
     pencilBtn.classList.add("btn", "btn-dark");
     pencilBtn.value = "Pencil";
+
     pencilBtn.addEventListener("click", (e) => {
       this.currentFigure = e.target.value;
     });
-    container.appendChild(pencilBtn);
-  }
 
-  createPolygonBtn(container) {
-    let polygonBtn = document.createElement("button");
-    polygonBtn.innerHTML = "Polígon";
-    polygonBtn.id = "polygon";
-    polygonBtn.classList.add("btn", "btn-dark");
-    polygonBtn.value = "Polygon";
-    polygonBtn.addEventListener("click", (e) => {
-      this.currentFigure = e.target.value;
-    });
-    container.appendChild(polygonBtn);
+    container.appendChild(pencilBtn);
   }
 
   createClearBtn(container) {
@@ -319,11 +385,13 @@ class PhotoDaw {
     clearBtn.id = "clear";
     clearBtn.classList.add("btn", "btn-danger");
     clearBtn.value = "clear";
+
     clearBtn.addEventListener("click", (e) => {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.drawCoords(e);
-      this.figures = [];
+      this.arrSavedFigures = [];
     });
+
     container.appendChild(clearBtn);
   }
 
@@ -333,7 +401,7 @@ class PhotoDaw {
     widthLineRange.id = "widthLineRange";
     widthLineRange.classList.add("me-2", "ms-2");
     widthLineRange.min = "1";
-    widthLineRange.max = "50";
+    widthLineRange.max = "25";
     widthLineRange.value = "5";
     widthLineRange.step = "1";
 
@@ -342,6 +410,7 @@ class PhotoDaw {
       widthLine.innerHTML = `Gruix: ${widthLineRange.value}px`;
       this.currentWidth = parseInt(widthLineRange.value);
     });
+
     container.appendChild(widthLineRange);
   }
 
@@ -356,9 +425,11 @@ class PhotoDaw {
       "ms-2"
     );
     colorPicker.value = "#000000";
+    
     colorPicker.addEventListener("change", (e) => {
       this.currentColor = colorPicker.value;
     });
+
     container.appendChild(colorPicker);
   }
 
