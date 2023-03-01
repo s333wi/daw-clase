@@ -8,7 +8,7 @@ window.onload = function () {
       this.object = new Point();
     }
   }
-};
+}; 
 
 /**
  * @class PhotoDaw
