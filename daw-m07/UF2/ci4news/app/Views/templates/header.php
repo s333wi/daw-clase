@@ -15,6 +15,7 @@
           <ul class="nav nav-pills text-decoration-none">
               <li class="nav-item"><a href="<?= base_url() ?>" class="nav-link active">Home</a></li>
               <li class="nav-item"><a href="<?= base_url('create') ?>" class="nav-link text-success">Afegir noticia <i class="fa-solid fa-plus-large"></i></a></li>
+              <li class="nav-item"><a href="<?= base_url('dashboard')?>" class="nav-link">Dashboard</a></li>
           </ul>
       </header>
   </div>

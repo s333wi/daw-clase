@@ -19,12 +19,6 @@
                         <div class="card-footer bg-dark text-light d-flex justify-content-around align-items-center">
                             <a href="<?= base_url('view/') . '/' . $news['slug'] ?>" class="text-decoration-none ">Veure mes...</a>
                             <span><?= date('d/m/Y', strtotime($news['data_pub'])) ?></span>
-                            <a href="update/<?= $news['slug'] ?>">
-                                <i class="fa-solid fa-pen text-success"></i>
-                            </a>
-                            <a href="delete/<?= $news['id'] ?>">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>
                         </div>
                     </div>
                 </div>
