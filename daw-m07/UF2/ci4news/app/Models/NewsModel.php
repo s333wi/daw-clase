@@ -96,15 +96,11 @@ class NewsModel extends Model
     }
 
     //Lo mateix pero amb data de publicació anterior a la data actual
-    public function getNewsBeforeToday($slug = false)
+    public function getNewsBeforeToday($order_by = 'id', $sort_order = 'ASC')
     {
-        if ($slug === false) {
-            return $this->findAll();
-        }
-        return $this->asArray()
-            ->where(['slug' => $slug])
-            ->where('data_pub <=', date('Y-m-d H:i:s'))
-            ->first();
+        return $this
+            ->orderBy($order_by, $sort_order)
+            ->paginate(5);
     }
 
     /**
