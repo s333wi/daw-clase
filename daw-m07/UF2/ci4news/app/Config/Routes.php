@@ -3,6 +3,8 @@
 namespace Config;
 
 // Create a new instance of our RouteCollection class.
+use App\Controllers\UserController;
+
 $routes = Services::routes();
 
 /*
@@ -35,6 +37,11 @@ $routes->match(['get', 'post'], 'create', 'NewsController::create');
 $routes->get('delete/(:num)', 'NewsController::delete/$1');
 $routes->match(['get', 'post'], 'update/(:segment)', 'NewsController::update/$1');
 $routes->get('dashboard', 'NewsController::dashboard');
+<<<<<<< HEAD
+$routes->match(['get', 'post'], 'login', 'UserController::loginAction');
+$routes->match(['get', 'post'], 'register', 'UserController::registerAction');
+=======
+>>>>>>> 72aad4405f85480aad0bb473b2305e26661d5849
 
 /*
  * --------------------------------------------------------------------

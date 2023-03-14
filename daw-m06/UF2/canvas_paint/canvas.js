@@ -7,10 +7,6 @@ window.onload = function () {
     constructor() {
       this.object = new Point();
     }
-<<<<<<< HEAD
-  }
-}; 
-=======
   };
   figures.circle = class {
     constructor() {
@@ -38,7 +34,6 @@ window.onload = function () {
 
   let canvasElement = new PhotoDaw("canvasContainer", figures, true);
 };
->>>>>>> 46c8bee77df4c502f6337797b7a94582f20213cb
 
 /**
  * @class PhotoDaw
@@ -236,7 +231,7 @@ class PhotoDaw {
       let mousePos = this.getMousePos(this.canvas);
       this.currentFigureObject.object.xEnd = mousePos.x;
       this.currentFigureObject.object.yEnd = mousePos.y;
-
+      
       this.drawAllFigures();
       this.currentFigureObject.object.drawPreview(this.ctx);
       this.drawCoords(this.canvas);
@@ -430,7 +425,7 @@ class PhotoDaw {
       "ms-2"
     );
     colorPicker.value = "#000000";
-    
+
     colorPicker.addEventListener("change", (e) => {
       this.currentColor = colorPicker.value;
     });

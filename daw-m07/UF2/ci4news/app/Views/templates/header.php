@@ -15,7 +15,11 @@
           <ul class="nav nav-pills text-decoration-none">
               <li class="nav-item"><a href="<?= base_url() ?>" class="nav-link active">Home</a></li>
               <li class="nav-item"><a href="<?= base_url('create') ?>" class="nav-link text-success">Afegir noticia <i class="fa-solid fa-plus-large"></i></a></li>
+<<<<<<< HEAD
+              <li class="nav-item"><a href="<?= base_url('login')?>" class="nav-link">Login</a></li>
+=======
               <li class="nav-item"><a href="<?= base_url('dashboard')?>" class="nav-link">Dashboard</a></li>
+>>>>>>> 72aad4405f85480aad0bb473b2305e26661d5849
           </ul>
       </header>
   </div>
