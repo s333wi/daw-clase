@@ -39,4 +39,8 @@ class UserModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getUserByEmailOrName($email){
+        return $this->orWhere('email',$email)->orWhere('name',$email)->first();
+    }
 }

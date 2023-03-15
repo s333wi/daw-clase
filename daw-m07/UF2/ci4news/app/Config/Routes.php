@@ -31,17 +31,16 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('view/(:segment)', 'NewsController::view/$1');
+$routes->get('news/view/(:segment)', 'NewsController::view/$1');
 $routes->get('/', 'NewsController::index');
 $routes->match(['get', 'post'], 'create', 'NewsController::create');
-$routes->get('delete/(:num)', 'NewsController::delete/$1');
-$routes->match(['get', 'post'], 'update/(:segment)', 'NewsController::update/$1');
-$routes->get('dashboard', 'NewsController::dashboard');
-<<<<<<< HEAD
+$routes->get('news/delete/(:num)', 'NewsController::delete/$1');
+$routes->match(['get', 'post'], 'news/update/(:segment)', 'NewsController::update/$1');
 $routes->match(['get', 'post'], 'login', 'UserController::loginAction');
 $routes->match(['get', 'post'], 'register', 'UserController::registerAction');
-=======
->>>>>>> 72aad4405f85480aad0bb473b2305e26661d5849
+$routes->get('logout', 'UserController::logoutAction');
+$routes->get('private_dashboard', 'UserController::privateDashboardAction', ['filter' => 'autentica']);
+$routes->get('news/dashboard', 'NewsController::dashboard', ['filter' => 'autentica']);
 
 /*
  * --------------------------------------------------------------------
