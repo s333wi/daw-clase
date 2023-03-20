@@ -41,7 +41,7 @@ $routes->match(['get', 'post'], 'register', 'UserController::registerAction');
 $routes->get('logout', 'UserController::logoutAction');
 $routes->get('private_dashboard', 'UserController::privateDashboardAction', ['filter' => 'autentica']);
 $routes->get('news/dashboard', 'NewsController::dashboard', ['filter' => 'autentica']);
-
+$routes->match(['get', 'post'], 'contact', 'ContactController::index');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
