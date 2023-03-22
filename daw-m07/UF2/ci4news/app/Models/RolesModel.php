@@ -4,17 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class UserModel extends Model
+class RolesModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'users';
+    protected $table            = 'roles';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name','email','password','role_code','created_at','deleted_at','updated_at'];
+    protected $allowedFields    = [];
 
     // Dates
     protected $useTimestamps = false;
@@ -39,8 +39,4 @@ class UserModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function getUserByEmailOrName($email){
-        return $this->orWhere('email',$email)->orWhere('name',$email)->first();
-    }
 }

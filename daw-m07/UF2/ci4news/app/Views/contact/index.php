@@ -13,7 +13,7 @@ $session->setFlashdata('captcha_text', $captcha->text);
         <div class='row'>
             <div class='col-6'>
                 <label for="email" class="form-label">Email</label>
-                <input value="<?=old('email')?>" class="form-control" type="text" name="email" id="email">
+                <input value="<?= old('email') ?>" class="form-control" type="text" name="email" id="email">
             </div>
             <div class='col-6'>
                 <label for="name" class="form-label">Nom</label>
@@ -40,7 +40,6 @@ $session->setFlashdata('captcha_text', $captcha->text);
             </div>
         </div>
     </div>
-    <input type="submit" value="Actualitzar" class="btn btn-primary mt-1">
+    <input type="submit" value="Enviar" class="btn btn-primary mt-1 w-100">
 </form>
-<p><a href="<?= base_url() ?>" class="btn btn-warning mt-2">Anar noticies</a></p>
 <?= $this->endSection() ?>
