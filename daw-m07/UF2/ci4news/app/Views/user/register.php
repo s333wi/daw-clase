@@ -41,66 +41,52 @@
                         <div class="row mb-3">
                             <div class="col-6">
                                 <label for="username" class="mb-1">Nom d'usuari</label>
-                                <input type="text" name="name" class="form-control" id="username" value="<?=old('name')?>" required />
-                                <?php if (service('validation')->getError('name')) { ?>
-                                <div class="alert alert-danger" role="alert">
-                                    <?= service('validation')->getError('name') ?>
-                                </div>
-                            <?php } //endif error name?>
+                                <input type="text" name="name" class="form-control <?= !empty(validation_show_error('name')) ? 'is-invalid' : '' ?>" id="username" value="<?= old('name') ?>" required />
                             </div>
                             <div class="col">
                                 <label for="names" class="mb-1">Nom i cognoms</label>
-                                <input type="text" name="nomcognoms" class="form-control" value="<?=old('nomcognoms')?>" id="names" required>
+                                <input type="text" name="nomcognoms" class="form-control <?= !empty(validation_show_error('nomcognoms')) ? 'is-invalid' : '' ?>" value="<?= old('nomcognoms') ?>" id="names" required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-8">
                                 <label for="email" class="mb-1">Correu electrònic</label>
-                                <input type="email" name="email" class="form-control" id="email" value="<?=old('email')?>" required />
+                                <input type="text" name="email" class="form-control <?= !empty(validation_show_error('email')) ? 'is-invalid' : '' ?>" id="email" value="<?= old('email') ?>" required />
                                 <div class="form-helper">
                                     <small class="text-muted">Tranquil, no t'enviarem spam</small>
                                 </div>
-                                <?php if (service('validation')->getError('email')) { ?>
-                                <div class="alert alert-danger" role="alert">
-                                    <?= service('validation')->getError('email') ?>
-                                </div>
-                            <?php } //endif error email?>
                             </div>
                             <div class="col">
                                 <label for="age" class="mb-1">Edat</label>
-                                <input type="number" name="edat" class="form-control" value="<?=old('edat')?>" id="age" required />
+                                <input type="number" name="edat" class="form-control <?= !empty(validation_show_error('edat')) ? 'is-invalid' : '' ?>" value="<?= old('edat') ?>" id="age" required />
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="password" class="form-label mb-1">Contrasenya</label>
-                                <input type="password" name="password" class="form-control" id="password" required />
+                                <input type="password" name="password" class="form-control <?= !empty(validation_show_error('password')) ? 'is-invalid' : '' ?>" id="password" required />
                                 <div class="form-helper">
                                     <small class="text-muted">La contrasenya ha de tenir almenys 4 caràcters</small>
                                 </div>
                                 <?php if (service('validation')->getError('password')) { ?>
-                                <div class="alert alert-danger" role="alert">
-                                    <?= service('validation')->getError('password') ?>
-                                </div>
-                            <?php } //endif error password?>
+                                    <div class="alert alert-danger" role="alert">
+                                        <?= service('validation')->getError('password') ?>
+                                    </div>
+                                <?php } //endif error password
+                                ?>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="passwordConfirm" class="form-label mb-1">Confirma la contrasenya</label>
-                                <input type="password" name="password_confirm" class="form-control" id="passwordConfirm" required />
-                                
-                                <?php if (service('validation')->getError('passwordConfirm')) { ?>
-                                <div class="alert alert-danger" role="alert">
-                                    <?= service('validation')->getError('passwordConfirm') ?>
-                                </div>
-                            <?php } //endif error passwordConfirm?>
+                                <input type="password" name="password_confirm" class="form-control <?= !empty(validation_show_error('password_confirm')) ? 'is-invalid' : '' ?>" id="passwordConfirm" required />
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Registra't</button>
                         <?php if (session()->getFlashdata('error')) { ?>
                             <div class="alert alert-danger mt-2" role="alert">
                                 <?= session()->getFlashdata('error') ?>
+                                <?= validation_list_errors(); ?>
                             </div>
                         <?php } //endif error login
                         ?>

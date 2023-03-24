@@ -94,6 +94,11 @@ class NewsController extends BaseController
 
     public function dashboard()
     {
+
+        echo "<pre>";
+        print_r($_SESSION);
+        echo "</pre>";
+        die;
         //agafem les variables del get request
         $order = $this->request->getVar('order');
         $sort = $this->request->getVar('so');

@@ -9,6 +9,7 @@ use CodeIgniter\Filters\Honeypot;
 use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\ValidaUsuarisFilter;
+use App\Filters\ValidaRoleFilter;
 
 class Filters extends BaseConfig
 {
@@ -23,6 +24,7 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'autentica' => ValidaUsuarisFilter::class,
+        'validaRole' => ValidaRoleFilter::class,
     ];
 
     /**

@@ -18,6 +18,10 @@ body {
   overflow-x: hidden;
 }
 
+.bg-light {
+  color: #000;
+}
+
 #text {
   display: flex;
   justify-content: center;

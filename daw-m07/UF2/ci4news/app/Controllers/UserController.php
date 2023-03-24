@@ -59,6 +59,7 @@ class UserController extends BaseController
                         'id' => $user['id'],
                         'name' => $user['name'],
                         'email' => $user['email'],
+                        'role' => $user['role_code'],
                         'isLoggedIn' => true
                     ];
                     if ($remember) {
@@ -81,44 +82,49 @@ class UserController extends BaseController
 
     public function registerAction()
     {
-        //see if the request is post
+        helper('form');
         if ($this->request->getMethod() == 'post') {
+
             $data = $this->request->getPost();
+
+            echo "<pre>";
+            print_r($data);
+            echo "</pre>";
             $rules = [
-                'name'=>[
-                    'rules'=>'required|min_length[3]|max_length[20]',
-                    'errors'=>[
-                        'required'=>'El nom és obligatori',
-                        'min_length'=>'El nom ha de tenir almenys 3 caràcters',
-                        'max_length'=>'El nom ha de tenir com a màxim 20 caràcters'
+                'name' => [
+                    'rules' => 'required|min_length[3]|max_length[20]',
+                    'errors' => [
+                        'required' => 'El nom és obligatori',
+                        'min_length' => 'El nom ha de tenir almenys 3 caràcters',
+                        'max_length' => 'El nom ha de tenir com a màxim 20 caràcters'
                     ]
                 ],
-                'email'=>[
-                    'rules'=>'required|valid_email|is_unique[users.email]',
-                    'errors'=>[
-                        'required'=>'L\'email és obligatori',
-                        'valid_email'=>'L\'email no és vàlid',
-                        'is_unique'=>'Aquest email ja està registrat'
+                'email' => [
+                    'rules' => 'required|valid_email|is_unique[users.email]',
+                    'errors' => [
+                        'required' => 'L\'email és obligatori',
+                        'valid_email' => 'L\'email no és vàlid',
+                        'is_unique' => 'Aquest email ja està registrat'
                     ]
                 ],
-                'password'=>[
-                    'rules'=>'required|min_length[4]',
-                    'errors'=>[
-                        'required'=>'La contrasenya és obligatòria',
-                        'min_length'=>'La contrasenya ha de tenir almenys 4 caràcters'
+                'password' => [
+                    'rules' => 'required|min_length[4]',
+                    'errors' => [
+                        'required' => 'La contrasenya és obligatòria',
+                        'min_length' => 'La contrasenya ha de tenir almenys 4 caràcters'
                     ]
                 ],
-                'password_confirm'=>[
-                    'rules'=>'required|matches[password]',
-                    'errors'=>[
-                        'required'=>'La confirmació de la contrasenya és obligatòria',
-                        'matches'=>'Les contrasenyes no coincideixen'
+                'password_confirm' => [
+                    'rules' => 'required|matches[password]',
+                    'errors' => [
+                        'required' => 'La confirmació de la contrasenya és obligatòria',
+                        'matches' => 'Les contrasenyes no coincideixen'
                     ]
                 ]
             ];
             if (!$this->validate($rules)) {
                 session()->setFlashdata('error', 'Hi ha errors en el formulari');
-                return redirect()->to('/register')->withInput()->with('validation', $this->validator);
+                return redirect()->back()->withInput();
             } else {
                 //if validation succeeds, save the data to the database
                 $model = new \App\Models\UserModel();
@@ -135,7 +141,8 @@ class UserController extends BaseController
 
         return view('user/register', ['title' => 'Register']);
     }
-    public function logoutAction(){
+    public function logoutAction()
+    {
         $this->session->destroy();
         return redirect()->to('/');
     }

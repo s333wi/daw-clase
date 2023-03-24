@@ -8,12 +8,13 @@ class ContactController extends BaseController
 {
     public function index()
     {
+        helper('form');
         $config = [
-            "textColor" => '#2cb58c',
+            "textColor" => '#000000',
             "backColor" => '#ffffff',
             "noiceColor" => '#5c00ce',
-            "imgWidth" => 180,
-            "imgHeight" => 40,
+            "imgWidth" => 400,
+            "imgHeight" => 80,
             "noiceLines" => 40,
             "noiceDots" => 20,
             "length" => 6,
@@ -58,8 +59,15 @@ class ContactController extends BaseController
                     'min_length' => 'El missatge ha de tenir almenys 3 caràcters'
                 ]
             ],
+            'captcha' => [
+                'rules' => 'required|validateCaptcha',
+                'errors' => [
+                    'required' => 'El captcha és obligatori',
+                    'validateCaptcha' => 'El captcha no és correcte'
+                ]
+            ],
         ];
-        
+
         if ($this->validate($validationRules)) {
             $name = $this->request->getPost('name');
             $email = $this->request->getPost('email');
@@ -67,16 +75,21 @@ class ContactController extends BaseController
             $message = $this->request->getPost('message');
             $captcha = $this->request->getPost('captcha');
 
+            if (!$this->validate($validationRules)) {
+                $session->setFlashdata('error', 'Hi ha errors en el formulari');
+                return redirect()->back()->withInput();
+            }
+
             if ($captcha == $session->get('captcha_text')) {
                 $session->setFlashdata('success', 'El missatge s\'ha enviat correctament');
-                return redirect()->to('/contact');
+                return redirect()->back();
             } else {
                 $session->setFlashdata('error', 'El captcha no és correcte');
-                return redirect()->to('/contact')->withInput();
+                return redirect()->back()->withInput();
             }
         } else {
             $session->setFlashdata('error', 'Hi ha errors en el formulari');
-            return redirect()->to('/contact')->withInput();
+            return redirect()->back()->withInput();
         }
     }
 }

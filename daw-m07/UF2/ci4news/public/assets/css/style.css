@@ -1,79 +1,79 @@
-html,body,*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+html,
+body,
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-    background-color: #FF7383;
-    color: #fff;
-<<<<<<< HEAD
-    font-family: 'Plus Jakarta Sans', sans-serif;
-=======
-    font-family: monospace;
->>>>>>> 72aad4405f85480aad0bb473b2305e26661d5849
-    font-size: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    overflow-x: hidden;
+body {
+  background-color: #ff7383;
+  color: #fff;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  overflow-x: hidden;
 }
 
-
-#text{
-    display:flex;
-    justify-content: center;
-    height: 33px;
+.bg-light {
+  color: #000;
 }
 
-#effect{
-    font-size: 30px;
-    font-family: monospace;
-    border-right: 3px solid;
-    width: 10ch;
-    overflow: hidden;
-    white-space: nowrap;
-    animation: text 1s steps(24),effect 0.5s steps(1) infinite alternate;
+#text {
+  display: flex;
+  justify-content: center;
+  height: 33px;
 }
 
-@keyframes  text{
-    0%{
-        width:0;
-    }
-
-    50%{
-        width:5ch;
-    }
-
-    75%{
-        width: 7.5ch;
-    }
-   
+#effect {
+  font-size: 30px;
+  font-family: monospace;
+  border-right: 3px solid;
+  width: 10ch;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: text 1s steps(24), effect 0.5s steps(1) infinite alternate;
 }
 
-@keyframes effect{
-    50%{
-       border-color:#0000;
-    }
+@keyframes text {
+  0% {
+    width: 0;
+  }
+
+  50% {
+    width: 5ch;
+  }
+
+  75% {
+    width: 7.5ch;
+  }
 }
 
-.btn-primary,.nav-link.active{
-    background-color:#e04f5f !important;
-    color:#fff !important;
-    border-color: #fff;
+@keyframes effect {
+  50% {
+    border-color: #0000;
+  }
 }
 
-.nav-link{
-    color:#e04f5f !important;
+.btn-primary,
+.nav-link.active {
+  background-color: #e04f5f !important;
+  color: #fff !important;
+  border-color: #fff;
 }
 
-.btn-primary:hover{
-    background-color:#aa3f4b;
-    border-color: #fff;
+.nav-link {
+  color: #e04f5f !important;
+}
+
+.btn-primary:hover {
+  background-color: #aa3f4b;
+  border-color: #fff;
 }
 
 ul.footer-nav li a {
-   
-    padding-left:0 !important;
+  padding-left: 0 !important;
 }

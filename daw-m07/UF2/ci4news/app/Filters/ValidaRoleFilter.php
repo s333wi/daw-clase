@@ -6,7 +6,7 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Filters\FilterInterface;
 
-class ValidaUsuarisFilter implements FilterInterface
+class ValidaRoleFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
@@ -19,8 +19,8 @@ class ValidaUsuarisFilter implements FilterInterface
             return;
         }
 
-        foreach ($arguments as $name) {
-            if (session()->get('name') == $name) {
+        foreach ($arguments as $role) {
+            if (session()->get('role') == $role) {
                 return;
             }
         }
