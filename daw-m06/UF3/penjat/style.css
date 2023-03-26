@@ -74,6 +74,11 @@ body {
   animation-fill-mode: forwards;
 }
 
+.box.finishWrong{
+  border-color: #a83c3c;
+  background-color: #db8b8b;
+}
+
 #game {
   width: 100%;
   max-width: 800px;
