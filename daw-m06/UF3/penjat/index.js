@@ -9,7 +9,7 @@ import { wordList } from "./diccionari.js";
 let inputFocus;
 let currLetter;
 let countdownTimer;
-let timeLeft = 10;
+let timeLeft = 60;
 let gamePlaying = true;
 let goodTry = 0;
 let badTry = 0;
@@ -107,7 +107,7 @@ function drawCountDown(gamediv) {
 
 //Funcio que comença el contador de temps
 function startCounter() {
-  timeLeft = 10;
+  timeLeft = 60;
   countdownTimer = setInterval(function () {
     if (timeLeft <= 0) {
       clearInterval(countdownTimer);
