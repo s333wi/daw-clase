@@ -33,15 +33,21 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('news/view/(:segment)', 'NewsController::view/$1');
 $routes->get('/', 'NewsController::index');
-$routes->match(['get', 'post'], 'create', 'NewsController::create');
-$routes->get('news/delete/(:num)', 'NewsController::delete/$1');
-$routes->match(['get', 'post'], 'news/update/(:segment)', 'NewsController::update/$1');
+$routes->match(['get', 'post'], 'create', 'NewsController::create', ['filter' => 'validaRole:EDT']  );
+$routes->get('news/delete/(:num)', 'NewsController::delete/$1', ['filter' => 'validaRole:EDT']);
+$routes->match(['get', 'post'], 'news/update/(:segment)', 'NewsController::update/$1', ['filter' => 'validaRole:EDT']);
 $routes->match(['get', 'post'], 'login', 'UserController::loginAction');
 $routes->match(['get', 'post'], 'register', 'UserController::registerAction');
 $routes->get('logout', 'UserController::logoutAction');
 $routes->get('private_dashboard', 'UserController::privateDashboardAction', ['filter' => 'autentica']);
-$routes->get('news/dashboard', 'NewsController::dashboard', ['filter' => 'autentica:admin']);
+$routes->get('news/dashboard', 'NewsController::dashboard', ['filter' => 'validaRole:EDT']);
 $routes->match(['get', 'post'], 'contact', 'ContactController::index');
+$routes->match(['get', 'post'], 'users/update/(:num)', 'UserController::update/$1', ['filter' => 'autentica']);
+$routes->match(['get', 'post'], 'roles/update/(:num)', 'RolesController::update/$1', ['filter' => 'validaRole:ADM,GST']);
+$routes->get('roles/dashboard', 'RolesController::dashboard', ['filter' => 'validaRole:ADM,GST']);
+$routes->get('users/dashboard', 'UserController::dashboard', ['filter' => 'autentica']);
+$routes->get('users/delete/(:num)', 'UserController::delete/$1', ['filter' => 'autentica:admin']);
+$routes->get('roles/delete/(:num)', 'RolesController::delete/$1', ['filter' => 'autentica:admin']);
 /*
  * --------------------------------------------------------------------
  * Additional Routing

@@ -19,6 +19,56 @@ class UserController extends BaseController
         //
     }
 
+    public function dashboard()
+    {
+        $order = $this->request->getVar('order');
+        $sort = $this->request->getVar('sort');
+
+        $model = model('UserModel');
+
+        if ($order != null && $sort != null) {
+            if (strtolower($sort) == 'asc') {
+                $sort = 'desc';
+            } else if (strtolower($sort) == 'desc') {
+                $sort = 'asc';
+            }
+            $data['info_users'] = $model->fetchUsers($order, $sort);
+        } else {
+            $sort = 'asc';
+            $data['info_users'] = $model->fetchUsers();
+        }
+        $data['title'] = "Dashboard users";
+        $data['pager'] = $model->pager;
+        $data['sort'] = $sort;
+        return view("user/user_dashboard", $data);
+    }
+
+    public function update($usrId = null)
+    {
+        $usrModel = model('UserModel');
+        $rolModel = model('RolesModel');
+        $data['user'] = $usrModel->find($usrId);
+        if (empty($data['user'])) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('No s\'ha trobat l\'usuari amb usrId: ' . $usrId);
+        }
+
+        $data['roles'] = $rolModel->findAll();
+        $data['title'] = "Update user";
+
+        if ($this->request->getMethod() == 'post') {
+            $usrModel->updateUsr($usrId, $this->request->getPost());
+            return redirect()->to('/users/dashboard');
+        }
+        return view("user/update", $data);
+    }
+
+    public function delete($usrId = null)
+    {
+        $usrModel = model('UserModel');
+        $usrModel->delete($usrId);
+        return redirect()->to('/users/dashboard');
+    }
+
     public function loginAction()
     {
         if ($this->session->get('isLoggedIn') || $this->session->get('remember')) {
@@ -86,10 +136,6 @@ class UserController extends BaseController
         if ($this->request->getMethod() == 'post') {
 
             $data = $this->request->getPost();
-
-            echo "<pre>";
-            print_r($data);
-            echo "</pre>";
             $rules = [
                 'name' => [
                     'rules' => 'required|min_length[3]|max_length[20]',
@@ -126,15 +172,14 @@ class UserController extends BaseController
                 session()->setFlashdata('error', 'Hi ha errors en el formulari');
                 return redirect()->back()->withInput();
             } else {
-                //if validation succeeds, save the data to the database
                 $model = new \App\Models\UserModel();
                 $newData = [
                     'name' => $data['name'],
                     'email' => $data['email'],
+                    'role_code' => 'USR',
                     'password' => password_hash($data['password'], PASSWORD_DEFAULT)
                 ];
                 $model->save($newData);
-                //redirect to the login page
                 return redirect()->to('/login');
             }
         }

@@ -50,10 +50,13 @@
                 </div>
                 <ul class="nav d-flex flex-column ps-2">
                     <li class="nav-item mt-1">
-                        <a href="index.php?action=manage_users" class="text-dark">Gestió usuaris</a>
+                        <a href="<?= base_url('users/dashboard')?>" class="text-dark">Gestió usuaris</a>
                     </li>
                     <li class="nav-item mt-1">
                         <a href="<?= base_url('news/dashboard') ?>" class="text-dark">Gestió notícies</a>
+                    </li>
+                    <li class="nav-item mt-1">
+                        <a href="<?= base_url('roles/dashboard')?>" class="text-dark">Gestió rols</a>
                     </li>
                 </ul>
             </div>

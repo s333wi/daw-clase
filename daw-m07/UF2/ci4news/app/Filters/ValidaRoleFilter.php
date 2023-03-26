@@ -18,7 +18,6 @@ class ValidaRoleFilter implements FilterInterface
         if (empty($arguments)) {
             return;
         }
-
         foreach ($arguments as $role) {
             if (session()->get('role') == $role) {
                 return;

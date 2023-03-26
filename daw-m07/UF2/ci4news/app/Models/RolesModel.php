@@ -14,7 +14,7 @@ class RolesModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['name', 'code', 'description'];
 
     // Dates
     protected $useTimestamps = false;
@@ -39,4 +39,16 @@ class RolesModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function fetchRoles($order_by = 'id', $sort_order = 'ASC')
+    {
+        return $this
+            ->orderBy($order_by, $sort_order)
+            ->paginate(5);
+    }
+
+    public function updateRol($rolId, $data)
+    {
+        $this->update($rolId, $data);
+    }
 }

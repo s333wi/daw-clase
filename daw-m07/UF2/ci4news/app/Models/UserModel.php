@@ -14,7 +14,7 @@ class UserModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name','email','password','role_code','created_at','deleted_at','updated_at'];
+    protected $allowedFields    = ['name', 'email', 'password', 'role_code', 'created_at', 'deleted_at', 'updated_at'];
 
     // Dates
     protected $useTimestamps = false;
@@ -40,7 +40,20 @@ class UserModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getUserByEmailOrName($email){
-        return $this->orWhere('email',$email)->orWhere('name',$email)->first();
+    public function getUserByEmailOrName($email)
+    {
+        return $this->orWhere('email', $email)->orWhere('name', $email)->first();
+    }
+
+    public function fetchUsers($order_by = 'id', $sort_order = 'ASC')
+    {
+        return $this
+            ->orderBy($order_by, $sort_order)
+            ->paginate(5);
+    }
+
+    public function updateUsr($usrId, $data)
+    {
+        $this->update($usrId, $data);
     }
 }
