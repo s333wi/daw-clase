@@ -22,5 +22,19 @@ class UserSeeder extends Seeder
                 'active' => 1
             ]);
         }
+
+        $userModel->withGroup('Administrators')->insert([
+            'email' => 'admin@me.local',
+            'username' => 'admin',
+            'password_hash' => Password::hash('12345678'),
+            'active' => 1
+        ]);
+
+        $userModel->withGroup('Users')->insert([
+            'email' => 'user@me.local',
+            'username' => 'user',
+            'password_hash' => Password::hash('12345678'),
+            'active' => 1
+        ]);
     }
 }
