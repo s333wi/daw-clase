@@ -27,7 +27,6 @@ class RoleFilter extends BaseFilter implements FilterInterface
         if (empty($arguments)) {
             return;
         }
-
         // Check each requested permission
         foreach ($arguments as $group) {
             if ($this->authorize->inGroup($group, $this->authenticate->id())) {

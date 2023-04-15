@@ -12,6 +12,14 @@
             <li class="nav-item active">
                 <a class="nav-link" href="<?= base_url() ?>"><i class="bi bi-house-door-fill"></i><?= lang('Auth.home') ?></a>
             </li>
+            <?php if (logged_in()) { ?>
+                <li class="nav-item active">
+                    <a class="nav-link" href="<?= base_url('user/dashboard') ?>"><i class="bi bi-person-fill"></i>Usuaris</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="<?= base_url('link/dashboard') ?>"><i class="bi bi-link-45deg"></i>Enllaços</a>
+                </li>
+            <?php } ?>
         </ul>
         <ul class="navbar-nav">
             <?php if (!logged_in()) { ?>

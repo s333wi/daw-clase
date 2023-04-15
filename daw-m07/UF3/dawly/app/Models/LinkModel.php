@@ -6,6 +6,7 @@ use CodeIgniter\Model;
 
 class LinkModel extends Model
 {
+
     protected $DBGroup          = 'default';
     protected $table            = 'links';
     protected $primaryKey       = 'id';
@@ -39,4 +40,32 @@ class LinkModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function checkCustomLink($link)
+    {
+        $this->where('custom_link', $link);
+        $this->where('deleted_at', null);
+        $this->where('expires_at >', date('Y-m-d H:i:s'));
+        $query = $this->get();
+        if ($query->getResult()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getLink($link)
+    {
+        $query = $this->builder()->getWhere(['custom_link' => $link, 'deleted_at' => null]);
+        if ($dbLink = $query->getResult()[0]) {
+            //Comprovo que no hagi expirat el link
+            if ($dbLink->expires_at > date('Y-m-d H:i:s') || $dbLink->expires_at == null) {
+                return $dbLink;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }

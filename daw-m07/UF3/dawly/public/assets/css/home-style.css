@@ -9,7 +9,7 @@ body {
 
 body {
   padding-top: 90px;
-  background-color: rgb(78, 66, 255, 70%);
+  background-color: rgb(78, 66, 255, 70%) !important;
 }
 
 a.nav-link i {

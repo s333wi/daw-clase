@@ -14,6 +14,14 @@ $routes->set404Override();
 /** @var RouteCollection $routes definitions */
 
 $routes->get('/', 'HomeController::index');
+$routes->get('/l/(:segment)', 'HomeController::index/$1');
+$routes->post('shorten', 'HomeController::shortenUrl');
+
+$routes->group('user',  static function ($routes) {
+    $routes->get('dashboard', 'UserController::dashboard', ['filter' => 'role:Users']);
+});
+
+$routes->match(['get','post'],'user/dashboard', 'UserController::dashboard');
 
 // Myth:Auth routes file.
 $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes) {
